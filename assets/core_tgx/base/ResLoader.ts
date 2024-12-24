@@ -1,6 +1,6 @@
 import { Asset, AssetManager, __private, assetManager, error, js, resources, warn } from "cc";
 
-export type AssetType<T = Asset> = __private.__types_globals__Constructor<T> | null;
+export type AssetType<T = Asset> = __private._types_globals__Constructor<T> | null;
 export type Paths = string | string[];
 export type ProgressCallback = ((finished: number, total: number, item: AssetManager.RequestItem) => void) | null;
 export type CompleteCallback = any;
@@ -35,6 +35,7 @@ export class ResLoader {
     //#region 资源配置数据
     /** 全局默认加载的资源包名 */
     defaultBundleName: string = "module_basic";
+    gameBundleName: string = "module_movecar";
     /** 是否使用远程 CDN 资源 */
     cdn: boolean = false;
 

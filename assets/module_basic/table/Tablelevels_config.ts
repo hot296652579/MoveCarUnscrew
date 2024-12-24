@@ -15,17 +15,17 @@ export class Tablelevels_config {
     /** 编号【KEY】 */
     id: number = 0;
 
-    /** 关卡编号 */
+    /** 关卡数 */
     get level(): number {
         return this.data.level;
     }
-    /** 基础钞票奖励 */
-    get reward_basics(): number {
-        return this.data.reward_basics;
+    /** 关卡操作步数 */
+    get step(): number {
+        return this.data.step;
     }
-    /** 额外钞票奖励 */
-    get reward_additional(): number {
-        return this.data.reward_additional;
+    /** 是否参与随机 */
+    get random(): number {
+        return this.data.random;
     }
 }
     

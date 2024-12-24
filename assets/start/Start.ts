@@ -1,17 +1,30 @@
-import { _decorator, assetManager, Component, director, game, Label, Prefab, Node, AssetManager } from 'cc';
-import { tgxModuleContext, tgxUIMgr, tgxUIWaiting } from '../core_tgx/tgx';
+import { _decorator, assetManager, Component, director, game, Label, Prefab, Node, AssetManager, Asset, PhysicsSystem, PhysicsSystem2D, EPhysics2DDrawFlags, AudioClip, ProgressBar } from 'cc';
+import { tgxModuleContext, tgxUIMgr, tgxUITips, tgxUIWaiting } from '../core_tgx/tgx';
 import { GameUILayers, GameUILayerNames } from '../scripts/GameUILayers';
 
 import { ModuleDef } from '../scripts/ModuleDef';
 import { SceneDef } from '../scripts/SceneDef';
 import { JsonUtil } from '../core_tgx/base/utils/JsonUtil';
+import { GtagMgr, GtagType } from '../core_tgx/base/GtagMgr';
 const { ccclass, property } = _decorator;
 
-const _preloadBundles = [ModuleDef.BASIC];
+const _preloadBundles = [ModuleDef.BASIC, ModuleDef.MODULE_MOVECAR];
 
 const _preloadRes = [
     { bundle: ModuleDef.BASIC, url: 'ui_alert/UI_Alert', type: 'prefab' },
+    { bundle: ModuleDef.BASIC, url: 'ui_tips/UI_Tips', type: 'prefab' },
     { bundle: ModuleDef.BASIC, url: 'ui_waiting/UI_Waiting', type: 'prefab' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/bgm.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/bgm_jiemian.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/dianji.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/shengli.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/wancheng.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/shengqi.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/luoxia.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/jiesuo.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/xing1.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/xing2.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/xing3.mp3', type: 'audio' },
 ];
 
 const _loadingText = ['Loading.', 'Loading..', 'Loading...'];
@@ -25,19 +38,35 @@ export class Start extends Component {
     @property(Prefab)
     uiCanvasPrefab: Prefab;
 
-    @property(Node)
-    loadingBar: Node;
+    // @property(Node)
+    // loadingBar: Node;
+
+    @property(ProgressBar)
+    loadingBar: ProgressBar = null!;
 
     private _percent: string = '';
     private _numCurrentLoaded = 0;
     start() {
+
+        // // 确保物理系统启用
+        // PhysicsSystem2D.instance.enable = true;
+
+        // // 开启调试信息
+        // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Aabb |
+        //     EPhysics2DDrawFlags.Pair |
+        //     EPhysics2DDrawFlags.CenterOfMass |
+        //     EPhysics2DDrawFlags.Joint |
+        //     EPhysics2DDrawFlags.Shape;
+
         tgxModuleContext.setDefaultModule(ModuleDef.BASIC);
 
         game.frameRate = 61;
         tgxUIMgr.inst.setup(this.uiCanvasPrefab, GameUILayers.NUM, GameUILayerNames);
 
         this.preloadBundle(0);
+        GtagMgr.inst.init();
         this.loadConfig();
+        GtagMgr.inst.doGameDot(GtagType.game_start);
     }
 
     async loadConfig() {
@@ -72,6 +101,7 @@ export class Start extends Component {
 
     preloadRes(idx: number) {
         let res = _preloadRes[idx];
+        // console.log('预加载资源：' + res.url);
         let bundle = assetManager.getBundle(res.bundle);
 
         let onComplete = () => {
@@ -87,18 +117,21 @@ export class Start extends Component {
         if (bundle) {
             if (res.type == 'prefab') {
                 bundle.preload(res.url, Prefab, onComplete);
+            } else if (res.type == 'audio') {
+                bundle.preload(res.url, AudioClip, onComplete);
             }
         }
     }
 
     onPreloadingComplete() {
-        let bundle = assetManager.getBundle(ModuleDef.BASIC);
-        bundle.preloadScene(SceneDef.MAIN_MENU, () => {
+        let bundle = assetManager.getBundle(ModuleDef.MODULE_MOVECAR);
+        bundle.preloadScene(SceneDef.ROOSTER_HOLE, () => {
             this.onResLoaded();
             // director.loadScene(SceneDef.MAIN_MENU);
+
             const info = {
-                bundle: 'module_demo_rooster',
-                entryScene: 'rooster_jump'
+                bundle: 'module_movecar',
+                entryScene: 'rooster_movecar'
             }
             tgxUIWaiting.show();
             assetManager.loadBundle(info.bundle, (err, bundle: AssetManager.Bundle) => {
@@ -120,7 +153,8 @@ export class Start extends Component {
             let idx = Math.floor(game.totalTime / 1000) % 3;
             this.txtLoading.string = _loadingText[idx];
         }
-        this.loadingBar.setScale(this._numCurrentLoaded / _totalNum, 1, 1);
+        // this.loadingBar.setScale(this._numCurrentLoaded / _totalNum, 1, 1);
+        this.loadingBar.progress = this._numCurrentLoaded / _totalNum;
     }
 }
 
