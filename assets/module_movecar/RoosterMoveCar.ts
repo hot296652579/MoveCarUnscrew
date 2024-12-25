@@ -1,4 +1,4 @@
-import { _decorator, Camera, Component, EPhysics2DDrawFlags, ERaycast2DType, EventTouch, find, geometry, Input, Node, PhysicsSystem, PhysicsSystem2D, Quat, Tween, tween, Vec2, Vec3 } from 'cc';
+import { _decorator, Camera, Component, EPhysics2DDrawFlags, ERaycast2DType, EventTouch, find, geometry, Input, Mat4, Node, PhysicsSystem, PhysicsSystem2D, Quat, Tween, tween, Vec2, Vec3 } from 'cc';
 import { EventDispatcher } from '../core_tgx/easy_ui_framework/EventDispatcher';
 import { GameEvent } from './Script/Enum/GameEvent';
 import { CarCarColorsComponent } from './Script/Components/CarCarColorsComponent';
@@ -146,21 +146,18 @@ export class RoosterMoveCar extends Component {
         })
             .call(() => {
                 const targetWorldPos = targetPoint.getWorldPosition();
-                let direction = null;
-                if (hitPoint.name == 'PhysicRoodLeft' || hitPoint.name == 'PhysicRoodRight') {
-                    direction = targetWorldPos.subtract(newHintStreetPos).normalize();
+                const direction = targetWorldPos.subtract(newHintStreetPos).normalize();
+                console.log('direction:', direction);
 
-                    direction.z = 0;
-                    direction.normalize();
-                    car.forward = direction;
+                let up: Vec3;
+                if (Math.abs(direction.x) > Math.abs(direction.y)) {
+                    // 左右方向
+                    up = direction.x > 0 ? new Vec3(0, 0, -1) : new Vec3(0, 0, 1);
                 } else {
-                    const carPos = car.getWorldPosition().clone();
-                    const leftPoint = hitPoint.getChildByName('LeftPoint').getWorldPosition().clone();
-                    direction = leftPoint.subtract(carPos).normalize();
-                    let angle = 0;
-                    angle = direction.x < 0 ? 90 : -90;
-                    car.setRotationFromEuler(0, 0, angle);
+                    // 上下方向
+                    up = direction.y > 0 ? new Vec3(0, 1, 0) : new Vec3(0, -1, 0);
                 }
+                car.lookAt(targetWorldPos, up);
             })
             .delay(0.1)
     }
