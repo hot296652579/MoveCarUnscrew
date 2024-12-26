@@ -4,6 +4,9 @@ import { GameEvent } from './Script/Enum/GameEvent';
 import { CarCarColorsComponent } from './Script/Components/CarCarColorsComponent';
 import { CarDir } from './Script/CarColorsGlobalTypes';
 import { dir } from 'console';
+import { CarColorsGlobalInstance } from './Script/CarColorsGlobalInstance';
+import { CarCarColorsSysterm } from './Script/Systems/CarCarColorsSysterm';
+import { LevelManager } from './Script/LevelMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('RoosterMoveCar')
@@ -17,7 +20,24 @@ export class RoosterMoveCar extends Component {
 
         PhysicsSystem2D.instance.debugDrawFlags = 1; // 启用调试绘制
 
+        CarColorsGlobalInstance.instance.carSysterm = this.node.getComponent(CarCarColorsSysterm)!;
+
         this.registerListener();
+    }
+
+    protected start(): void {
+        this.startGame();
+    }
+
+    async startGame() {
+        find("Canvas/Scene/Levels").removeAllChildren();
+        CarColorsGlobalInstance.instance.carSysterm.clearAll();
+        const levelNode = await LevelManager.instance.loadLevel(1);
+        for (let i = 0; i < levelNode.children.length; i++) {
+            CarColorsGlobalInstance.instance.carSysterm.addCar(levelNode.children[i])
+        }
+
+        console.log('carSeats:', CarColorsGlobalInstance.instance.carSysterm.carSeats);
     }
 
     registerListener() {
