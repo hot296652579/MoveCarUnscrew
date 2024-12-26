@@ -70,27 +70,41 @@ export class RoosterMoveCar extends Component {
                 let tweenCar: Tween<Node> = tween(car)
                 if (collider.node.name === "PhysicRoodTop") {
                     this.hitPointTween(car, parkPoint, tweenCar, collider.node)
-                    // this.topRoadTween(car, parkPoint, tweenCar)
+                    this.topRoadTween(car, parkPoint, tweenCar)
                 } else if (collider.node.name === "PhysicRoodLeft") {
                     const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodTop/LeftPoint")
                     this.hitPointTween(car, targetPoint, tweenCar, collider.node)
+                    this.leftRoadTween(car, tweenCar)
+                    this.topRoadTween(car, parkPoint, tweenCar)
                 } else if (collider.node.name === "PhysicRoodRight") {
                     const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodTop/RightPoint")
                     this.hitPointTween(car, targetPoint, tweenCar, collider.node)
+                    this.rightRoadTween(car, tweenCar)
+                    this.topRoadTween(car, parkPoint, tweenCar)
                 } else if (collider.node.name === "PhysicRoodBottom") {
-                    if (carWorldPos.x > 0) {
-                        const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodBottom/RightPoint")
-                        this.hitPointTween(car, targetPoint, tweenCar, collider.node)
+                    const hitPoint = find("Canvas/Scene/Grounds/PhysicRoodBottom")!;
+                    const leftPoint = hitPoint.getChildByName('LeftPoint')!;
+                    const rightPoint = hitPoint.getChildByName('RightPoint')!;
+                    const toLeft = leftPoint.getWorldPosition().subtract(carWorldPos).normalize();
+                    const toRight = rightPoint.getWorldPosition().subtract(carWorldPos).normalize();
 
-                    } else {
+                    if (Math.abs(toLeft.x) < Math.abs(toRight.x)) {
                         const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodBottom/LeftPoint")
                         this.hitPointTween(car, targetPoint, tweenCar, collider.node)
+                        this.bottomRoadTween(car, targetPoint, tweenCar)
+                        this.leftRoadTween(car, tweenCar)
+                    } else {
+                        const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodBottom/RightPoint")
+                        this.hitPointTween(car, targetPoint, tweenCar, collider.node)
+                        this.bottomRoadTween(car, targetPoint, tweenCar)
+                        this.rightRoadTween(car, tweenCar)
                     }
+                    this.topRoadTween(car, parkPoint, tweenCar)
                 }
 
                 parkPoint.name = "inuse"
                 tweenCar.call(() => {
-                    // car.setParent(point, true)
+                    car.setParent(parkPoint, true);
                 })
                     .start()
             }
@@ -152,7 +166,16 @@ export class RoosterMoveCar extends Component {
                 let up: Vec3;
                 if (Math.abs(direction.x) > Math.abs(direction.y)) {
                     // 左右方向
-                    up = direction.x > 0 ? new Vec3(0, 0, -1) : new Vec3(0, 0, 1);
+                    const leftPoint = hitPoint.getChildByName('LeftPoint')!;
+                    const rightPoint = hitPoint.getChildByName('RightPoint')!;
+                    const toLeft = leftPoint.getWorldPosition().subtract(carWorldPos).normalize();
+                    const toRight = rightPoint.getWorldPosition().subtract(carWorldPos).normalize();
+
+                    if (Math.abs(toLeft.x) < Math.abs(toRight.x)) {
+                        up = new Vec3(0, 0, 1);
+                    } else {
+                        up = new Vec3(0, 0, -1);
+                    }
                 } else {
                     // 上下方向
                     up = direction.y > 0 ? new Vec3(0, 1, 0) : new Vec3(0, -1, 0);
@@ -183,7 +206,7 @@ export class RoosterMoveCar extends Component {
     }
     // 左边导航
     leftRoadTween(car: Node, tweenCar: Tween<Node>) {
-        const targetPoint = find("Scene/Grounds/PhysicRoodTop/LeftPoint")
+        const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodTop/LeftPoint")
         tweenCar.to(0.2, {
             worldPosition: targetPoint.getWorldPosition()
         })
@@ -200,7 +223,7 @@ export class RoosterMoveCar extends Component {
     }
     // 右边导航
     rightRoadTween(car: Node, tweenCar: Tween<Node>) {
-        const targetPoint = find("Scene/Grounds/PhysicRoodTop/RightPoint")
+        const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodTop/RightPoint")
         tweenCar.to(0.2, {
             worldPosition: targetPoint.getWorldPosition()
         })
