@@ -2,6 +2,7 @@ import { _decorator, Component, find, geometry, Node, PhysicsSystem } from 'cc';
 import { CarColors, CarTypes } from '../CarColorsGlobalTypes';
 import { CarCarColorsComponent } from '../Components/CarCarColorsComponent';
 import { CarBoxComponent } from '../Components/CarBoxComponent';
+import { CarModel } from '../CarModel';
 const { ccclass, property } = _decorator;
 
 @ccclass('CarCarColorsSysterm')
@@ -11,6 +12,11 @@ export class CarCarColorsSysterm extends Component {
     carSeats: Array<CarColors> = []
 
     carBoxMap: Array<CarBoxComponent> = []
+
+    carModel: CarModel = null
+    initData() {
+        this.carModel = new CarModel();
+    }
 
     addCar(node: Node) {
         const carBoxCom = node.getComponent(CarBoxComponent)
@@ -22,6 +28,7 @@ export class CarCarColorsSysterm extends Component {
             return
         }
         this.activeCar.set(node.uuid, node)
+        if (!node.getComponent(CarCarColorsComponent)) return;
         const color = node.getComponent(CarCarColorsComponent).carColor
         const carType = node.getComponent(CarCarColorsComponent).carType
         let len = 10
@@ -98,6 +105,20 @@ export class CarCarColorsSysterm extends Component {
         bigCars.cars.forEach((car, index) => {
             car.getComponent(CarCarColorsComponent).carColor = bigCars.colors[index]
         })
+    }
+
+    getCarSeatsRandomColor() {
+        return this.carSeats[Math.floor(Math.random() * this.carSeats.length)]
+    }
+
+    getLayerGroup() {
+        let temp = 1 << this.carModel.group;
+        this.carModel.group += 1;
+        if (this.carModel.group > 16) {
+            this.carModel.group = 7;
+        }
+        console.log("group:::::", temp);
+        return temp;
     }
 
     checkCarBox() {
