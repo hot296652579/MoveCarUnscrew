@@ -50,11 +50,11 @@ export class UnitColorsSysterm extends Component {
                 holes.forEach((hole) => {
                     const carColor = CarColorsGlobalInstance.instance.carSysterm.carSeats.pop()
                     const pin = instantiate(this.pin);
-                    pin.getComponent(PinComponent)!.init_date(group, carColor, hole);
+                    const holeNode = hole.node.getChildByName('hole')!;
+                    pin.getComponent(PinComponent)!.init_date(group, carColor, hole.getComponent(HoleComponent));
                     pin.name = 'pin';
-                    hole.node.getChildByName('hole')!.addChild(pin);
+                    holeNode.addChild(pin);
                 })
-
             })
         })
     }
@@ -120,7 +120,6 @@ export class UnitColorsSysterm extends Component {
 
             // 匹配的车
             if (selectedCar !== null) {
-
                 if (selectedCar.getComponent(CarCarColorsComponent).addRole(pinCom.node)) {
                     selectedCar.setParent(find("Canvas/Scene/Levels"), true)
                 }

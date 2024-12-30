@@ -35,10 +35,8 @@ export class RoosterMoveCar extends Component {
         CarColorsGlobalInstance.instance.carSysterm.clearAll();
         const levelNode = await LevelManager.instance.loadLevel(1);
         for (let i = 0; i < levelNode.children.length; i++) {
-            CarColorsGlobalInstance.instance.carSysterm.addCar(levelNode.children[i])
+            CarColorsGlobalInstance.instance.carSysterm.addCar(levelNode.children[i]);
         }
-
-        console.log('carSeats:', CarColorsGlobalInstance.instance.carSysterm.carSeats);
     }
 
     registerListener() {
