@@ -85,6 +85,11 @@ export class UnitColorsSysterm extends Component {
         const layers = this.node.children;
         const bottomLayers = layers.slice(-1);
         bottomLayers.forEach((layer) => {
+            if (layer.children.length == 0) {
+                layer.active = false;
+                layer.removeFromParent();
+            }
+
             layer.children.forEach((element) => {
                 const holes = element.getComponentsInChildren(HoleComponent)!;
                 holes.forEach((hole) => {
@@ -117,7 +122,7 @@ export class UnitColorsSysterm extends Component {
             if (selectedCar !== null) {
 
                 if (selectedCar.getComponent(CarCarColorsComponent).addRole(pinCom.node)) {
-
+                    selectedCar.setParent(find("Canvas/Scene/Levels"), true)
                 }
             } else {
 
