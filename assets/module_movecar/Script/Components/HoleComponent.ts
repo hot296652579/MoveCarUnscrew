@@ -7,10 +7,6 @@ export class HoleComponent extends Component {
     start() {
 
     }
-
-    initHole(color: CarColors) {
-        //DOTO 实例化钉子
-    }
 }
 
 

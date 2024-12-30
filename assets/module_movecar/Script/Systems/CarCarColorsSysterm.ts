@@ -42,6 +42,7 @@ export class CarCarColorsSysterm extends Component {
         for (; len--;) {
             this.carSeats.push(color)
         }
+        console.log(this.carSeats);
     }
 
     removeCar(node: Node) {
@@ -58,6 +59,7 @@ export class CarCarColorsSysterm extends Component {
         this.carSeats = []
     }
 
+    //DOTO 刷新车方式改变
     refreshCar() {
         const cars = find("Scene/Levels").children[0].children
 
@@ -107,17 +109,14 @@ export class CarCarColorsSysterm extends Component {
         })
     }
 
-    getCarSeatsRandomColor() {
-        return this.carSeats[Math.floor(Math.random() * this.carSeats.length)]
-    }
-
+    //获取物理分组
     getLayerGroup() {
         let temp = 1 << this.carModel.group;
         this.carModel.group += 1;
         if (this.carModel.group > 16) {
             this.carModel.group = 7;
         }
-        console.log("group:::::", temp);
+        // console.log("group:::::", temp);
         return temp;
     }
 

@@ -177,7 +177,7 @@ export class Adapter extends Component {
                 result = DeviceDirection.UpsideDown;
             }
         }
-        console.log(`当前设备方向:${str}`)
+        // console.log(`当前设备方向:${str}`)
         return result;
     }
 

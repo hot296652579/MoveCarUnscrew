@@ -126,7 +126,7 @@ export class CarCarColorsComponent extends Component {
             })
             .delay(0.1)
             .to(0.2, {
-                worldPosition: find("Scene/Grounds/PhysicRoodTop/RightPoint").getWorldPosition()
+                worldPosition: find("Canvas/Scene/Grounds/PhysicRoodTop/RightPoint").getWorldPosition()
             })
             .call(() => {
                 this.carOut()
