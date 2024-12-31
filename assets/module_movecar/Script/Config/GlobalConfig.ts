@@ -1,5 +1,5 @@
 export const GlobalConfig = {
-    isDebug: false,
+    isDebug: true,
     initilizeLevel: 1,//初始关卡
-    levelTotal: 70,   //最大关卡等级
+    levelTotal: 2,   //最大关卡等级
 }

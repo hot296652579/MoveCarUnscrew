@@ -765,7 +765,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "empty",
+    "_name": "empty-003",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -3572,9 +3572,6 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "levels": {
-      "__id__": 30
-    },
     "_id": "7c3L5I+DJL26u6DpQxTEvz"
   },
   {

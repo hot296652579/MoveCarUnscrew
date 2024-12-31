@@ -2,6 +2,11 @@ import { _decorator, Component, Enum, EventTouch, find, Input, Node, tween, Vec3
 import { CarColors, CarDir, CarTypes } from '../CarColorsGlobalTypes';
 import { GameEvent } from '../Enum/GameEvent';
 import { EventDispatcher } from 'db://assets/core_tgx/easy_ui_framework/EventDispatcher';
+import { CarColorsGlobalInstance } from '../CarColorsGlobalInstance';
+import { UnitComponent } from './UnitComponent';
+import { UnitColorsSysterm } from '../Systems/UnitColorsSysterm';
+import { tgxUIMgr } from 'db://assets/core_tgx/tgx';
+import { UI_BattleResult } from 'db://assets/scripts/UIDef';
 const { ccclass, property, executeInEditMode } = _decorator;
 @ccclass('CarCarColorsComponent')
 @executeInEditMode
@@ -103,8 +108,19 @@ export class CarCarColorsComponent extends Component {
         this.node.getChildByName("Seets").children.forEach(seat => {
             if (seat.children.length === 0) return
         })
+        CarColorsGlobalInstance.instance.carSysterm.removeCar(this.node);
         this.node.removeFromParent()
         this.node.destroy()
+
+        if (CarColorsGlobalInstance.instance.carSysterm.activeCar.size === 0) {
+            const children = CarColorsGlobalInstance.instance.levels.children;
+            const unit = children[0].getComponentsInChildren(UnitColorsSysterm)!;
+            const pinIsEmpty = unit[0].pinIsEmpty();
+            if (pinIsEmpty) {
+                console.log('游戏胜利!!!');
+                tgxUIMgr.inst.showUI(UI_BattleResult);
+            }
+        }
     }
 
     protected onDestroy(): void {

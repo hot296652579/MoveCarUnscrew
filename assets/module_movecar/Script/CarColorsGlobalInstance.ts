@@ -15,6 +15,7 @@ export class CarColorsGlobalInstance extends Component {
         return this._instance;
     }
 
+    public levels: Node = null;
     public carSysterm: CarCarColorsSysterm = null;
 }
 

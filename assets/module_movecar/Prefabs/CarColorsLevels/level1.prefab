@@ -1145,7 +1145,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "Unit_1"
+    "value": "unit_1"
   },
   {
     "__type__": "cc.TargetInfo",

@@ -46,8 +46,9 @@ export class CarCarColorsSysterm extends Component {
     }
 
     removeCar(node: Node) {
-
+        console.log(this.activeCar);
         this.activeCar.delete(node.uuid)
+        console.log(this.activeCar);
     }
 
     clearAll() {

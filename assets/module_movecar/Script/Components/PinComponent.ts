@@ -16,7 +16,7 @@ export class PinComponent extends Component {
     flying: boolean = false;
 
     start() {
-        this.node.on(Input.EventType.TOUCH_START, this.touch_start, this);
+        // this.node.on(Input.EventType.TOUCH_START, this.touch_start, this);
     }
 
     update(deltaTime: number) {

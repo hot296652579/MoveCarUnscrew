@@ -6,4 +6,13 @@ export class GameEvent {
 
     /** 点击汽车*/
     static readonly EVENT_CLICK_CAR = 'EVENT_CLICK_CAR';
+
+    /** 更新Layer*/
+    static readonly EVENT_UPDATE_LAYER = 'EVENT_UPDATE_LAYER';
+
+    /** 闯关成功 关卡升级*/
+    static readonly EVENT_BATTLE_SUCCESS_LEVEL_UP = 'EVENT_BATTLE_SUCCESS_LEVEL_UP';
+
+    /** 闯关失败 关卡重载*/
+    static readonly EVENT_BATTLE_FAIL_LEVEL_RESET = 'EVENT_BATTLE_FAIL_LEVEL_RESET';
 }

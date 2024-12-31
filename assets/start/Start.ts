@@ -14,6 +14,7 @@ const _preloadRes = [
     { bundle: ModuleDef.BASIC, url: 'ui_alert/UI_Alert', type: 'prefab' },
     { bundle: ModuleDef.BASIC, url: 'ui_tips/UI_Tips', type: 'prefab' },
     { bundle: ModuleDef.BASIC, url: 'ui_waiting/UI_Waiting', type: 'prefab' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Prefabs/UI/Result/UI_BattleResult', type: 'prefab' },
     { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/bgm.mp3', type: 'audio' },
     { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/bgm_jiemian.mp3', type: 'audio' },
     { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/dianji.mp3', type: 'audio' },

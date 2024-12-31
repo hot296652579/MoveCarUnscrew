@@ -20,6 +20,9 @@ export class RoosterMoveCar extends Component {
 
         // PhysicsSystem2D.instance.debugDrawFlags = 1; // 启用调试绘制
 
+        LevelManager.instance.initilizeModel();
+
+        CarColorsGlobalInstance.instance.levels = find('Canvas/Scene/Levels')!;
         CarColorsGlobalInstance.instance.carSysterm = this.node.getComponent(CarCarColorsSysterm)!;
         CarColorsGlobalInstance.instance.carSysterm.initData();
 
@@ -31,12 +34,9 @@ export class RoosterMoveCar extends Component {
     }
 
     async startGame() {
-        find("Canvas/Scene/Levels").removeAllChildren();
-        CarColorsGlobalInstance.instance.carSysterm.clearAll();
-        const levelNode = await LevelManager.instance.loadLevel(1);
-        for (let i = 0; i < levelNode.children.length; i++) {
-            CarColorsGlobalInstance.instance.carSysterm.addCar(levelNode.children[i]);
-        }
+        //DOTO 获取保存等级
+        LevelManager.instance.levelModel.level = 1;
+        await LevelManager.instance.gameStart();
     }
 
     registerListener() {
