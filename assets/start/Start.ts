@@ -49,19 +49,17 @@ export class Start extends Component {
     private _numCurrentLoaded = 0;
     start() {
 
-        // // 确保物理系统启用
-        // PhysicsSystem2D.instance.enable = true;
-
-        // // 开启调试信息
         // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Aabb |
         //     EPhysics2DDrawFlags.Pair |
         //     EPhysics2DDrawFlags.CenterOfMass |
         //     EPhysics2DDrawFlags.Joint |
         //     EPhysics2DDrawFlags.Shape;
 
+        PhysicsSystem2D.instance.debugDrawFlags = 0; // 启用调试绘制
+
         tgxModuleContext.setDefaultModule(ModuleDef.BASIC);
 
-        game.frameRate = 61;
+        game.frameRate = 60;
         tgxUIMgr.inst.setup(this.uiCanvasPrefab, GameUILayers.NUM, GameUILayerNames);
 
         this.preloadBundle(0);

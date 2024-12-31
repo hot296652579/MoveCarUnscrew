@@ -12,19 +12,13 @@ const { ccclass, property } = _decorator;
 @ccclass('RoosterMoveCar')
 export class RoosterMoveCar extends Component {
     onLoad() {
-        // PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Aabb |
-        //     EPhysics2DDrawFlags.Pair |
-        //     EPhysics2DDrawFlags.CenterOfMass |
-        //     EPhysics2DDrawFlags.Joint |
-        //     EPhysics2DDrawFlags.Shape;
 
-        // PhysicsSystem2D.instance.debugDrawFlags = 1; // 启用调试绘制
 
         LevelManager.instance.initilizeModel();
-
         CarColorsGlobalInstance.instance.levels = find('Canvas/Scene/Levels')!;
         CarColorsGlobalInstance.instance.carSysterm = this.node.getComponent(CarCarColorsSysterm)!;
         CarColorsGlobalInstance.instance.carSysterm.initData();
+        CarColorsGlobalInstance.instance.loadPinPrefab();
 
         this.registerListener();
     }
@@ -35,7 +29,7 @@ export class RoosterMoveCar extends Component {
 
     async startGame() {
         //DOTO 获取保存等级
-        LevelManager.instance.levelModel.level = 1;
+        LevelManager.instance.levelModel.level = 2;
         await LevelManager.instance.gameStart();
     }
 

@@ -1,3 +1,3 @@
 export class CarModel {
-    public group: number = 7;
+    public group: number = 3;
 }

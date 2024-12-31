@@ -24,63 +24,47 @@
       },
       {
         "index": 2,
-        "name": "park"
-      },
-      {
-        "index": 3,
-        "name": "door"
-      },
-      {
-        "index": 4,
         "name": "street"
       },
       {
-        "index": 5,
-        "name": "endstreet"
-      },
-      {
-        "index": 6,
-        "name": "role"
-      },
-      {
-        "index": 7,
-        "name": "g0"
-      },
-      {
-        "index": 8,
+        "index": 3,
         "name": "g1"
       },
       {
-        "index": 9,
+        "index": 4,
         "name": "g2"
       },
       {
-        "index": 10,
+        "index": 5,
         "name": "g3"
       },
       {
-        "index": 11,
+        "index": 6,
         "name": "g4"
       },
       {
-        "index": 12,
+        "index": 7,
         "name": "g5"
       },
       {
-        "index": 13,
+        "index": 8,
         "name": "g6"
       },
       {
-        "index": 14,
+        "index": 9,
         "name": "g7"
       },
       {
-        "index": 15,
+        "index": 10,
         "name": "g8"
       },
       {
-        "index": 16,
+        "index": 11,
         "name": "g9"
+      },
+      {
+        "index": 12,
+        "name": "g10"
       }
     ],
     "collisionMatrix": {
@@ -100,7 +84,13 @@
       "13": 8192,
       "14": 16384,
       "15": 32768,
-      "16": 65536
+      "16": 65536,
+      "17": 131072,
+      "18": 262144,
+      "19": 524288,
+      "20": 1048576,
+      "21": 2097152,
+      "22": 4194304
     }
   }
 }

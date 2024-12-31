@@ -16,7 +16,6 @@ export class PinComponent extends Component {
     flying: boolean = false;
 
     start() {
-        // this.node.on(Input.EventType.TOUCH_START, this.touch_start, this);
     }
 
     update(deltaTime: number) {
@@ -33,23 +32,20 @@ export class PinComponent extends Component {
 
     public init_date(group_id: number, pin_color: CarColors, hole: HoleComponent) {
         this.pos_hole = hole;
-        this.node.getComponent(RigidBody2D).group = group_id;
-        this.node.getComponents(BoxCollider2D).forEach(element => {
-            element.group = group_id;
-        });
-        this.node.getComponents(CircleCollider2D).forEach(element => {
-            element.group = group_id;
-        });
-        this.node.getComponents(PolygonCollider2D).forEach(element => {
-            element.group = group_id;
-        });
+        // this.node.getComponent(RigidBody2D).group = group_id;
+        // this.node.getComponents(BoxCollider2D).forEach(element => {
+        //     element.group = group_id;
+        // });
+        // this.node.getComponents(CircleCollider2D).forEach(element => {
+        //     element.group = group_id;
+        // });
+        this.node.getComponent(CircleCollider2D).group = group_id;
+        // this.node.getComponents(PolygonCollider2D).forEach(element => {
+        //     element.group = group_id;
+        // });
         this.pin_color = pin_color;
         //set color
         this.reset_img();
-    }
-
-    touch_start(e: EventTouch) {
-        this.node.destroy();
     }
 
     public remove_collider() {

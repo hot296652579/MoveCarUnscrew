@@ -3,7 +3,6 @@ import { CarColors, CarDir, CarTypes } from '../CarColorsGlobalTypes';
 import { GameEvent } from '../Enum/GameEvent';
 import { EventDispatcher } from 'db://assets/core_tgx/easy_ui_framework/EventDispatcher';
 import { CarColorsGlobalInstance } from '../CarColorsGlobalInstance';
-import { UnitComponent } from './UnitComponent';
 import { UnitColorsSysterm } from '../Systems/UnitColorsSysterm';
 import { tgxUIMgr } from 'db://assets/core_tgx/tgx';
 import { UI_BattleResult } from 'db://assets/scripts/UIDef';

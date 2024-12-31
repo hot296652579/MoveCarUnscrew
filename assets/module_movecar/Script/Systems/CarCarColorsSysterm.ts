@@ -46,7 +46,6 @@ export class CarCarColorsSysterm extends Component {
     }
 
     removeCar(node: Node) {
-        console.log(this.activeCar);
         this.activeCar.delete(node.uuid)
         console.log(this.activeCar);
     }
@@ -114,8 +113,8 @@ export class CarCarColorsSysterm extends Component {
     getLayerGroup() {
         let temp = 1 << this.carModel.group;
         this.carModel.group += 1;
-        if (this.carModel.group > 16) {
-            this.carModel.group = 7;
+        if (this.carModel.group > 12) {
+            this.carModel.group = 3;
         }
         // console.log("group:::::", temp);
         return temp;

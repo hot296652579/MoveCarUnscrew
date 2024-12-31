@@ -6,8 +6,6 @@ import { PinComponent } from "../Components/PinComponent";
 import { CarCarColorsComponent } from "../Components/CarCarColorsComponent";
 import { EventDispatcher } from "db://assets/core_tgx/easy_ui_framework/EventDispatcher";
 import { GameEvent } from "../Enum/GameEvent";
-import { ElementComponent } from "../Components/ElementComponent";
-import { UnitComponent } from "../Components/UnitComponent";
 const { ccclass, property } = _decorator;
 
 @ccclass('UnitColorsSysterm')
@@ -15,28 +13,14 @@ export class UnitColorsSysterm extends Component {
 
     pin: Prefab = null!;
 
-    protected async start() {
-        this.pin = await this.loadAsyncPin();
-        this.initUI();
+    protected start(): void {
+        this.pin = CarColorsGlobalInstance.instance.pinPrefab;
         this.registerEvent();
+        this.initUI();
     }
 
     registerEvent() {
         EventDispatcher.instance.on(GameEvent.EVENT_UPDATE_LAYER, this.updateLayer, this);
-    }
-
-    async loadAsyncPin(): Promise<Prefab> {
-        return new Promise((resolve, reject) => {
-            const bundle = assetManager.getBundle(resLoader.gameBundleName);
-            if (!bundle) {
-                console.error("module_nut is null!");
-                reject();
-            }
-
-            resLoader.loadAsync(resLoader.gameBundleName, `Prefabs/Unit/pin`, Prefab).then((prefab: Prefab) => {
-                resolve(prefab);
-            })
-        })
     }
 
     protected initUI(): void {
@@ -61,7 +45,6 @@ export class UnitColorsSysterm extends Component {
                     const pin = instantiate(this.pin);
                     const holeNode = hole.node.getChildByName('hole')!;
                     pin.getComponent(PinComponent)!.init_date(group, carColor, hole.getComponent(HoleComponent));
-                    pin.name = 'pin';
                     holeNode.addChild(pin);
                 })
             })
