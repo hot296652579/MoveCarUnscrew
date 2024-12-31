@@ -6,6 +6,7 @@ import { GameEvent } from './Enum/GameEvent';
 import { LevelModel } from './Model/LevelModel';
 import { CarColorsGlobalInstance } from './CarColorsGlobalInstance';
 import { CarCarColorsComponent } from './Components/CarCarColorsComponent';
+import { UnitColorsSysterm } from './Systems/UnitColorsSysterm';
 const { ccclass, property } = _decorator;
 
 @ccclass('LevelManager')
@@ -69,6 +70,11 @@ export class LevelManager {
             const temp = levelNode.children[i];
             if (temp.getComponent(CarCarColorsComponent)) {
                 CarColorsGlobalInstance.instance.carSysterm.addCar(levelNode.children[i]);
+            }
+
+            if (temp.getComponent(UnitColorsSysterm)) {
+                temp.getComponent(UnitColorsSysterm).initLayer();
+                temp.getComponent(UnitColorsSysterm).initPin();
             }
         }
     }

@@ -1,6 +1,7 @@
 import { _decorator, assetManager, Component, Node, Prefab } from 'cc';
 import { CarCarColorsSysterm } from './Systems/CarCarColorsSysterm';
 import { resLoader } from '../../core_tgx/base/ResLoader';
+import { ResourcePool } from './ResourcePool';
 
 const { ccclass, property } = _decorator;
 
@@ -18,7 +19,7 @@ export class CarColorsGlobalInstance extends Component {
 
     async loadPinPrefab() {
         const prefab = await this.loadAsyncPin();
-        this.pinPrefab = prefab;
+        ResourcePool.instance.set_prefab(prefab.name, prefab);
     }
 
     async loadAsyncPin(): Promise<Prefab> {
@@ -35,7 +36,6 @@ export class CarColorsGlobalInstance extends Component {
         })
     }
 
-    public pinPrefab: Prefab = null;
     public levels: Node = null;
     public carSysterm: CarCarColorsSysterm = null;
 }

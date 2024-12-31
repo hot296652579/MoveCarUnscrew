@@ -1489,7 +1489,7 @@
   },
   {
     "__type__": "cc.PrefabInstance",
-    "fileId": "f2PM1eu55LQpHVroCrWrWF",
+    "fileId": "d40PH32UdPNLT15kPVT3vA",
     "prefabRootNode": {
       "__id__": 1
     },
@@ -1537,8 +1537,8 @@
     ],
     "value": {
       "__type__": "cc.Vec3",
-      "x": 144.779,
-      "y": 461.292,
+      "x": 191.266,
+      "y": 557.841,
       "z": 0
     }
   },

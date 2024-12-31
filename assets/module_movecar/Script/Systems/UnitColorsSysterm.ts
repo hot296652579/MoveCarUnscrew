@@ -6,46 +6,49 @@ import { PinComponent } from "../Components/PinComponent";
 import { CarCarColorsComponent } from "../Components/CarCarColorsComponent";
 import { EventDispatcher } from "db://assets/core_tgx/easy_ui_framework/EventDispatcher";
 import { GameEvent } from "../Enum/GameEvent";
+import { ResourcePool } from "../ResourcePool";
 const { ccclass, property } = _decorator;
 
 @ccclass('UnitColorsSysterm')
 export class UnitColorsSysterm extends Component {
-
-    pin: Prefab = null!;
+    layer_group_id = 0;
 
     protected start(): void {
-        this.pin = CarColorsGlobalInstance.instance.pinPrefab;
         this.registerEvent();
-        this.initUI();
     }
 
     registerEvent() {
         EventDispatcher.instance.on(GameEvent.EVENT_UPDATE_LAYER, this.updateLayer, this);
     }
 
-    protected initUI(): void {
+    initLayer(): void {
         this.node.children.forEach((layer) => {
-            const group = CarColorsGlobalInstance.instance.carSysterm.getLayerGroup();
-            console.log("group:", group);
+            this.layer_group_id = CarColorsGlobalInstance.instance.carSysterm.getLayerGroup();
             layer.children.forEach((element) => {
-                element.getComponent(RigidBody2D)!.group = group;
+                element.getComponent(RigidBody2D)!.group = this.layer_group_id;
                 element.getComponents(BoxCollider2D).forEach(element => {
-                    element.group = group;
+                    element.group = this.layer_group_id;
                 });
                 element.getComponents(CircleCollider2D).forEach(element => {
-                    element.group = group;
+                    element.group = this.layer_group_id;
                 });
                 element.getComponents(PolygonCollider2D).forEach(element => {
-                    element.group = group;
+                    element.group = this.layer_group_id;
                 });
+            })
+        })
+    }
 
+    initPin() {
+        this.node.children.forEach((layer) => {
+            layer.children.forEach((element) => {
                 const holes = element.getComponentsInChildren(HoleComponent)!;
                 holes.forEach((hole) => {
                     const carColor = CarColorsGlobalInstance.instance.carSysterm.carSeats.pop()
-                    const pin = instantiate(this.pin);
+                    const pin = instantiate(ResourcePool.instance.get_prefab("pin"));
                     const holeNode = hole.node.getChildByName('hole')!;
-                    pin.getComponent(PinComponent)!.init_date(group, carColor, hole.getComponent(HoleComponent));
                     holeNode.addChild(pin);
+                    pin.getComponent(PinComponent)!.init_date(this.layer_group_id, carColor, hole.getComponent(HoleComponent));
                 })
             })
         })

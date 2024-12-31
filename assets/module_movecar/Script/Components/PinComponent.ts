@@ -32,7 +32,7 @@ export class PinComponent extends Component {
 
     public init_date(group_id: number, pin_color: CarColors, hole: HoleComponent) {
         this.pos_hole = hole;
-        // this.node.getComponent(RigidBody2D).group = group_id;
+        this.node.getComponent(RigidBody2D).group = group_id;
         // this.node.getComponents(BoxCollider2D).forEach(element => {
         //     element.group = group_id;
         // });
