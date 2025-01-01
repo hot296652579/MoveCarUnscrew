@@ -1,7 +1,15 @@
+/*
+ * @Author: super_javan 296652579@qq.com
+ * @Date: 2025-01-01 09:28:17
+ * @LastEditors: super_javan 296652579@qq.com
+ * @LastEditTime: 2025-01-01 18:28:17
+ * @FilePath: /MoveCarUnscrew/assets/module_movecar/Script/CarColorsGlobalInstance.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import { _decorator, assetManager, Component, Node, Prefab } from 'cc';
-import { CarCarColorsSysterm } from './Systems/CarCarColorsSysterm';
 import { resLoader } from '../../core_tgx/base/ResLoader';
 import { ResourcePool } from './ResourcePool';
+import { CarCarColorsSysterm } from './Systems/CarCarColorsSysterm';
 
 const { ccclass, property } = _decorator;
 
@@ -30,7 +38,7 @@ export class CarColorsGlobalInstance extends Component {
                 reject();
             }
 
-            resLoader.loadAsync(resLoader.gameBundleName, `Prefabs/Unit/pin`, Prefab).then((prefab: Prefab) => {
+            resLoader.loadAsync(resLoader.gameBundleName, `Prefabs/pin`, Prefab).then((prefab: Prefab) => {
                 resolve(prefab);
             })
         })

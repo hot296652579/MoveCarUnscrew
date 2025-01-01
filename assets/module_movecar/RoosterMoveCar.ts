@@ -1,12 +1,11 @@
-import { _decorator, Camera, Component, EPhysics2DDrawFlags, ERaycast2DType, EventTouch, find, geometry, Input, Mat4, Node, PhysicsSystem, PhysicsSystem2D, Quat, Tween, tween, Vec2, Vec3 } from 'cc';
+import { _decorator, Component, ERaycast2DType, find, Node, PhysicsSystem2D, Tween, tween, Vec2, Vec3 } from 'cc';
 import { EventDispatcher } from '../core_tgx/easy_ui_framework/EventDispatcher';
-import { GameEvent } from './Script/Enum/GameEvent';
-import { CarCarColorsComponent } from './Script/Components/CarCarColorsComponent';
-import { CarDir } from './Script/CarColorsGlobalTypes';
-import { dir } from 'console';
 import { CarColorsGlobalInstance } from './Script/CarColorsGlobalInstance';
-import { CarCarColorsSysterm } from './Script/Systems/CarCarColorsSysterm';
+import { CarDir } from './Script/CarColorsGlobalTypes';
+import { CarCarColorsComponent } from './Script/Components/CarCarColorsComponent';
+import { GameEvent } from './Script/Enum/GameEvent';
 import { LevelManager } from './Script/LevelMgr';
+import { CarCarColorsSysterm } from './Script/Systems/CarCarColorsSysterm';
 const { ccclass, property } = _decorator;
 
 @ccclass('RoosterMoveCar')

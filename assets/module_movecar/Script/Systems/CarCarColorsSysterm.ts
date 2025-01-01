@@ -1,8 +1,7 @@
 import { _decorator, Component, find, geometry, Node, PhysicsSystem } from 'cc';
 import { CarColors, CarTypes } from '../CarColorsGlobalTypes';
-import { CarCarColorsComponent } from '../Components/CarCarColorsComponent';
 import { CarBoxComponent } from '../Components/CarBoxComponent';
-import { CarModel } from '../CarModel';
+import { CarCarColorsComponent } from '../Components/CarCarColorsComponent';
 const { ccclass, property } = _decorator;
 
 @ccclass('CarCarColorsSysterm')
@@ -13,9 +12,7 @@ export class CarCarColorsSysterm extends Component {
 
     carBoxMap: Array<CarBoxComponent> = []
 
-    carModel: CarModel = null
     initData() {
-        this.carModel = new CarModel();
     }
 
     addCar(node: Node) {
@@ -42,7 +39,7 @@ export class CarCarColorsSysterm extends Component {
         for (; len--;) {
             this.carSeats.push(color)
         }
-        console.log(this.carSeats);
+        // console.log(this.carSeats);
     }
 
     removeCar(node: Node) {
@@ -107,17 +104,6 @@ export class CarCarColorsSysterm extends Component {
         bigCars.cars.forEach((car, index) => {
             car.getComponent(CarCarColorsComponent).carColor = bigCars.colors[index]
         })
-    }
-
-    //获取物理分组
-    getLayerGroup() {
-        let temp = 1 << this.carModel.group;
-        this.carModel.group += 1;
-        if (this.carModel.group > 12) {
-            this.carModel.group = 3;
-        }
-        // console.log("group:::::", temp);
-        return temp;
     }
 
     checkCarBox() {

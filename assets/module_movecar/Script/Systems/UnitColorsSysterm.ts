@@ -1,12 +1,7 @@
-import { _decorator, assetManager, BoxCollider2D, CircleCollider2D, Component, find, instantiate, PolygonCollider2D, Prefab, RigidBody2D, Node } from "cc";
-import { HoleComponent } from "../Components/HoleComponent";
-import { resLoader } from "db://assets/core_tgx/base/ResLoader";
-import { CarColorsGlobalInstance } from "../CarColorsGlobalInstance";
-import { PinComponent } from "../Components/PinComponent";
+import { Component, Node, _decorator, find } from "cc";
 import { CarCarColorsComponent } from "../Components/CarCarColorsComponent";
-import { EventDispatcher } from "db://assets/core_tgx/easy_ui_framework/EventDispatcher";
-import { GameEvent } from "../Enum/GameEvent";
-import { ResourcePool } from "../ResourcePool";
+import { HoleComponent } from "../Components/HoleComponent";
+import { PinComponent } from "../Components/PinComponent";
 const { ccclass, property } = _decorator;
 
 @ccclass('UnitColorsSysterm')
@@ -18,40 +13,6 @@ export class UnitColorsSysterm extends Component {
     }
 
     registerEvent() {
-        EventDispatcher.instance.on(GameEvent.EVENT_UPDATE_LAYER, this.updateLayer, this);
-    }
-
-    initLayer(): void {
-        this.node.children.forEach((layer) => {
-            this.layer_group_id = CarColorsGlobalInstance.instance.carSysterm.getLayerGroup();
-            layer.children.forEach((element) => {
-                element.getComponent(RigidBody2D)!.group = this.layer_group_id;
-                element.getComponents(BoxCollider2D).forEach(element => {
-                    element.group = this.layer_group_id;
-                });
-                element.getComponents(CircleCollider2D).forEach(element => {
-                    element.group = this.layer_group_id;
-                });
-                element.getComponents(PolygonCollider2D).forEach(element => {
-                    element.group = this.layer_group_id;
-                });
-            })
-        })
-    }
-
-    initPin() {
-        this.node.children.forEach((layer) => {
-            layer.children.forEach((element) => {
-                const holes = element.getComponentsInChildren(HoleComponent)!;
-                holes.forEach((hole) => {
-                    const carColor = CarColorsGlobalInstance.instance.carSysterm.carSeats.pop()
-                    const pin = instantiate(ResourcePool.instance.get_prefab("pin"));
-                    const holeNode = hole.node.getChildByName('hole')!;
-                    holeNode.addChild(pin);
-                    pin.getComponent(PinComponent)!.init_date(this.layer_group_id, carColor, hole.getComponent(HoleComponent));
-                })
-            })
-        })
     }
 
     moveToCar() {
@@ -124,11 +85,7 @@ export class UnitColorsSysterm extends Component {
     }
 
     protected update(dt: number): void {
-        this.moveToCar();
-    }
-
-    private updateLayer() {
-
+        // this.moveToCar();
     }
 
     //获取是否还有钉子

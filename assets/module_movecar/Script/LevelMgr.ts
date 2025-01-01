@@ -1,12 +1,10 @@
-import { _decorator, Node, Prefab, instantiate, Component, sys, assetManager, find } from 'cc';
+import { Node, Prefab, _decorator, assetManager, find, instantiate } from 'cc';
+import { resLoader } from 'db://assets/core_tgx/base/ResLoader';
 import { EventDispatcher } from 'db://assets/core_tgx/easy_ui_framework/EventDispatcher';
-import { ResLoader, resLoader } from 'db://assets/core_tgx/base/ResLoader';
 import { GlobalConfig } from './Config/GlobalConfig';
 import { GameEvent } from './Enum/GameEvent';
+import { LevelAction } from './LevelAction';
 import { LevelModel } from './Model/LevelModel';
-import { CarColorsGlobalInstance } from './CarColorsGlobalInstance';
-import { CarCarColorsComponent } from './Components/CarCarColorsComponent';
-import { UnitColorsSysterm } from './Systems/UnitColorsSysterm';
 const { ccclass, property } = _decorator;
 
 @ccclass('LevelManager')
@@ -41,7 +39,7 @@ export class LevelManager {
             }
 
             console.log('加载的level:', level);
-            resLoader.loadAsync(resLoader.gameBundleName, `Prefabs/CarColorsLevels/level${level}`, Prefab).then((prefab: Prefab) => {
+            resLoader.loadAsync(resLoader.gameBundleName, `Prefabs/CarColorsLevels/lvl_${level}`, Prefab).then((prefab: Prefab) => {
                 resolve(prefab);
             })
         })
@@ -51,7 +49,7 @@ export class LevelManager {
     async preloadLevel() {
         const bundle = assetManager.getBundle(resLoader.gameBundleName);
         for (let i = 1; i <= GlobalConfig.levelTotal; i++) {
-            bundle.preload(`Prefabs/Level/Level${i}`, Prefab, null, () => {
+            bundle.preload(`Prefabs/CarColorsLevels/lvl_${i}`, Prefab, null, () => {
                 console.log(`Level:${i} 预加载完成!`);
             })
         }
@@ -66,17 +64,14 @@ export class LevelManager {
     public async gameStart() {
         const { level } = this.levelModel;
         const levelNode = await this.loadLevel(level);
-        for (let i = 0; i < levelNode.children.length; i++) {
-            const temp = levelNode.children[i];
-            if (temp.getComponent(CarCarColorsComponent)) {
-                CarColorsGlobalInstance.instance.carSysterm.addCar(levelNode.children[i]);
-            }
-
-            if (temp.getComponent(UnitColorsSysterm)) {
-                temp.getComponent(UnitColorsSysterm).initLayer();
-                temp.getComponent(UnitColorsSysterm).initPin();
-            }
-        }
+        levelNode.getComponent(LevelAction)!.init_level();
+        // const levelNode = await this.loadLevel(level);
+        // for (let i = 0; i < levelNode.children.length; i++) {
+        //     const temp = levelNode.children[i];
+        //     if (temp.getComponent(CarCarColorsComponent)) {
+        //         CarColorsGlobalInstance.instance.carSysterm.addCar(levelNode.children[i]);
+        //     }
+        // }
     }
 
     /** 清除关卡数据*/

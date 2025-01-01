@@ -1,4 +1,12 @@
-import { _decorator, BoxCollider2D, CircleCollider2D, Color, Component, director, EventTouch, find, Input, instantiate, Node, PolygonCollider2D, Rect, RigidBody2D, Sprite, tween, UIOpacity, UITransform, Vec2, Vec3 } from 'cc';
+/*
+ * @Author: super_javan 296652579@qq.com
+ * @Date: 2025-01-01 09:28:17
+ * @LastEditors: super_javan 296652579@qq.com
+ * @LastEditTime: 2025-01-01 12:12:44
+ * @FilePath: /MoveCarUnscrew/assets/module_movecar/Script/Components/PinComponent.ts
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+import { _decorator, BoxCollider2D, CircleCollider2D, Color, Component, Input, PolygonCollider2D, RigidBody2D, Sprite } from 'cc';
 import { CarColorHex, CarColors } from '../CarColorsGlobalTypes';
 import { HoleComponent } from './HoleComponent';
 const { ccclass, property } = _decorator;
@@ -33,16 +41,15 @@ export class PinComponent extends Component {
     public init_date(group_id: number, pin_color: CarColors, hole: HoleComponent) {
         this.pos_hole = hole;
         this.node.getComponent(RigidBody2D).group = group_id;
-        // this.node.getComponents(BoxCollider2D).forEach(element => {
-        //     element.group = group_id;
-        // });
-        // this.node.getComponents(CircleCollider2D).forEach(element => {
-        //     element.group = group_id;
-        // });
-        this.node.getComponent(CircleCollider2D).group = group_id;
-        // this.node.getComponents(PolygonCollider2D).forEach(element => {
-        //     element.group = group_id;
-        // });
+        this.node.getComponents(BoxCollider2D).forEach(element => {
+            element.group = group_id;
+        });
+        this.node.getComponents(CircleCollider2D).forEach(element => {
+            element.group = group_id;
+        });
+        this.node.getComponents(PolygonCollider2D).forEach(element => {
+            element.group = group_id;
+        });
         this.pin_color = pin_color;
         //set color
         this.reset_img();

@@ -65,6 +65,26 @@
       {
         "index": 12,
         "name": "g10"
+      },
+      {
+        "index": 13,
+        "name": "g11"
+      },
+      {
+        "index": 14,
+        "name": "g12"
+      },
+      {
+        "index": 15,
+        "name": "g13"
+      },
+      {
+        "index": 16,
+        "name": "g14"
+      },
+      {
+        "index": 17,
+        "name": "g15"
       }
     ],
     "collisionMatrix": {
