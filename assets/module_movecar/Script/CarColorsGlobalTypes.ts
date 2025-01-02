@@ -12,26 +12,26 @@ export enum CarDir {
 }
 
 export enum CarColors {
-    Blue,
-    Green,
-    Red,
-    White,
-    Yellow,
-    Pink,
-    Purple,
-    Brown,
-    Black
+    Blue = 1,
+    Green = 2,
+    Red = 3,
+    White = 4,
+    Yellow = 5,
+    Pink = 6,
+    Purple = 7,
+    Brown = 8,
+    Black = 9
 }
 
 // 定义对应的十六进制颜色值
 export const CarColorHex: Record<CarColors, string> = {
-    [CarColors.Blue]: "#0000FF",
-    [CarColors.Green]: "#008000",
-    [CarColors.Red]: "#FF0000",
-    [CarColors.White]: "#FFFFFF",
-    [CarColors.Yellow]: "#FFFF00",
-    [CarColors.Pink]: "#FFC0CB",
-    [CarColors.Purple]: "#800080",
-    [CarColors.Brown]: "#A52A2A",
+    [CarColors.Blue]: "#1B24F0",
+    [CarColors.Green]: "#1BF01B",
+    [CarColors.Red]: "#F0241B",
+    [CarColors.White]: "#F0FAFA",
+    [CarColors.Yellow]: "#EBF32A",
+    [CarColors.Pink]: "#EB88BB",
+    [CarColors.Purple]: "#F32AF3",
+    [CarColors.Brown]: "#F5A71D",
     [CarColors.Black]: "#000000",
 };

@@ -1,4 +1,4 @@
-import { _decorator, Component, find, Node } from 'cc';
+import { _decorator, Component, ERaycast2DType, find, geometry, Node, PhysicsSystem, PhysicsSystem2D, UITransform, Vec2, Vec3 } from 'cc';
 import { CarColorsGlobalInstance } from './CarColorsGlobalInstance';
 import { CarCarColorsComponent } from './Components/CarCarColorsComponent';
 import { PinComponent } from './Components/PinComponent';
@@ -14,7 +14,7 @@ export class LevelAction extends Component {
 
     start() {
         EventDispatcher.instance.on(GameEvent.EVENT_UPDATE_LAYER, this.hide_element, this);
-        this.schedule(this.moveToCar, 1);
+        this.schedule(this.moveToCar, 0.2);
     }
 
     get_lvl(): number {
@@ -142,42 +142,78 @@ export class LevelAction extends Component {
                     const pins = element.getComponentsInChildren(PinComponent)!;
                     pins.forEach(async (pin) => {
                         pinCom = pin.getComponent(PinComponent)!;
-                        if (pinCom) {
-                            let selectedCar: Node = null
-                            for (let i = cars.length; i--;) {
-                                const car = cars[i]
-                                const carComp = car.getComponent(CarCarColorsComponent);
+                        this.checkAbove(pinCom.node, layer.node);
+                        let selectedCar: Node = null
+                        for (let i = cars.length; i--;) {
+                            const car = cars[i]
+                            const carComp = car.getComponent(CarCarColorsComponent);
 
-                                if (carComp.isFull)
+                            if (carComp.isFull)
+                                continue
+
+                            // 颜色相同
+                            // console.log('车颜色:', carComp.carColor, '钉子颜色:', pinCom.pin_color);
+                            if (carComp.carColor === pinCom.pin_color) {
+                                if (selectedCar === null) {
+                                    selectedCar = car
                                     continue
-
-                                // 颜色相同
-                                // console.log('车颜色:', carComp.carColor, '钉子颜色:', pinCom.pin_color);
-                                if (carComp.carColor === pinCom.pin_color) {
-                                    if (selectedCar === null) {
-                                        selectedCar = car
-                                        continue
-                                    }
-                                    if (selectedCar.getComponent(CarCarColorsComponent).roleNum === 0) {
-                                        selectedCar = car
-                                    }
                                 }
-                            }
-
-                            // 匹配的车
-                            if (selectedCar !== null) {
-                                if (selectedCar.getComponent(CarCarColorsComponent).addRole(pinCom.node)) {
-                                    selectedCar.setParent(find("Canvas/Scene/Levels"), true)
+                                if (selectedCar.getComponent(CarCarColorsComponent).roleNum === 0) {
+                                    selectedCar = car
                                 }
-                            } else {
-                                // 游戏结束判定
-                                if (!isEmpty) {
-                                    console.log("游戏结束！！！！");
-                                }
-                                return
                             }
                         }
+
+                        // 匹配的车
+                        if (selectedCar !== null) {
+                            if (selectedCar.getComponent(CarCarColorsComponent).addRole(pinCom.node)) {
+                                selectedCar.setParent(find("Canvas/Scene/Levels"), true)
+                            }
+                        } else {
+                            // 游戏结束判定
+                            if (!isEmpty) {
+                                console.log("游戏结束！！！！");
+                            }
+                            return
+                        }
                     })
+                });
+            }
+        });
+    }
+
+    /** 检测钉子上方是否有物体*/
+    checkAbove(pin: Node, layer: Node) {
+        // 获取 pin 节点的包围盒
+        const pinTransform = pin.getComponent(UITransform);
+        const pinBoundingBox = pinTransform.getBoundingBoxToWorld();
+        const pinZPosition = pin.getWorldPosition().z;
+
+        let foundAboveElement = false;
+        let layer_arr = this.get_all_layer();
+        layer_arr.forEach(layer => {
+            if (layer.layer_status == 1) {
+                layer.node.children.forEach((elementNode) => {
+                    if (elementNode === pin.parent) {
+                        // 跳过当前 pin 所属的 element 节点
+                        return;
+                    }
+
+                    const elementTransform = elementNode.getComponent(UITransform);
+                    if (!elementTransform) return;
+
+                    // 获取 element 的包围盒
+                    const elementBoundingBox = elementTransform.getBoundingBoxToWorld();
+                    const elementZPosition = elementNode.getWorldPosition().z;
+
+                    // 判断是否在 pin 节点的上方
+                    if (
+                        elementBoundingBox.intersects(pinBoundingBox) && // 包围盒重叠
+                        elementZPosition > pinZPosition // Z 轴在上方
+                    ) {
+                        console.log(`检测到上方的 element 节点: ${elementNode.name}`);
+                        foundAboveElement = true;
+                    }
                 });
             }
         });
