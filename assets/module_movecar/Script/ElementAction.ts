@@ -56,7 +56,7 @@ export class ElementAction extends Component {
                 let new_pin = instantiate(ResourcePool.instance.get_prefab("pin"));
                 this.node.addChild(new_pin);
                 new_pin.setPosition(element.position);
-                console.log("实例钉子 group_id:", group_id);
+                // console.log("实例钉子 group_id:", group_id);
                 new_pin.getComponent(PinComponent).init_date(group_id, color_pin_arr.shift(), element.getComponent(HoleComponent));
             }
         });

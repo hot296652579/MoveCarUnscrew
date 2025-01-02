@@ -6,6 +6,8 @@ import { CarColorsGlobalInstance } from '../CarColorsGlobalInstance';
 import { UnitColorsSysterm } from '../Systems/UnitColorsSysterm';
 import { tgxUIMgr } from 'db://assets/core_tgx/tgx';
 import { UI_BattleResult } from 'db://assets/scripts/UIDef';
+import { UnitAction } from '../UnitAction';
+import { LevelAction } from '../LevelAction';
 const { ccclass, property, executeInEditMode } = _decorator;
 @ccclass('CarCarColorsComponent')
 @executeInEditMode
@@ -113,10 +115,9 @@ export class CarCarColorsComponent extends Component {
 
         if (CarColorsGlobalInstance.instance.carSysterm.activeCar.size === 0) {
             const children = CarColorsGlobalInstance.instance.levels.children;
-            const unit = children[0].getComponentsInChildren(UnitColorsSysterm)!;
-            const pinIsEmpty = unit[0].pinIsEmpty();
-            if (pinIsEmpty) {
-                console.log('游戏胜利!!!');
+            const levelComp = children[0].getComponent(LevelAction)!;
+            const pins = levelComp.get_pin_color();
+            if (pins.length == 0) {
                 tgxUIMgr.inst.showUI(UI_BattleResult);
             }
         }

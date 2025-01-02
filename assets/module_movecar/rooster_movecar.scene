@@ -1368,7 +1368,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 280,
+      "y": 270,
       "z": 0
     },
     "_lrot": {
@@ -1591,7 +1591,7 @@
     "tag": 0,
     "_group": 16,
     "_density": 1,
-    "_sensor": false,
+    "_sensor": true,
     "_friction": 0.2,
     "_restitution": 0,
     "_offset": {
@@ -1861,7 +1861,7 @@
     "tag": 0,
     "_group": 16,
     "_density": 1,
-    "_sensor": false,
+    "_sensor": true,
     "_friction": 0.2,
     "_restitution": 0,
     "_offset": {
@@ -2131,7 +2131,7 @@
     "tag": 0,
     "_group": 16,
     "_density": 1,
-    "_sensor": false,
+    "_sensor": true,
     "_friction": 0.2,
     "_restitution": 0,
     "_offset": {
@@ -2401,7 +2401,7 @@
     "tag": 0,
     "_group": 16,
     "_density": 1,
-    "_sensor": false,
+    "_sensor": true,
     "_friction": 0.2,
     "_restitution": 0,
     "_offset": {

@@ -35,7 +35,6 @@ export class LayerAction extends Component {
 
     public init_layer() {
         this.layer_group_id = DataModel.get_new_group_index();
-        // this.layer_color = DataModel.get_layer_color();
 
         this.node.children.forEach(element_node => {
             element_node.getComponent(ElementAction).init_element(this.layer_group_id, this.layer_color);
@@ -47,12 +46,6 @@ export class LayerAction extends Component {
             element_node.getComponent(ElementAction).init_pin(this.layer_group_id, color_pin_arr);
         });
     }
-
-    // public init_hole() {
-    //     this.node.children.forEach(element_node => {
-    //         element_node.getComponent(ElementAction).init_hole();
-    //     });
-    // }
 
     get_pin_color(arr: PinComponent[]) {
         this.node.children.forEach(element_node => {

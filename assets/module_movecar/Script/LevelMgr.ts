@@ -65,13 +65,6 @@ export class LevelManager {
         const { level } = this.levelModel;
         const levelNode = await this.loadLevel(level);
         levelNode.getComponent(LevelAction)!.init_level();
-        // const levelNode = await this.loadLevel(level);
-        // for (let i = 0; i < levelNode.children.length; i++) {
-        //     const temp = levelNode.children[i];
-        //     if (temp.getComponent(CarCarColorsComponent)) {
-        //         CarColorsGlobalInstance.instance.carSysterm.addCar(levelNode.children[i]);
-        //     }
-        // }
     }
 
     /** 清除关卡数据*/

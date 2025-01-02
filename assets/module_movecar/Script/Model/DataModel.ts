@@ -34,13 +34,13 @@ export class DataModel {
     private static cur_group_index = 3;
 
     public static get_new_group_index() {
-        console.log('group index ++++++++')
+        // console.log('group index ++++++++')
         let temp = 1 << DataModel.cur_group_index;
         DataModel.cur_group_index += 1;
         if (DataModel.cur_group_index > 17) {
             DataModel.cur_group_index = 3;
         }
-        console.log("group:::::", temp);
+        // console.log("group:::::", temp);
         return temp;
     }
 }

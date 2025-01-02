@@ -6,13 +6,12 @@ import { CarCarColorsComponent } from './Script/Components/CarCarColorsComponent
 import { GameEvent } from './Script/Enum/GameEvent';
 import { LevelManager } from './Script/LevelMgr';
 import { CarCarColorsSysterm } from './Script/Systems/CarCarColorsSysterm';
+import { UnitColorsSysterm } from './Script/Systems/UnitColorsSysterm';
 const { ccclass, property } = _decorator;
 
 @ccclass('RoosterMoveCar')
 export class RoosterMoveCar extends Component {
     onLoad() {
-
-
         LevelManager.instance.initilizeModel();
         CarColorsGlobalInstance.instance.levels = find('Canvas/Scene/Levels')!;
         CarColorsGlobalInstance.instance.carSysterm = this.node.getComponent(CarCarColorsSysterm)!;
@@ -28,7 +27,7 @@ export class RoosterMoveCar extends Component {
 
     async startGame() {
         //DOTO 获取保存等级
-        LevelManager.instance.levelModel.level = 2;
+        LevelManager.instance.levelModel.level = 1;
         await LevelManager.instance.gameStart();
     }
 
