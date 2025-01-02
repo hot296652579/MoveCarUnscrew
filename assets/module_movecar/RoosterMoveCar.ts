@@ -1,4 +1,4 @@
-import { _decorator, Component, ERaycast2DType, find, Game, Node, PhysicsSystem2D, Tween, tween, Vec2, Vec3 } from 'cc';
+import { _decorator, Component, ERaycast2DType, find, Node, PhysicsSystem2D, Tween, tween, Vec2, Vec3 } from 'cc';
 import { EventDispatcher } from '../core_tgx/easy_ui_framework/EventDispatcher';
 import { CarColorsGlobalInstance } from './Script/CarColorsGlobalInstance';
 import { CarDir } from './Script/CarColorsGlobalTypes';
@@ -6,7 +6,6 @@ import { CarCarColorsComponent } from './Script/Components/CarCarColorsComponent
 import { GameEvent } from './Script/Enum/GameEvent';
 import { LevelManager } from './Script/LevelMgr';
 import { CarCarColorsSysterm } from './Script/Systems/CarCarColorsSysterm';
-import { UnitColorsSysterm } from './Script/Systems/UnitColorsSysterm';
 const { ccclass, property } = _decorator;
 
 @ccclass('RoosterMoveCar')
@@ -27,7 +26,7 @@ export class RoosterMoveCar extends Component {
 
     async startGame() {
         //DOTO 获取保存等级
-        LevelManager.instance.levelModel.level = 1;
+        LevelManager.instance.levelModel.level = 3;
         await LevelManager.instance.gameStart();
     }
 

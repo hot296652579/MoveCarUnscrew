@@ -28,12 +28,16 @@ export class CarCarColorsSysterm extends Component {
         if (!node.getComponent(CarCarColorsComponent)) return;
         const color = node.getComponent(CarCarColorsComponent).carColor
         const carType = node.getComponent(CarCarColorsComponent).carType
-        let len = 10
-        if (carType === CarTypes.Minivan) {
-            len = 6
+        let len = 0;
+        if (carType === CarTypes.Bus) {
+            len = 10
         }
-        else if (carType === CarTypes.Sedan) {
+        else if (carType === CarTypes.Minivan) {
+            len = 6
+        } else if (carType === CarTypes.Sedan) {
             len = 4
+        } else if (carType === CarTypes.Single) {
+            len = 1
         }
 
         for (; len--;) {

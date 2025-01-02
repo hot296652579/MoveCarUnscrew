@@ -1,12 +1,12 @@
-import { _decorator, Component, ERaycast2DType, find, geometry, Node, PhysicsSystem, PhysicsSystem2D, UITransform, Vec2, Vec3 } from 'cc';
+import { _decorator, BoxCollider2D, CircleCollider2D, Component, find, Node } from 'cc';
+import { EventDispatcher } from '../../core_tgx/easy_ui_framework/EventDispatcher';
 import { CarColorsGlobalInstance } from './CarColorsGlobalInstance';
 import { CarCarColorsComponent } from './Components/CarCarColorsComponent';
 import { PinComponent } from './Components/PinComponent';
+import { ElementAction } from './ElementAction';
+import { GameEvent } from './Enum/GameEvent';
 import { LayerAction } from './LayerAction';
 import { UnitAction } from './UnitAction';
-import { HoleComponent } from './Components/HoleComponent';
-import { GameEvent } from './Enum/GameEvent';
-import { EventDispatcher } from '../../core_tgx/easy_ui_framework/EventDispatcher';
 const { ccclass, property } = _decorator;
 
 @ccclass('LevelAction')
@@ -82,6 +82,18 @@ export class LevelAction extends Component {
         return arr;
     }
 
+    private get_active_layer_colliders(): BoxCollider2D[] {
+        const active_layer_arr = this.get_all_layer().filter(layer => layer.layer_status == 1);
+        let allColliders = [];
+        active_layer_arr.forEach((layer, i) => {
+            const units = layer.getComponentsInChildren(ElementAction)!;
+            units.forEach(unit => {
+                const colliders = unit.node.getComponents(BoxCollider2D)!;
+                allColliders.push(...colliders);
+            })
+        })
+        return allColliders;
+    }
 
     private async hide_element() {
         let default_show_layer_num = 2;
@@ -142,7 +154,11 @@ export class LevelAction extends Component {
                     const pins = element.getComponentsInChildren(PinComponent)!;
                     pins.forEach(async (pin) => {
                         pinCom = pin.getComponent(PinComponent)!;
-                        this.checkAbove(pinCom.node, layer.node);
+                        // const intersect = this.checkAbove(pinCom.node);
+                        // console.log('intersect:', intersect);
+                        // if (intersect) {
+                        //     return
+                        // }
                         let selectedCar: Node = null
                         for (let i = cars.length; i--;) {
                             const car = cars[i]
@@ -183,40 +199,21 @@ export class LevelAction extends Component {
     }
 
     /** 检测钉子上方是否有物体*/
-    checkAbove(pin: Node, layer: Node) {
-        // 获取 pin 节点的包围盒
-        const pinTransform = pin.getComponent(UITransform);
-        const pinBoundingBox = pinTransform.getBoundingBoxToWorld();
-        const pinZPosition = pin.getWorldPosition().z;
-
-        let foundAboveElement = false;
-        let layer_arr = this.get_all_layer();
-        layer_arr.forEach(layer => {
-            if (layer.layer_status == 1) {
-                layer.node.children.forEach((elementNode) => {
-                    if (elementNode === pin.parent) {
-                        // 跳过当前 pin 所属的 element 节点
-                        return;
-                    }
-
-                    const elementTransform = elementNode.getComponent(UITransform);
-                    if (!elementTransform) return;
-
-                    // 获取 element 的包围盒
-                    const elementBoundingBox = elementTransform.getBoundingBoxToWorld();
-                    const elementZPosition = elementNode.getWorldPosition().z;
-
-                    // 判断是否在 pin 节点的上方
-                    if (
-                        elementBoundingBox.intersects(pinBoundingBox) && // 包围盒重叠
-                        elementZPosition > pinZPosition // Z 轴在上方
-                    ) {
-                        console.log(`检测到上方的 element 节点: ${elementNode.name}`);
-                        foundAboveElement = true;
-                    }
-                });
+    checkAbove(pin: Node) {
+        let intersect = false;
+        const colliderNode = pin.getComponent(CircleCollider2D)!.node;
+        const area = pin.getComponent(CircleCollider2D).worldAABB;
+        const allColliders = this.get_active_layer_colliders();
+        allColliders.forEach((collider) => {
+            // 排除当前节点的 collider
+            console.log(`collider.node:${collider.node.name} , pin.parent:${pin.parent.name}`);
+            if (collider.node !== pin.parent) {
+                if (area.intersects(collider.worldAABB)) {
+                    intersect = true;
+                }
             }
         });
+        return intersect;
     }
 
     update(deltaTime: number) {

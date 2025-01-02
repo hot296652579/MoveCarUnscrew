@@ -1,12 +1,10 @@
 import { _decorator, Component, Enum, EventTouch, find, Input, Node, tween, Vec3 } from 'cc';
-import { CarColors, CarDir, CarTypes } from '../CarColorsGlobalTypes';
-import { GameEvent } from '../Enum/GameEvent';
 import { EventDispatcher } from 'db://assets/core_tgx/easy_ui_framework/EventDispatcher';
-import { CarColorsGlobalInstance } from '../CarColorsGlobalInstance';
-import { UnitColorsSysterm } from '../Systems/UnitColorsSysterm';
 import { tgxUIMgr } from 'db://assets/core_tgx/tgx';
 import { UI_BattleResult } from 'db://assets/scripts/UIDef';
-import { UnitAction } from '../UnitAction';
+import { CarColorsGlobalInstance } from '../CarColorsGlobalInstance';
+import { CarColors, CarDir, CarTypes } from '../CarColorsGlobalTypes';
+import { GameEvent } from '../Enum/GameEvent';
 import { LevelAction } from '../LevelAction';
 const { ccclass, property, executeInEditMode } = _decorator;
 @ccclass('CarCarColorsComponent')
@@ -101,6 +99,8 @@ export class CarCarColorsComponent extends Component {
             this.isFull = this.roleNum > 3
         } else if (this.carType === CarTypes.Bus) {
             this.isFull = this.roleNum > 9
+        } else if (this.carType === CarTypes.Single) {
+            this.isFull = this.roleNum > 0
         }
 
         return this.isFull
