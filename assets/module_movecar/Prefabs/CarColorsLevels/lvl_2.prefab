@@ -1744,7 +1744,7 @@
     "propertyPath": [
       "carDir"
     ],
-    "value": 2
+    "value": 3
   },
   {
     "__type__": "cc.TargetInfo",
@@ -2736,7 +2736,7 @@
     "propertyPath": [
       "carDir"
     ],
-    "value": 3
+    "value": 1
   },
   {
     "__type__": "cc.TargetInfo",

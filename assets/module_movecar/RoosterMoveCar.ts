@@ -1,4 +1,4 @@
-import { _decorator, Component, ERaycast2DType, find, Node, PhysicsSystem2D, Tween, tween, Vec2, Vec3 } from 'cc';
+import { _decorator, Component, ERaycast2DType, find, Game, Node, PhysicsSystem2D, Tween, tween, Vec2, Vec3 } from 'cc';
 import { EventDispatcher } from '../core_tgx/easy_ui_framework/EventDispatcher';
 import { CarColorsGlobalInstance } from './Script/CarColorsGlobalInstance';
 import { CarDir } from './Script/CarColorsGlobalTypes';

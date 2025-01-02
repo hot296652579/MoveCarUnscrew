@@ -75,7 +75,7 @@ export class CarCarColorsComponent extends Component {
         const carPoint = this.node.parent
         role.setParent(this.node.getChildByName("Seets").children[this.roleNum], true)
         tween(role).to(0.2, {
-            position: new Vec3(0, 0, -0.1)
+            position: new Vec3(0, 0, 0)
         }).call(() => {
             this.tweenCount -= 1
             role.setScale(0.9, 0.9, 0.9)

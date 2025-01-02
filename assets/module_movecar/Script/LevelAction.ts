@@ -14,6 +14,7 @@ export class LevelAction extends Component {
 
     start() {
         EventDispatcher.instance.on(GameEvent.EVENT_UPDATE_LAYER, this.hide_element, this);
+        this.schedule(this.moveToCar, 1);
     }
 
     get_lvl(): number {
@@ -112,7 +113,7 @@ export class LevelAction extends Component {
         return arr
     }
 
-    moveToCar() {
+    async moveToCar() {
         const points = find("Canvas/Scene/Parkings").children
         let cars: Array<Node> = []
         let isEmpty = false
@@ -139,7 +140,7 @@ export class LevelAction extends Component {
             if (layer.layer_status == 1) {
                 layer.node.children.forEach((element) => {
                     const pins = element.getComponentsInChildren(PinComponent)!;
-                    pins.forEach((pin) => {
+                    pins.forEach(async (pin) => {
                         pinCom = pin.getComponent(PinComponent)!;
                         if (pinCom) {
                             let selectedCar: Node = null
@@ -183,7 +184,7 @@ export class LevelAction extends Component {
     }
 
     update(deltaTime: number) {
-        this.moveToCar();
+        // this.moveToCar();
     }
 }
 

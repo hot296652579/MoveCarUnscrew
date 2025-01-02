@@ -1,6 +1,6 @@
-import { _decorator, BoxCollider2D, CircleCollider2D, Component, ERigidBody2DType, instantiate, PolygonCollider2D, RigidBody2D, tween, UIOpacity, view } from 'cc';
+import { _decorator, BoxCollider2D, CircleCollider2D, Color, Component, ERigidBody2DType, instantiate, PolygonCollider2D, RigidBody2D, Sprite, tween, UIOpacity, view, Node } from 'cc';
 import { EventDispatcher } from '../../core_tgx/easy_ui_framework/EventDispatcher';
-import { CarColors } from './CarColorsGlobalTypes';
+import { CarColorHex, CarColors } from './CarColorsGlobalTypes';
 import { HoleComponent } from './Components/HoleComponent';
 import { PinComponent } from './Components/PinComponent';
 import { GameEvent } from './Enum/GameEvent';
@@ -15,7 +15,7 @@ export class ElementAction extends Component {
     }
 
     update(deltaTime: number) {
-        let currentPosition = this.node.getPosition()
+        let currentPosition = this.node.getPosition().clone();
         if (currentPosition.y < - view.getVisibleSize().height / 2) {
             this.node.removeFromParent();
             this.node.destroy();
@@ -96,6 +96,15 @@ export class ElementAction extends Component {
         });
     }
 
+    private set_img_color(_color: CarColors, a: number) {
+        this.node.children.forEach(element => {
+            if (element.name == "img" && _color) {
+                let img = element.getComponent(Sprite);
+                img.color = new Color().fromHEX(CarColorHex[_color]);
+            }
+        });
+    }
+
     // this this layer is black color,but don't show pin for shows
     public set_layer_bg_or_orgin(is_bg: boolean) {
         if (is_bg) {
@@ -106,7 +115,7 @@ export class ElementAction extends Component {
                 if (element.name == "img") {
                     element.active = true;
                     //只设置图片颜色
-                    // this.set_img_color(CarColors.new_bean(0, 0, 0, 0), 180);
+                    this.set_img_color(CarColors.Black, 180);
                 }
             });
         } else {
@@ -114,10 +123,9 @@ export class ElementAction extends Component {
                 //默认都不显示
                 element.active = true;
             });
-            // this.set_img_color(this.ele_color, 190);
+            this.set_img_color(this.ele_color, 190);
             this.node.getComponent(RigidBody2D).type = ERigidBody2DType.Dynamic;
         }
-
     }
 }
 
