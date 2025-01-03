@@ -29,7 +29,8 @@ export enum CarColors {
     Pink = 6,
     Purple = 7,
     Brown = 8,
-    Black = 9
+    Black = 9,
+    SpriteWhite = 10
 }
 
 // 定义对应的十六进制颜色值
@@ -43,4 +44,5 @@ export const CarColorHex: Record<CarColors, string> = {
     [CarColors.Purple]: "#F32AF3",
     [CarColors.Brown]: "#F5A71D",
     [CarColors.Black]: "#000000",
+    [CarColors.SpriteWhite]: "#FFFFFF6F",
 };

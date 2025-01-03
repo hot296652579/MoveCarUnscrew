@@ -134,9 +134,13 @@ export class ElementAction extends Component {
                 //默认都不显示
                 element.active = true;
             });
-            this.set_img_color(this.ele_color, 190);
+            this.set_img_color(CarColors.SpriteWhite, 190);
             this.node.getComponent(RigidBody2D).type = ERigidBody2DType.Dynamic;
         }
+    }
+
+    protected onDestroy(): void {
+        EventDispatcher.instance.off(GameEvent.EVENT_CHECK_ELEMENT_CHILDREN, this.checkElementChildren);
     }
 }
 
