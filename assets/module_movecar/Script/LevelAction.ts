@@ -82,19 +82,6 @@ export class LevelAction extends Component {
         return arr;
     }
 
-    private get_active_layer_colliders(): BoxCollider2D[] {
-        const active_layer_arr = this.get_all_layer().filter(layer => layer.layer_status == 1);
-        let allColliders = [];
-        active_layer_arr.forEach((layer, i) => {
-            const units = layer.getComponentsInChildren(ElementAction)!;
-            units.forEach(unit => {
-                const colliders = unit.node.getComponents(BoxCollider2D)!;
-                allColliders.push(...colliders);
-            })
-        })
-        return allColliders;
-    }
-
     private async hide_element() {
         let default_show_layer_num = 2;
         let show_num = 0;
@@ -113,6 +100,24 @@ export class LevelAction extends Component {
                 layer_action.set_status(0);
             }
         }
+
+        this.check_pins_block();
+    }
+
+    //每个钉子检测是否被遮挡
+    private async check_pins_block() {
+        let layer_arr = this.get_all_layer();
+        layer_arr.forEach(layer => {
+            if (layer.layer_status == 1) {
+                layer.node.children.forEach((element) => {
+                    const pins = element.getComponentsInChildren(PinComponent)!;
+                    pins.forEach(async (pin) => {
+                        const pinCom = pin.getComponent(PinComponent)!;
+                        pinCom.checkBlocking();
+                    })
+                })
+            }
+        });
     }
 
     /** 返回顶部面板里的颜色钉子组件数组*/

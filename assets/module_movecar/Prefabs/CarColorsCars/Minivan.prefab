@@ -839,7 +839,7 @@
       "__id__": 2
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 34
@@ -1111,7 +1111,7 @@
       "__id__": 2
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 46
@@ -2719,7 +2719,7 @@
     "__prefab": {
       "__id__": 119
     },
-    "carType": 2,
+    "carType": 3,
     "carDir": 0,
     "_carColor": 6,
     "_id": ""

@@ -55,7 +55,7 @@ export class PinComponent extends Component {
     }
 
     // 检查是否被遮挡
-    private checkBlocking() {
+    checkBlocking() {
         const pinBoundingBox = this.getWorldBoundingBox();
         if (!pinBoundingBox) return;
 
