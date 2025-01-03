@@ -16,6 +16,9 @@ export class GameEvent {
     /** 检测element子节点长度*/
     static readonly EVENT_CHECK_ELEMENT_CHILDREN = 'EVENT_CHECK_ELEMENT_CHILDREN';
 
+    /** 磁力事件*/
+    static readonly EVENT_MAGNET = 'EVENT_MAGNET';
+
     /** 闯关成功 关卡升级*/
     static readonly EVENT_BATTLE_SUCCESS_LEVEL_UP = 'EVENT_BATTLE_SUCCESS_LEVEL_UP';
 

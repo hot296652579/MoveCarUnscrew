@@ -6,6 +6,7 @@ import { CarCarColorsComponent } from './Script/Components/CarCarColorsComponent
 import { GameEvent } from './Script/Enum/GameEvent';
 import { LevelManager } from './Script/LevelMgr';
 import { CarCarColorsSysterm } from './Script/Systems/CarCarColorsSysterm';
+import { ButtonComponent } from './Script/Components/ButtonComponent';
 const { ccclass, property } = _decorator;
 
 @ccclass('RoosterMoveCar')

@@ -46,3 +46,12 @@ export const CarColorHex: Record<CarColors, string> = {
     [CarColors.Black]: "#000000",
     [CarColors.SpriteWhite]: "#FFFFFF6F",
 };
+
+/**道具类型
+ * @param REFRESH 刷新
+ * @param MAGNET 磁铁
+*/
+export enum TYPE_ITEM {
+    REFRESH = 1,
+    MAGNET = 2,
+}

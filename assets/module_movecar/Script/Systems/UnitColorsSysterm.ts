@@ -4,21 +4,26 @@ import { HoleComponent } from "../Components/HoleComponent";
 import { PinComponent } from "../Components/PinComponent";
 import { CarColorsGlobalInstance } from "../CarColorsGlobalInstance";
 import { UnitAction } from "../UnitAction";
+import { EventDispatcher } from "db://assets/core_tgx/easy_ui_framework/EventDispatcher";
+import { GameEvent } from "../Enum/GameEvent";
 const { ccclass, property } = _decorator;
 
 @ccclass('UnitColorsSysterm')
 export class UnitColorsSysterm extends Component {
-    layer_group_id = 0;
 
     protected start(): void {
         this.registerEvent();
     }
 
     registerEvent() {
+        EventDispatcher.instance.on(GameEvent.EVENT_MAGNET, this.moveToCar, this);
     }
 
     moveToCar() {
         const points = find("Canvas/Scene/Parkings").children
+
+        let selectedCar: Node = null;
+        let finsPins = []
         let cars: Array<Node> = []
         let isEmpty = false
         for (let i = points.length; i--;) {
@@ -43,8 +48,7 @@ export class UnitColorsSysterm extends Component {
         units.forEach((unit) => {
             let pinCom = null;
             const layers = unit.node.children;
-            const bottomLayers = layers.slice(-2);
-            bottomLayers.forEach((layer) => {
+            layers.forEach((layer) => {
                 layer.children.forEach((element) => {
                     const holes = element.getComponentsInChildren(HoleComponent)!;
                     holes.forEach((hole) => {
@@ -53,7 +57,6 @@ export class UnitColorsSysterm extends Component {
                             pinCom = pin.getComponent(PinComponent)!;
 
                             if (pinCom) {
-                                let selectedCar: Node = null
                                 for (let i = cars.length; i--;) {
                                     const car = cars[i]
                                     const carComp = car.getComponent(CarCarColorsComponent)
@@ -71,15 +74,7 @@ export class UnitColorsSysterm extends Component {
 
                                 // 匹配的车
                                 if (selectedCar !== null) {
-                                    if (selectedCar.getComponent(CarCarColorsComponent).addRole(pinCom.node)) {
-                                        selectedCar.setParent(find("Canvas/Scene/Levels"), true)
-                                    }
-                                } else {
-                                    // 游戏结束判定
-                                    if (!isEmpty) {
-                                        console.log("游戏结束！！！！");
-                                    }
-                                    return
+                                    finsPins.push(pin);
                                 }
                             }
                         }
@@ -87,20 +82,8 @@ export class UnitColorsSysterm extends Component {
                 });
             })
         })
-    }
 
-    protected update(dt: number): void {
-        this.moveToCar();
+        console.log('找到的钉子数量有:', finsPins.length);
+        console.log('找到的车:', selectedCar.name);
     }
-
-    //获取是否还有钉子
-    pinIsEmpty() {
-        this.node.children.forEach((layer) => {
-            if (layer.children.length > 0) {
-                return false;
-            }
-        })
-        return true;
-    }
-
 }

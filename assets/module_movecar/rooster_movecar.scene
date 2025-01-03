@@ -2550,7 +2550,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "BtnUndo",
+    "_name": "BtnRefresh",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -2965,7 +2965,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "BtnAddScrew",
+    "_name": "BtnMagnet",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -3190,7 +3190,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 109.1796875,
+      "width": 146.15234375,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -3220,7 +3220,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "Nut+1",
+    "_string": "Magnet",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 40,
