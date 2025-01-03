@@ -13,6 +13,9 @@ export class GameEvent {
     /** 检测是否有钉子可上车*/
     static readonly EVENT_CHECK_MOVE_TO_CAR = 'EVENT_CHECK_MOVE_TO_CAR';
 
+    /** 检测element子节点长度*/
+    static readonly EVENT_CHECK_ELEMENT_CHILDREN = 'EVENT_CHECK_ELEMENT_CHILDREN';
+
     /** 闯关成功 关卡升级*/
     static readonly EVENT_BATTLE_SUCCESS_LEVEL_UP = 'EVENT_BATTLE_SUCCESS_LEVEL_UP';
 

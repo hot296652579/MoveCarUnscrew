@@ -82,9 +82,9 @@ export class PinComponent extends Component {
         });
 
         if (this.isBlocked) {
-            console.log(`pin_color:${this.pin_color} 被遮挡了`);
+            // console.log(`pin_color:${this.pin_color} 被遮挡了`);
         } else {
-            console.log('Pin 未被遮挡，可以移动');
+            // console.log('Pin 未被遮挡，可以移动');
         }
     }
 

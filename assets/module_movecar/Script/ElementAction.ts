@@ -12,6 +12,7 @@ const { ccclass, property } = _decorator;
 export class ElementAction extends Component {
     ele_color: CarColors
     start() {
+        EventDispatcher.instance.on(GameEvent.EVENT_CHECK_ELEMENT_CHILDREN, this.checkElementChildren, this);
     }
 
     update(deltaTime: number) {
@@ -20,6 +21,18 @@ export class ElementAction extends Component {
             this.node.removeFromParent();
             this.node.destroy();
             EventDispatcher.instance.emit(GameEvent.EVENT_UPDATE_LAYER);
+        }
+    }
+
+    //检测没有钉子 就变成传感器
+    public checkElementChildren() {
+        if (!this.node) return;
+
+        if (this.node.children.length == 0) {
+            const colliders = this.node.getComponentsInChildren(BoxCollider2D)!;
+            colliders.forEach(collider => {
+                collider.sensor = true;
+            })
         }
     }
 
@@ -32,7 +45,6 @@ export class ElementAction extends Component {
         });
         return hole_num;
     }
-
 
     public init_element(group_id: number, ele_color: CarColors) {
         this.ele_color = ele_color;
@@ -71,7 +83,6 @@ export class ElementAction extends Component {
             }
         });
     }
-
 
     public flash_img(t: number = 0.3) {
         this.node.children.forEach(element => {

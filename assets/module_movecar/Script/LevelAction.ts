@@ -1,4 +1,4 @@
-import { _decorator, BoxCollider2D, CircleCollider2D, Component, find, Node } from 'cc';
+import { _decorator, BoxCollider2D, CircleCollider2D, Collider2D, Component, find, Node } from 'cc';
 import { EventDispatcher } from '../../core_tgx/easy_ui_framework/EventDispatcher';
 import { CarColorsGlobalInstance } from './CarColorsGlobalInstance';
 import { CarCarColorsComponent } from './Components/CarCarColorsComponent';
@@ -14,7 +14,11 @@ export class LevelAction extends Component {
 
     start() {
         EventDispatcher.instance.on(GameEvent.EVENT_UPDATE_LAYER, this.hide_element, this);
-        this.schedule(this.moveToCar, 0.2);
+        this.schedule(this.moveToCar, 0.3);
+    }
+
+    protected onEnable(): void {
+        this.init_level();
     }
 
     get_lvl(): number {
@@ -58,7 +62,7 @@ export class LevelAction extends Component {
         //默认隐藏一些
         this.scheduleOnce(() => {
             this.set_default_layer();
-        }, 0.1)
+        }, 0.2)
     }
 
     private set_default_layer() {
@@ -73,6 +77,8 @@ export class LevelAction extends Component {
     private get_all_layer(): LayerAction[] {
         let arr: LayerAction[] = [];
         //默认都是不显示的
+        if (!this.node) return;
+
         for (let i = this.node.children.length - 1; i >= 0; i--) {
             if (this.node.children[i].getComponent(UnitAction)) {
                 const unit = this.node.children[i].getComponent(UnitAction)!;
@@ -86,6 +92,8 @@ export class LevelAction extends Component {
         let default_show_layer_num = 2;
         let show_num = 0;
         let layer_arr = this.get_all_layer();
+        if (!layer_arr) return;
+
         for (let i = 0; i < layer_arr.length; i++) {
             let layer_action = layer_arr[i];
             if (layer_action.get_element_num() <= 0) {
@@ -186,7 +194,7 @@ export class LevelAction extends Component {
                         // 匹配的车
                         if (selectedCar !== null) {
                             if (selectedCar.getComponent(CarCarColorsComponent).addRole(pinCom.node)) {
-                                selectedCar.setParent(find("Canvas/Scene/Levels"), true)
+                                selectedCar.setParent(find("Canvas/Scene/Levels"), true);
                             }
                         } else {
                             // 游戏结束判定

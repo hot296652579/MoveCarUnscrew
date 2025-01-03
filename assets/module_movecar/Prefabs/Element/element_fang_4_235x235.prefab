@@ -885,7 +885,7 @@
     "_type": 2,
     "_allowSleep": true,
     "_gravityScale": 10,
-    "_linearDamping": 0,
+    "_linearDamping": 0.2,
     "_angularDamping": 0.2,
     "_linearVelocity": {
       "__type__": "cc.Vec2",

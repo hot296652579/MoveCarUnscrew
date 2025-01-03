@@ -64,7 +64,7 @@ export class LevelManager {
     public async gameStart() {
         const { level } = this.levelModel;
         const levelNode = await this.loadLevel(level);
-        levelNode.getComponent(LevelAction)!.init_level();
+        // levelNode.getComponent(LevelAction)!.init_level();
     }
 
     /** 清除关卡数据*/

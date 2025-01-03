@@ -1,4 +1,4 @@
-import { _decorator, Component, Enum, EventTouch, find, Input, Node, tween, Vec3 } from 'cc';
+import { _decorator, CircleCollider2D, Component, Enum, EventTouch, find, Input, Node, tween, Vec3 } from 'cc';
 import { EventDispatcher } from 'db://assets/core_tgx/easy_ui_framework/EventDispatcher';
 import { tgxUIMgr } from 'db://assets/core_tgx/tgx';
 import { UI_BattleResult } from 'db://assets/scripts/UIDef';
@@ -71,7 +71,7 @@ export class CarCarColorsComponent extends Component {
     /** 添加人到车位上*/
     addRole(role: Node): boolean {
         const carPoint = this.node.parent
-        role.setParent(this.node.getChildByName("Seets").children[this.roleNum], true)
+        role.setParent(this.node.getChildByName("Seets").children[this.roleNum]);
         tween(role).to(0.2, {
             position: new Vec3(0, 0, 0)
         }).call(() => {
@@ -88,6 +88,9 @@ export class CarCarColorsComponent extends Component {
                 }
                 this.carOutTween(carPoint)
             }
+
+            role.getComponent(CircleCollider2D)!.sensor = true;
+            EventDispatcher.instance.emit(GameEvent.EVENT_CHECK_ELEMENT_CHILDREN);
         })
             .start()
 
