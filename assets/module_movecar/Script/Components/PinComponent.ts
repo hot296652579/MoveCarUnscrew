@@ -1,14 +1,8 @@
-/*
- * @Author: super_javan 296652579@qq.com
- * @Date: 2025-01-01 09:28:17
- * @LastEditors: super_javan 296652579@qq.com
- * @LastEditTime: 2025-01-02 23:03:50
- * @FilePath: /MoveCarUnscrew/assets/module_movecar/Script/Components/PinComponent.ts
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
-import { _decorator, BoxCollider2D, CircleCollider2D, Collider2D, Color, Component, Contact2DType, Input, IPhysics2DContact, PhysicsSystem2D, PolygonCollider2D, RigidBody2D, Sprite } from 'cc';
+import { _decorator, BoxCollider2D, CCBoolean, CircleCollider2D, Collider2D, Color, Node, Component, Contact2DType, Input, IPhysics2DContact, PhysicsSystem2D, PolygonCollider2D, RigidBody2D, Sprite, Rect } from 'cc';
 import { CarColorHex, CarColors } from '../CarColorsGlobalTypes';
 import { HoleComponent } from './HoleComponent';
+import { LayerAction } from '../LayerAction';
+import { UnitAction } from '../UnitAction';
 const { ccclass, property } = _decorator;
 
 /** 钉子组件*/
@@ -18,51 +12,80 @@ export class PinComponent extends Component {
     @property({ type: Sprite })
     pin_img: Sprite
 
+    isBlocked: boolean = false;
+
     pos_hole: HoleComponent = null;
 
-    canFlying: boolean = true;
-    flying: boolean = false;
-
     start() {
-        const physicsSystem = PhysicsSystem2D.instance;
-        let collider = this.getComponent(Collider2D);
+        this.checkBlocking();
+    }
 
-        if (collider) {
-            collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
-            collider.on(Contact2DType.END_CONTACT, this.onEndContact, this);
+    // 获取当前 pin 所属的 layer 节点
+    private getParentLayer(node: Node): Node | null {
+        let current = node.parent;
+        while (current) {
+            if (current.parent?.getComponent(UnitAction)) {
+                return current;
+            }
+            current = current.parent!;
         }
+        return null;
     }
 
-    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        //被其他物体挡住禁止飞行
-        // console.log('selfCollider.node.name:', selfCollider.node.name, 'otherCollider.node.name:', otherCollider.node.name);
-        // console.log('selfCollider.node.parent:', selfCollider.node.parent, 'otherCollider.node.parent:', otherCollider.node.parent);
-        // if (otherCollider.node) {
-        //     if (selfCollider.node.parent !== otherCollider.node.parent) {
-        //         console.log(`被挡住的钉子颜色:${this.pin_color} otherCollider节点:${otherCollider.node.name} other.parent:${otherCollider.node.parent.name}`);
-        //     }
-        // }
+    // 获取当前层以上的所有 layer
+    private getHigherLayers(currentLayer: Node): Node[] {
+        const unitNode = currentLayer.parent;
+        if (!unitNode) return [];
 
-        // console.log(otherCollider.node.getSiblingIndex());
-        console.log('this.pin_color:', this.pin_color);
-        console.log(this.node.parent.name);
-        console.log('otherCollider.node.name:', otherCollider.node.name);
-        if (this.node.parent !== otherCollider.node) {
-            console.log('asdfsafa')
+        const layers = unitNode.children
+            .filter((child) => child.name.startsWith('layer_'))
+            .sort((a, b) => parseInt(a.name.split('_')[1]) - parseInt(b.name.split('_')[1]));
+
+        const currentIndex = layers.indexOf(currentLayer);
+        return layers.slice(currentIndex + 1); // 获取当前层以上的所有层
+    }
+
+    // 获取当前 pin 的包围盒
+    private getWorldBoundingBox(): Rect | null {
+        const collider = this.node.getComponent(CircleCollider2D);
+        if (!collider) return null;
+
+        const aabb = collider.worldAABB;
+        return new Rect(aabb.xMin, aabb.yMin, aabb.width, aabb.height);
+    }
+
+    // 检查是否被遮挡
+    private checkBlocking() {
+        const pinBoundingBox = this.getWorldBoundingBox();
+        if (!pinBoundingBox) return;
+
+        // 获取当前 pin 所在的 layer
+        const currentLayer = this.getParentLayer(this.node);
+        if (!currentLayer) return;
+
+        // 获取当前层以上的所有 layer
+        const higherLayers = this.getHigherLayers(currentLayer);
+        if (higherLayers.length === 0) return;
+
+        // 遍历所有高层 layer 的碰撞组件，判断是否有相交
+        this.isBlocked = higherLayers.some((layer) => {
+            const colliders = layer.getComponentsInChildren(Collider2D);
+            return colliders.some((collider) => {
+                const otherBoundingBox = collider.worldAABB;
+                return pinBoundingBox.intersects(new Rect(
+                    otherBoundingBox.xMin,
+                    otherBoundingBox.yMin,
+                    otherBoundingBox.width,
+                    otherBoundingBox.height
+                ));
+            });
+        });
+
+        if (this.isBlocked) {
+            console.log(`pin_color:${this.pin_color} 被遮挡了`);
+        } else {
+            console.log('Pin 未被遮挡，可以移动');
         }
-    }
-
-    onEndContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        // 只在两个碰撞体结束接触时被调用一次
-
-    }
-
-    public is_flying(): boolean {
-        return this.flying;
-    }
-
-    public set_flyinng(f: boolean) {
-        this.flying = f;
     }
 
     public init_date(group_id: number, pin_color: CarColors, hole: HoleComponent) {
@@ -82,18 +105,17 @@ export class PinComponent extends Component {
         this.reset_img();
     }
 
-    public remove_collider() {
-        this.node.getComponent(RigidBody2D).enabled = false;
-        this.node.getComponent(CircleCollider2D).enabled = false;
-        this.node.off(Input.EventType.TOUCH_START);
-    }
-
     reset_img() {
         if (!this.pin_color) {
+            console.log(`被return的颜色${this.pin_color}`);
             return;
         }
 
         this.pin_img.getComponent(Sprite).color = new Color().fromHEX(CarColorHex[this.pin_color]);
+    }
+
+    protected onDestroy(): void {
+
     }
 
 }

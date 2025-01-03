@@ -154,11 +154,9 @@ export class LevelAction extends Component {
                     const pins = element.getComponentsInChildren(PinComponent)!;
                     pins.forEach(async (pin) => {
                         pinCom = pin.getComponent(PinComponent)!;
-                        // const intersect = this.checkAbove(pinCom.node);
-                        // console.log('intersect:', intersect);
-                        // if (intersect) {
-                        //     return
-                        // }
+                        if (pinCom.isBlocked)
+                            return
+
                         let selectedCar: Node = null
                         for (let i = cars.length; i--;) {
                             const car = cars[i]
@@ -196,24 +194,6 @@ export class LevelAction extends Component {
                 });
             }
         });
-    }
-
-    /** 检测钉子上方是否有物体*/
-    checkAbove(pin: Node) {
-        let intersect = false;
-        const colliderNode = pin.getComponent(CircleCollider2D)!.node;
-        const area = pin.getComponent(CircleCollider2D).worldAABB;
-        const allColliders = this.get_active_layer_colliders();
-        allColliders.forEach((collider) => {
-            // 排除当前节点的 collider
-            console.log(`collider.node:${collider.node.name} , pin.parent:${pin.parent.name}`);
-            if (collider.node !== pin.parent) {
-                if (area.intersects(collider.worldAABB)) {
-                    intersect = true;
-                }
-            }
-        });
-        return intersect;
     }
 
     update(deltaTime: number) {
