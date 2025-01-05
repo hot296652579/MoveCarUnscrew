@@ -6,6 +6,7 @@ import { CarColorsGlobalInstance } from "../CarColorsGlobalInstance";
 import { UnitAction } from "../UnitAction";
 import { EventDispatcher } from "db://assets/core_tgx/easy_ui_framework/EventDispatcher";
 import { GameEvent } from "../Enum/GameEvent";
+import { LevelAction } from "../LevelAction";
 const { ccclass, property } = _decorator;
 
 @ccclass('UnitColorsSysterm')
@@ -19,11 +20,11 @@ export class UnitColorsSysterm extends Component {
         EventDispatcher.instance.on(GameEvent.EVENT_MAGNET, this.moveToCar, this);
     }
 
-    moveToCar() {
+    async moveToCar() {
+        const level = CarColorsGlobalInstance.instance.levels.children[0];
         const points = find("Canvas/Scene/Parkings").children
 
-        let selectedCar: Node = null;
-        let finsPins = []
+        let findPins = [];
         let cars: Array<Node> = []
         let isEmpty = false
         for (let i = points.length; i--;) {
@@ -43,47 +44,44 @@ export class UnitColorsSysterm extends Component {
             return
         }
 
-        //找到顶部层级layer 遍历里面钉子
-        const units = CarColorsGlobalInstance.instance.levels.getComponentsInChildren(UnitAction)!;
-        units.forEach((unit) => {
-            let pinCom = null;
-            const layers = unit.node.children;
-            layers.forEach((layer) => {
-                layer.children.forEach((element) => {
-                    const holes = element.getComponentsInChildren(HoleComponent)!;
-                    holes.forEach((hole) => {
-                        if (hole.node.getChildByName('hole')!.getChildByName('pin')) {
-                            const pin = hole.node.getChildByName('hole')!.getChildByName('pin')!;
-                            pinCom = pin.getComponent(PinComponent)!;
+        let pinCom = null;
+        let layer_arr = level.getComponent(LevelAction)!.get_all_layer();
+        layer_arr.reverse();
+        layer_arr.forEach(layer => {
+            layer.node.children.forEach((element) => {
+                const pins = element.getComponentsInChildren(PinComponent)!;
+                pins.forEach(async (pin) => {
+                    pinCom = pin.getComponent(PinComponent)!;
 
-                            if (pinCom) {
-                                for (let i = cars.length; i--;) {
-                                    const car = cars[i]
-                                    const carComp = car.getComponent(CarCarColorsComponent)
-                                    // 颜色相同
-                                    if (carComp.carColor === pinCom.pin_color) {
-                                        if (selectedCar === null) {
-                                            selectedCar = car
-                                            continue
-                                        }
-                                        if (selectedCar.getComponent(CarCarColorsComponent).roleNum === 0) {
-                                            selectedCar = car
-                                        }
-                                    }
-                                }
+                    let selectedCar: Node = null
+                    for (let i = cars.length; i--;) {
+                        const car = cars[i]
+                        const carComp = car.getComponent(CarCarColorsComponent);
 
-                                // 匹配的车
-                                if (selectedCar !== null) {
-                                    finsPins.push(pin);
-                                }
+                        if (carComp.isFull)
+                            continue
+
+                        // 颜色相同
+                        // console.log('车颜色:', carComp.carColor, '钉子颜色:', pinCom.pin_color);
+                        if (carComp.carColor === pinCom.pin_color) {
+                            if (selectedCar === null) {
+                                selectedCar = car
+                                continue
+                            }
+                            if (selectedCar.getComponent(CarCarColorsComponent).roleNum === 0) {
+                                selectedCar = car
                             }
                         }
-                    })
-                });
-            })
-        })
+                    }
 
-        console.log('找到的钉子数量有:', finsPins.length);
-        console.log('找到的车:', selectedCar.name);
+                    // 匹配的车
+                    if (selectedCar !== null) {
+                        findPins.push(pinCom.node);
+                    }
+                })
+            });
+        });
+
+        console.log('findPins总数:', findPins.length);
     }
 }

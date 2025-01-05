@@ -74,7 +74,7 @@ export class LevelAction extends Component {
         this.hide_element();
     }
 
-    private get_all_layer(): LayerAction[] {
+    get_all_layer(): LayerAction[] {
         let arr: LayerAction[] = [];
         //默认都是不显示的
         if (!this.node) return;
