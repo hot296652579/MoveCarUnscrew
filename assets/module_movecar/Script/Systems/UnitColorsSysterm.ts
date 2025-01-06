@@ -46,40 +46,29 @@ export class UnitColorsSysterm extends Component {
             }
         }
 
-        let pinCom = null;
+        if (cars.length <= 0) {
+            console.log('停车场没有车');
+            return
+        }
+
+        this.selectedCar = cars[cars.length - 1]; //找最左边的车
         const layer_arr = level.getComponent(LevelAction)!.get_all_layer();
         const layers = layer_arr.reverse();
+        let magnetIndex = 0;
         layers.forEach(layer => {
             layer.node.children.forEach((element) => {
                 const pins = element.getComponentsInChildren(PinComponent)!;
-                pins.forEach(async (pin) => {
-                    pinCom = pin.getComponent(PinComponent)!;
+                pins.forEach(async (pin, index) => {
+                    const pinCom = pin.getComponent(PinComponent)!;
 
-                    let selectedCar: Node = null
-                    for (let i = cars.length; i--;) {
-                        const car = cars[i]
-                        const carComp = car.getComponent(CarCarColorsComponent);
+                    const carComp = this.selectedCar.getComponent(CarCarColorsComponent);
+                    const remainSeat = carComp.getRemainSeat();
 
-                        if (carComp.isFull)
-                            continue
-
-                        // 颜色相同
-                        // console.log('车颜色:', carComp.carColor, '钉子颜色:', pinCom.pin_color);
-                        if (carComp.carColor === pinCom.pin_color) {
-                            if (selectedCar === null) {
-                                selectedCar = car
-                                continue
-                            }
-                            if (selectedCar.getComponent(CarCarColorsComponent).roleNum === 0) {
-                                selectedCar = car
-                            }
+                    if (pinCom.pin_color == carComp.carColor) {
+                        magnetIndex++;
+                        if (magnetIndex <= remainSeat) {
+                            this.findPins.push(pinCom.node);
                         }
-                    }
-
-                    // 匹配的车
-                    if (selectedCar !== null) {
-                        this.findPins.push(pinCom.node);
-                        this.selectedCar = selectedCar;
                     }
                 })
             });

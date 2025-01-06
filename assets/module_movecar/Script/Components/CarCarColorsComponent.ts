@@ -127,6 +127,29 @@ export class CarCarColorsComponent extends Component {
         }
     }
 
+    //剩余车位
+    getRemainSeat() {
+        let max = 0;
+        switch (this.carType) {
+            case CarTypes.Minivan:
+                max = 6;
+                break;
+            case CarTypes.Sedan:
+                max = 4;
+                break;
+            case CarTypes.Bus:
+                max = 10;
+                break;
+            case CarTypes.Single:
+                max = 1;
+                break;
+            default:
+                throw new Error(`Unknown car type: ${this.carType}`);
+        }
+
+        return max - this.roleNum;
+    }
+
     protected onDestroy(): void {
         this.node.off(Input.EventType.TOUCH_START, this.onTouchStart)
     }
