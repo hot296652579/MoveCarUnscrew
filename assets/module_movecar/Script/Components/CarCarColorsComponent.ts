@@ -6,6 +6,7 @@ import { CarColorsGlobalInstance } from '../CarColorsGlobalInstance';
 import { CarColors, CarDir, CarTypes } from '../CarColorsGlobalTypes';
 import { GameEvent } from '../Enum/GameEvent';
 import { LevelAction } from '../LevelAction';
+import { LevelManager } from '../LevelMgr';
 const { ccclass, property, executeInEditMode } = _decorator;
 @ccclass('CarCarColorsComponent')
 @executeInEditMode
@@ -122,6 +123,7 @@ export class CarCarColorsComponent extends Component {
             const levelComp = children[0].getComponent(LevelAction)!;
             const pins = levelComp.get_pin_color();
             if (pins.length == 0) {
+                LevelManager.instance.levelModel.isWin = true;
                 tgxUIMgr.inst.showUI(UI_BattleResult);
             }
         }

@@ -19,6 +19,9 @@ export class GameEvent {
     /** 磁力事件*/
     static readonly EVENT_MAGNET = 'EVENT_MAGNET';
 
+    /** 检测游戏是否结束*/
+    static readonly EVENT_CHECK_GAME_OVER = 'EVENT_CHECK_GAME_OVER';
+
     /** 闯关成功 关卡升级*/
     static readonly EVENT_BATTLE_SUCCESS_LEVEL_UP = 'EVENT_BATTLE_SUCCESS_LEVEL_UP';
 

@@ -28,14 +28,14 @@ export class LevelModel {
 
     /** 当前关卡等级*/
     public level: number = 1;
-    /** 当前关卡移动步数*/
-    public playerStep: number = 0;
     /** 每关星星结算*/
     public star: number = 3;
     /** 储存每关星星结算*/
     public levelStarsMap: Map<number, number> = new Map<number, number>();
     /** 保存可随机的关卡*/
     public randomLevelList: number[] = [];
+    /** 输赢*/
+    public isWin: boolean = false;
 
     /** 当前游戏状态*/
     public curGameState: TYPE_GAME_STATE = TYPE_GAME_STATE.GAME_STATE_INIT;
@@ -65,7 +65,7 @@ export class LevelModel {
 
     /** 清除关卡数据*/
     clearLevel() {
-        this.playerStep = 0;
+        this.isWin = false;
         this.star = 3;
     }
 

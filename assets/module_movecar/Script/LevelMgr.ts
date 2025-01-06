@@ -28,6 +28,7 @@ export class LevelManager {
 
     private registerEvent(): void {
         EventDispatcher.instance.on(GameEvent.EVENT_BATTLE_SUCCESS_LEVEL_UP, this.levelUpHandler, this);
+        EventDispatcher.instance.on(GameEvent.EVENT_BATTLE_FAIL_LEVEL_RESET, this.restartLevelHandler, this);
     }
 
     async loadAsyncLevel(level: number): Promise<Prefab> {
@@ -61,10 +62,14 @@ export class LevelManager {
         await this.gameStart();
     }
 
+    private async restartLevelHandler() {
+        this.clearLevelData();
+        await this.gameStart();
+    }
+
     public async gameStart() {
         const { level } = this.levelModel;
         const levelNode = await this.loadLevel(level);
-        // levelNode.getComponent(LevelAction)!.init_level();
     }
 
     /** 清除关卡数据*/
@@ -73,9 +78,7 @@ export class LevelManager {
     }
 
     upgradeLevel(up: number = 1): void {
-        console.log('升级关卡', up);
         this.levelModel.level += up;
-        console.log('this.levelModel.level:', this.levelModel.level);
     }
 
     async loadLevel(level: number): Promise<Node> {

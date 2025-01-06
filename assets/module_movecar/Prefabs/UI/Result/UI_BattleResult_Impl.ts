@@ -6,6 +6,7 @@ import { UI_BattleResult } from "../../../../scripts/UIDef";
 import { Layout_BattleResult } from "./Layout_BattleResult";
 import { GtagMgr, GtagType } from "db://assets/core_tgx/base/GtagMgr";
 import { GameEvent } from "../../../Script/Enum/GameEvent";
+import { LevelManager } from "../../../Script/LevelMgr";
 
 export class UI_BattleResult_Impl extends UI_BattleResult {
     rewardBase: number = 0; //基础奖励
@@ -22,17 +23,25 @@ export class UI_BattleResult_Impl extends UI_BattleResult {
     }
 
     protected onCreated(): void {
+        this.win = LevelManager.instance.levelModel.isWin;
         const soundId = this.win ? 3 : 3;
 
         let layout = this.layout as Layout_BattleResult;
         this.onButtonEvent(layout.btNext, () => {
-            this.onClickRewardBase(); //领取基础奖励
+            this.onClickRewardBase();
         });
+        this.onButtonEvent(layout.btRestart, () => {
+            this.onClickRewardBase();
+        });
+
+        layout.winNode.active = this.win;
+        layout.loseNode.active = !this.win;
 
         this.rotationLight();
     }
 
     private rotationLight(): void {
+        if (!this.win) return;
         const { light } = this.layout;
         light.eulerAngles = v3(0, 0, 0);
         tween(light)
@@ -55,8 +64,8 @@ export class UI_BattleResult_Impl extends UI_BattleResult {
     }
 
     onClickRewardBase(): void {
-        this.emitEvent();
         this.destoryMyself();
+        this.emitEvent();
     }
 
     clearAllTimeouts() {
@@ -72,7 +81,6 @@ export class UI_BattleResult_Impl extends UI_BattleResult {
         }
         this.clearAllTimeouts();
     }
-
 }
 
 tgxModuleContext.attachImplClass(UI_BattleResult, UI_BattleResult_Impl);

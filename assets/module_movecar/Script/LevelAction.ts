@@ -7,6 +7,9 @@ import { ElementAction } from './ElementAction';
 import { GameEvent } from './Enum/GameEvent';
 import { LayerAction } from './LayerAction';
 import { UnitAction } from './UnitAction';
+import { tgxUIMgr } from '../../core_tgx/tgx';
+import { UI_BattleResult } from '../../scripts/UIDef';
+import { LevelManager } from './LevelMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('LevelAction')
@@ -14,10 +17,9 @@ export class LevelAction extends Component {
 
     start() {
         EventDispatcher.instance.on(GameEvent.EVENT_UPDATE_LAYER, this.hide_element, this);
+        EventDispatcher.instance.on(GameEvent.EVENT_CHECK_GAME_OVER, this.checkGameOver, this);
         this.schedule(this.moveToCar, 0.3);
-    }
 
-    protected onEnable(): void {
         this.init_level();
     }
 
@@ -57,12 +59,24 @@ export class LevelAction extends Component {
             }
         });
 
-        //DOTO 初始化停车位
-
+        this.init_parking();
         //默认隐藏一些
         this.scheduleOnce(() => {
             this.set_default_layer();
         }, 0.2)
+    }
+
+    init_parking() {
+        const points = find("Canvas/Scene/Parkings").children
+        for (let index = 0; index < points.length; index++) {
+            const element = points[index];
+            element.removeAllChildren();
+
+            element.name = 'empty';
+            if (index > 3) {
+                element.name = `empty-lock${index}`;
+            }
+        }
     }
 
     private set_default_layer() {
@@ -141,7 +155,7 @@ export class LevelAction extends Component {
     async moveToCar() {
         const points = find("Canvas/Scene/Parkings").children
         let cars: Array<Node> = []
-        let isEmpty = false
+
         for (let i = points.length; i--;) {
             if (points[i].name === "inuse" && points[i].children.length === 1) {
                 cars.push(points[i].children[0])
@@ -149,13 +163,12 @@ export class LevelAction extends Component {
             }
 
             if (points[i].name === "empty") {
-                isEmpty = true
                 continue
             }
         }
 
         if (cars.length === 0) {
-            // console.log("没车了")
+            // console.log("没车了!")
             return
         }
 
@@ -196,17 +209,40 @@ export class LevelAction extends Component {
                             if (selectedCar.getComponent(CarCarColorsComponent).addRole(pinCom.node)) {
                                 selectedCar.setParent(find("Canvas/Scene/Levels"), true);
                             }
-                        } else {
-                            // 游戏结束判定
-                            if (!isEmpty) {
-                                console.log("游戏结束！！！！");
-                            }
-                            return
                         }
                     })
                 });
             }
         });
+    }
+
+    //检测游戏是否结束
+    checkGameOver() {
+        let checkOver = function () {
+            const points = find("Canvas/Scene/Parkings").children
+
+            for (let i = points.length; i--;) {
+
+                if (points[i].name === "empty") {
+                    return
+                }
+
+                if (points[i].name === "inuse" && points[i].children.length === 0) {
+                    return
+                }
+            }
+
+            LevelManager.instance.levelModel.isWin = false;
+            tgxUIMgr.inst.showUI(UI_BattleResult);
+        }
+        this.unschedule(checkOver);
+        this.scheduleOnce(checkOver, 1);
+    }
+
+    protected onDestroy(): void {
+        EventDispatcher.instance.off(GameEvent.EVENT_UPDATE_LAYER, this.hide_element);
+        EventDispatcher.instance.off(GameEvent.EVENT_CHECK_GAME_OVER, this.checkGameOver);
+        this.unscheduleAllCallbacks()
     }
 
     update(deltaTime: number) {

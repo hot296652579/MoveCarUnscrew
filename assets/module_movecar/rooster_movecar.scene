@@ -877,7 +877,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "empty-004",
+    "_name": "empty-lock4",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -986,7 +986,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "empty-005",
+    "_name": "empty-lock5",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -1095,7 +1095,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "empty-006",
+    "_name": "empty-lock6",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
