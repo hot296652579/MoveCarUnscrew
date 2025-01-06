@@ -57,8 +57,9 @@ export class LayerAction extends Component {
         return this.node.children.length;
     }
 
-    layer_status: number = 0;//1 = 
-    public set_status(args: number) {  //0 =隐藏，1=显示,2=黑色模式
+    layer_status: number = 0;
+    /**0 =隐藏，1=显示,2=黑色模式 */
+    public set_status(args: number) {
         switch (args) {
             case 0:
                 this.node.active = false;

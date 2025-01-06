@@ -12,19 +12,26 @@ const { ccclass, property } = _decorator;
 @ccclass('UnitColorsSysterm')
 export class UnitColorsSysterm extends Component {
 
+    findPins: Node[] = [];
+    selectedCar: Node = null;
+
     protected start(): void {
         this.registerEvent();
     }
 
     registerEvent() {
-        EventDispatcher.instance.on(GameEvent.EVENT_MAGNET, this.moveToCar, this);
+        EventDispatcher.instance.on(GameEvent.EVENT_MAGNET, this.onMagnet, this);
     }
 
-    async moveToCar() {
+    private onMagnet() {
+        this.findPinsCar();
+        this.moveToCar();
+    }
+
+    findPinsCar() {
         const level = CarColorsGlobalInstance.instance.levels.children[0];
         const points = find("Canvas/Scene/Parkings").children
 
-        let findPins = [];
         let cars: Array<Node> = []
         let isEmpty = false
         for (let i = points.length; i--;) {
@@ -39,15 +46,10 @@ export class UnitColorsSysterm extends Component {
             }
         }
 
-        if (cars.length === 0) {
-            // console.log("没车了")
-            return
-        }
-
         let pinCom = null;
-        let layer_arr = level.getComponent(LevelAction)!.get_all_layer();
-        layer_arr.reverse();
-        layer_arr.forEach(layer => {
+        const layer_arr = level.getComponent(LevelAction)!.get_all_layer();
+        const layers = layer_arr.reverse();
+        layers.forEach(layer => {
             layer.node.children.forEach((element) => {
                 const pins = element.getComponentsInChildren(PinComponent)!;
                 pins.forEach(async (pin) => {
@@ -76,12 +78,26 @@ export class UnitColorsSysterm extends Component {
 
                     // 匹配的车
                     if (selectedCar !== null) {
-                        findPins.push(pinCom.node);
+                        this.findPins.push(pinCom.node);
+                        this.selectedCar = selectedCar;
                     }
                 })
             });
         });
+    }
 
-        console.log('findPins总数:', findPins.length);
+    moveToCar() {
+        if (this.selectedCar != null) {
+            this.findPins.forEach(pin => {
+                this.selectedCar.getComponent(CarCarColorsComponent).addRole(pin);
+            })
+        }
+
+        this.clearpinsCar();
+    }
+
+    clearpinsCar() {
+        this.selectedCar = null
+        this.findPins = []
     }
 }

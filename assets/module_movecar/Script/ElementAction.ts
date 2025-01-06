@@ -1,4 +1,4 @@
-import { _decorator, BoxCollider2D, CircleCollider2D, Color, Component, ERigidBody2DType, instantiate, PolygonCollider2D, RigidBody2D, Sprite, tween, UIOpacity, view, Node } from 'cc';
+import { _decorator, BoxCollider2D, CircleCollider2D, Color, Component, ERigidBody2DType, instantiate, PolygonCollider2D, RigidBody2D, Sprite, tween, UIOpacity, view, Node, isValid } from 'cc';
 import { EventDispatcher } from '../../core_tgx/easy_ui_framework/EventDispatcher';
 import { CarColorHex, CarColors } from './CarColorsGlobalTypes';
 import { HoleComponent } from './Components/HoleComponent';
@@ -18,6 +18,12 @@ export class ElementAction extends Component {
     update(deltaTime: number) {
         let currentPosition = this.node.getPosition().clone();
         if (currentPosition.y < - view.getVisibleSize().height / 2) {
+            this.removeElement();
+        }
+    }
+
+    removeElement() {
+        if (isValid(this.node)) {
             this.node.removeFromParent();
             this.node.destroy();
             EventDispatcher.instance.emit(GameEvent.EVENT_UPDATE_LAYER);
@@ -28,11 +34,14 @@ export class ElementAction extends Component {
     public checkElementChildren() {
         if (!this.node) return;
 
-        if (this.node.children.length == 0) {
+        const pins = this.node.getComponentsInChildren(PinComponent)!;
+        if (pins.length == 0) {
             const colliders = this.node.getComponentsInChildren(BoxCollider2D)!;
             colliders.forEach(collider => {
                 collider.sensor = true;
             })
+
+            this.removeElement();
         }
     }
 

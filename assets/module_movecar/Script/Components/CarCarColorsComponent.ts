@@ -71,6 +71,7 @@ export class CarCarColorsComponent extends Component {
     /** 添加人到车位上*/
     addRole(role: Node): boolean {
         const carPoint = this.node.parent
+        role.active = true;
         role.setParent(this.node.getChildByName("Seets").children[this.roleNum]);
         tween(role).to(0.2, {
             position: new Vec3(0, 0, 0)
