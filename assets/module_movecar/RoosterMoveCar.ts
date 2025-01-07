@@ -25,7 +25,7 @@ export class RoosterMoveCar extends Component {
 
     async startGame() {
         //DOTO 获取保存等级
-        LevelManager.instance.levelModel.level = 1;
+        LevelManager.instance.levelModel.level = 2;
         await LevelManager.instance.gameStart();
     }
 
@@ -150,20 +150,26 @@ export class RoosterMoveCar extends Component {
     }
 
     /** 导航到碰撞点
-     *@param targetPoint 停车点
+     *@param targetPoint 下一个目标点
      *@param hitPoint street碰撞点
     */
     hitPointTween(car: Node, targetPoint: Node, tweenCar: Tween<Node>, hitPoint: Node = null) {
         const newHintStreetPos = hitPoint.getWorldPosition().clone();
         const carWorldPos = car.getWorldPosition();
 
-        // 判断移动方向
-        if (Math.abs(newHintStreetPos.x - carWorldPos.x) > Math.abs(newHintStreetPos.y - carWorldPos.y)) {
-            // 如果 X 轴差值更大，只改变 X 轴
-            newHintStreetPos.x = newHintStreetPos.x;
-            newHintStreetPos.y = carWorldPos.y;
-        } else {
-            // 否则只改变 Y 轴
+        const carDir = car.getComponent(CarCarColorsComponent)!.carDir;
+        if (carDir == CarDir.LEFT || carDir == CarDir.RIGHT) {
+            // 判断移动方向
+            if (Math.abs(newHintStreetPos.x - carWorldPos.x) > Math.abs(newHintStreetPos.y - carWorldPos.y)) {
+                // 如果 X 轴差值更大，只改变 X 轴
+                newHintStreetPos.x = newHintStreetPos.x;
+                newHintStreetPos.y = carWorldPos.y;
+            } else {
+                // 否则只改变 Y 轴
+                newHintStreetPos.x = carWorldPos.x;
+                newHintStreetPos.y = newHintStreetPos.y;
+            }
+        } else if (carDir == CarDir.TOP || carDir == CarDir.BOTTOM) {
             newHintStreetPos.x = carWorldPos.x;
             newHintStreetPos.y = newHintStreetPos.y;
         }
@@ -196,6 +202,7 @@ export class RoosterMoveCar extends Component {
                 car.lookAt(targetWorldPos, up);
             })
             .delay(0.1)
+            .start();
     }
 
     // 顶部导航
