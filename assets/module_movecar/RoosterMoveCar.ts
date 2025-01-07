@@ -25,7 +25,7 @@ export class RoosterMoveCar extends Component {
 
     async startGame() {
         //DOTO 获取保存等级
-        LevelManager.instance.levelModel.level = 2;
+        LevelManager.instance.levelModel.level = 1;
         await LevelManager.instance.gameStart();
     }
 
@@ -84,11 +84,13 @@ export class RoosterMoveCar extends Component {
                     const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodTop/LeftPoint")
                     this.hitPointTween(car, targetPoint, tweenCar, collider.node)
                     this.leftRoadTween(car, tweenCar)
+                    this.leftTopToRight(car, parkPoint, tweenCar)
                     this.topRoadTween(car, parkPoint, tweenCar)
                 } else if (collider.node.name === "PhysicRoodRight") {
                     const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodTop/RightPoint")
                     this.hitPointTween(car, targetPoint, tweenCar, collider.node)
                     this.rightRoadTween(car, tweenCar)
+                    this.rightTopToleft(car, parkPoint, tweenCar)
                     this.topRoadTween(car, parkPoint, tweenCar)
                 } else if (collider.node.name === "PhysicRoodBottom") {
                     const hitPoint = find("Canvas/Scene/Grounds/PhysicRoodBottom")!;
@@ -102,11 +104,13 @@ export class RoosterMoveCar extends Component {
                         this.hitPointTween(car, targetPoint, tweenCar, collider.node)
                         this.bottomRoadTween(car, targetPoint, tweenCar)
                         this.leftRoadTween(car, tweenCar)
+                        this.leftTopToRight(car, parkPoint, tweenCar)
                     } else {
                         const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodBottom/RightPoint")
                         this.hitPointTween(car, targetPoint, tweenCar, collider.node)
                         this.bottomRoadTween(car, targetPoint, tweenCar)
                         this.rightRoadTween(car, tweenCar)
+                        this.rightTopToleft(car, parkPoint, tweenCar)
                     }
                     this.topRoadTween(car, parkPoint, tweenCar)
                 }
@@ -215,6 +219,21 @@ export class RoosterMoveCar extends Component {
             })
 
     }
+
+    //左边顶部转向右
+    leftTopToRight(car: Node, targetPoint: Node, tweenCar: Tween<Node>) {
+        //转向右边动画
+        const targetWorldPos = targetPoint.getWorldPosition().clone()
+        tweenCar.to(0.2, {
+            eulerAngles: new Vec3(0, 0, -90)
+        })
+            .delay(0.2)
+            .to(0.2, { worldPosition: new Vec3(targetWorldPos.x, targetWorldPos.y - 100, targetWorldPos.z) })
+            .delay(0.2)
+            .to(0.2, { eulerAngles: new Vec3(0, 0, 0) })
+            .start()
+    }
+
     // 左边导航
     leftRoadTween(car: Node, tweenCar: Tween<Node>) {
         const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodTop/LeftPoint")
@@ -232,6 +251,21 @@ export class RoosterMoveCar extends Component {
             .delay(0.1)
 
     }
+
+    //右边顶部转向左
+    rightTopToleft(car: Node, targetPoint: Node, tweenCar: Tween<Node>) {
+        //转向左边动画
+        const targetWorldPos = targetPoint.getWorldPosition().clone()
+        tweenCar.to(0.2, {
+            eulerAngles: new Vec3(0, 0, 90)
+        })
+            .delay(0.2)
+            .to(0.2, { worldPosition: new Vec3(targetWorldPos.x, targetWorldPos.y - 100, targetWorldPos.z) })
+            .delay(0.2)
+            .to(0.2, { eulerAngles: new Vec3(0, 0, 0) })
+            .start()
+    }
+
     // 右边导航
     rightRoadTween(car: Node, tweenCar: Tween<Node>) {
         const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodTop/RightPoint")
