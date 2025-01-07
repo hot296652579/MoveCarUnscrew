@@ -3,6 +3,8 @@ import { Tablelevels_config } from "../../../module_basic/table/Tablelevels_conf
 import { Tablemain_config } from "../../../module_basic/table/Tablemain_config";
 import { GlobalConfig } from "../Config/GlobalConfig";
 import { sys } from "cc";
+import { CarCarColorsSysterm } from "../Systems/CarCarColorsSysterm";
+import { CarColorsGlobalInstance } from "../CarColorsGlobalInstance";
 
 /**道具类型
  * @param REVOKE 撤销
@@ -65,6 +67,7 @@ export class LevelModel {
 
     /** 清除关卡数据*/
     clearLevel() {
+        CarColorsGlobalInstance.instance.carSysterm.clearAll();
         this.isWin = false;
         this.star = 3;
     }

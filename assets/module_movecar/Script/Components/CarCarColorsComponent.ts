@@ -124,6 +124,7 @@ export class CarCarColorsComponent extends Component {
             const pins = levelComp.get_pin_color();
             if (pins.length == 0) {
                 LevelManager.instance.levelModel.isWin = true;
+                console.log('赢了添加结算面板+++++++++++++')
                 tgxUIMgr.inst.showUI(UI_BattleResult);
             }
         }
