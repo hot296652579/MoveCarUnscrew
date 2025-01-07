@@ -115,6 +115,19 @@ export class CarCarColorsSysterm extends Component {
             carTypes.get(carType)!.push(car);
         });
 
+        // 检查是否有同类型的车可以交换颜色
+        let hasSameTypeCars = false;
+        carTypes.forEach((carsOfType, type) => {
+            if (carsOfType.length > 1) {
+                hasSameTypeCars = true;
+            }
+        });
+
+        if (!hasSameTypeCars) {
+            console.log("没有同类型的车可以交换颜色！");
+            return; // 如果没有同类型的车，直接返回
+        }
+
         // 在同类型的车之间交换颜色
         carTypes.forEach((carsOfType, type) => {
             if (carsOfType.length > 1) {
