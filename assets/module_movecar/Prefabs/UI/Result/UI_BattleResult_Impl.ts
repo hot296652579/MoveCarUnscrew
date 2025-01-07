@@ -77,7 +77,7 @@ export class UI_BattleResult_Impl extends UI_BattleResult {
         Tween.stopAllByTarget(this.node)
         if (isValid(this.node)) {
             this.node.removeFromParent();
-            this.node.destroy();
+            this.hide();
         }
         this.clearAllTimeouts();
     }

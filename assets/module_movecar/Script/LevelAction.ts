@@ -232,8 +232,11 @@ export class LevelAction extends Component {
                 }
             }
 
-            LevelManager.instance.levelModel.isWin = false;
-            tgxUIMgr.inst.showUI(UI_BattleResult);
+            const ui = tgxUIMgr.inst.getUI(UI_BattleResult)!;
+            if (!ui) {
+                LevelManager.instance.levelModel.isWin = false;
+                tgxUIMgr.inst.showUI(UI_BattleResult);
+            }
         }
         this.unschedule(checkOver);
         this.scheduleOnce(checkOver, 1);
