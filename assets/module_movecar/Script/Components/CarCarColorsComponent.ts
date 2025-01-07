@@ -1,4 +1,4 @@
-import { _decorator, CircleCollider2D, Component, Enum, EventTouch, find, Input, Node, tween, Vec3 } from 'cc';
+import { _decorator, CircleCollider2D, Component, Enum, ERaycast2DType, EventTouch, find, Input, Node, PhysicsSystem2D, tween, Vec2, Vec3 } from 'cc';
 import { EventDispatcher } from 'db://assets/core_tgx/easy_ui_framework/EventDispatcher';
 import { tgxUIMgr } from 'db://assets/core_tgx/tgx';
 import { UI_BattleResult } from 'db://assets/scripts/UIDef';
@@ -177,6 +177,37 @@ export class CarCarColorsComponent extends Component {
                 this.carOut()
             })
             .start()
+    }
+
+    //检测前方是否有碰撞物
+    checkCollision(): boolean {
+        let carWorldPos = this.node.getWorldPosition().clone();
+        let objs = new Vec2(carWorldPos.x, carWorldPos.y);
+        let obje = this.createRaycastPosByDir(objs, this.carDir);
+
+        // 射线检测
+        let results = PhysicsSystem2D.instance.raycast(objs, obje, ERaycast2DType.Closest);
+        if (results.length > 0) {
+            const collider = results[0].collider;
+            //碰到车
+            if (collider.group == 1 << 1) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    createRaycastPosByDir(objs: Vec2, carDir: CarDir): Vec2 {
+        if (carDir == CarDir.TOP) {
+            return new Vec2(objs.x, objs.y + 1000);
+        } else if (carDir == CarDir.BOTTOM) {
+            return new Vec2(objs.x, objs.y - 1000);
+        } else if (carDir == CarDir.LEFT) {
+            return new Vec2(objs.x - 1000, objs.y);
+        } else if (carDir == CarDir.RIGHT) {
+            return new Vec2(objs.x + 1000, objs.y);
+        }
     }
 }
 

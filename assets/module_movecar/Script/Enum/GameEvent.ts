@@ -19,6 +19,9 @@ export class GameEvent {
     /** 磁力事件*/
     static readonly EVENT_MAGNET = 'EVENT_MAGNET';
 
+    /** 颜色刷新事件*/
+    static readonly EVENT_REFRESH_COLOR = 'EVENT_REFRESH_COLOR';
+
     /** 检测游戏是否结束*/
     static readonly EVENT_CHECK_GAME_OVER = 'EVENT_CHECK_GAME_OVER';
 

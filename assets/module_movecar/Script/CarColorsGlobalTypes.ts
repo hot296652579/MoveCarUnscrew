@@ -33,6 +33,19 @@ export enum CarColors {
     SpriteWhite = 10
 }
 
+export const CarColorLog: Record<CarColors, string> = {
+    [CarColors.Blue]: "蓝色",
+    [CarColors.Green]: "绿色",
+    [CarColors.Red]: "红色",
+    [CarColors.White]: "白色",
+    [CarColors.Yellow]: "黄色",
+    [CarColors.Pink]: "粉色",
+    [CarColors.Purple]: "紫色",
+    [CarColors.Brown]: "棕色",
+    [CarColors.Black]: "黑色",
+    [CarColors.SpriteWhite]: "精灵白色",
+};
+
 // 定义对应的十六进制颜色值
 export const CarColorHex: Record<CarColors, string> = {
     [CarColors.Blue]: "#1B24F0",

@@ -1,7 +1,12 @@
 import { _decorator, Component, find, geometry, Node, PhysicsSystem } from 'cc';
-import { CarColors, CarTypes } from '../CarColorsGlobalTypes';
+import { CarColorLog, CarColors, CarTypes } from '../CarColorsGlobalTypes';
 import { CarBoxComponent } from '../Components/CarBoxComponent';
 import { CarCarColorsComponent } from '../Components/CarCarColorsComponent';
+import { EventDispatcher } from 'db://assets/core_tgx/easy_ui_framework/EventDispatcher';
+import { GameEvent } from '../Enum/GameEvent';
+import { CarColorsGlobalInstance } from '../CarColorsGlobalInstance';
+import { LevelAction } from '../LevelAction';
+import { PinComponent } from '../Components/PinComponent';
 const { ccclass, property } = _decorator;
 
 @ccclass('CarCarColorsSysterm')
@@ -12,7 +17,12 @@ export class CarCarColorsSysterm extends Component {
 
     carBoxMap: Array<CarBoxComponent> = []
 
-    initData() {
+    protected start(): void {
+        EventDispatcher.instance.on(GameEvent.EVENT_REFRESH_COLOR, this.refreshCarColor, this);
+    }
+
+    protected onDestroy(): void {
+        EventDispatcher.instance.off(GameEvent.EVENT_REFRESH_COLOR, this.refreshCarColor);
     }
 
     addCar(node: Node) {
@@ -58,56 +68,80 @@ export class CarCarColorsSysterm extends Component {
 
         this.carSeats.length = 0
         this.carSeats = []
+
     }
 
-    //DOTO 刷新车方式改变
-    refreshCar() {
-        const cars = find("Scene/Levels").children[0].children
-
-        const miniCars: { cars: Array<Node>, colors: Array<CarColors> } = {
-            cars: [],
-            colors: []
-        }
-        const middleCars: { cars: Array<Node>, colors: Array<CarColors> } = {
-            cars: [],
-            colors: []
-        }
-        const bigCars: { cars: Array<Node>, colors: Array<CarColors> } = {
-            cars: [],
-            colors: []
-        }
+    refreshCarColor() {
+        // 找出外圈没被挡住的车子
+        const canOutCar: CarCarColorsComponent[] = [];
+        const cars = find("Canvas/Scene/Levels").children[0].getComponentsInChildren(CarCarColorsComponent)!;
         cars.forEach(car => {
-            const carCom = car.getComponent(CarCarColorsComponent)
-            if (!carCom) return
-            if (carCom.carType === CarTypes.Sedan) {
-                miniCars.cars.push(car)
-                miniCars.colors.push(carCom.carColor)
-                return
-            }
-            if (carCom.carType === CarTypes.Minivan) {
-                middleCars.cars.push(car)
-                middleCars.colors.push(carCom.carColor)
-                return
-            }
-            if (carCom.carType === CarTypes.Bus) {
-                bigCars.cars.push(car)
-                bigCars.colors.push(carCom.carColor)
-                return
-            }
-        })
+            const carComp = car.getComponent(CarCarColorsComponent);
+            const collider = carComp.checkCollision();
 
-        miniCars.colors.sort(() => Math.random() - 0.5);
-        middleCars.colors.sort(() => Math.random() - 0.5);
-        bigCars.colors.sort(() => Math.random() - 0.5);
-        miniCars.cars.forEach((car, index) => {
-            car.getComponent(CarCarColorsComponent).carColor = miniCars.colors[index]
-        })
-        middleCars.cars.forEach((car, index) => {
-            car.getComponent(CarCarColorsComponent).carColor = middleCars.colors[index]
-        })
-        bigCars.cars.forEach((car, index) => {
-            car.getComponent(CarCarColorsComponent).carColor = bigCars.colors[index]
-        })
+            if (!collider) {
+                canOutCar.push(car);
+            }
+        });
+
+        // 找出待解锁的钉子颜色
+        const level = CarColorsGlobalInstance.instance.levels.children[0];
+        const layer_arr = level.getComponent(LevelAction)!.get_all_layer();
+        let topPins: Set<CarColors> = new Set();
+
+        layer_arr.forEach(layer => {
+            if (layer.layer_status == 1) {
+                layer.node.children.forEach((element) => {
+                    const pins = element.getComponentsInChildren(PinComponent)!;
+                    pins.forEach(async (pin) => {
+                        const pinCom = pin.getComponent(PinComponent)!;
+                        if (!pinCom.isBlocked) {
+                            if (!topPins.has(pinCom.pin_color)) {
+                                topPins.add(pinCom.pin_color);
+                            }
+                        }
+                    });
+                });
+            }
+        });
+
+        // 按车类型分组
+        const carTypes = new Map<CarTypes, CarCarColorsComponent[]>();
+        cars.forEach(car => {
+            const carType = car.carType;
+            if (!carTypes.has(carType)) {
+                carTypes.set(carType, []);
+            }
+            carTypes.get(carType)!.push(car);
+        });
+
+        // 在同类型的车之间交换颜色
+        carTypes.forEach((carsOfType, type) => {
+            if (carsOfType.length > 1) {
+                // 随机交换颜色
+                for (let i = 0; i < carsOfType.length; i++) {
+                    const j = Math.floor(Math.random() * carsOfType.length);
+                    const tempColor = carsOfType[i].carColor;
+                    carsOfType[i].carColor = carsOfType[j].carColor;
+                    carsOfType[j].carColor = tempColor;
+                }
+            }
+        });
+
+        // 检查可开出的车中是否至少有一个车的颜色是待解锁的钉子颜色之一
+        let hasValidColor = false;
+        canOutCar.forEach(car => {
+            if (topPins.has(car.carColor)) {
+                hasValidColor = true;
+            }
+        });
+
+        if (!hasValidColor && canOutCar.length > 0) {
+            // 如果没有符合条件的车，将第一个可开出的车的颜色改为待解锁的钉子颜色之一
+            const firstCar = canOutCar[0];
+            const newColor = Array.from(topPins)[0]; // 取第一个待解锁的颜色
+            firstCar.carColor = newColor;
+        }
     }
 
     checkCarBox() {

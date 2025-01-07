@@ -14,7 +14,6 @@ export class RoosterMoveCar extends Component {
         LevelManager.instance.initilizeModel();
         CarColorsGlobalInstance.instance.levels = find('Canvas/Scene/Levels')!;
         CarColorsGlobalInstance.instance.carSysterm = this.node.getComponent(CarCarColorsSysterm)!;
-        CarColorsGlobalInstance.instance.carSysterm.initData();
         CarColorsGlobalInstance.instance.loadPinPrefab();
 
         this.registerListener();
@@ -26,7 +25,7 @@ export class RoosterMoveCar extends Component {
 
     async startGame() {
         //DOTO 获取保存等级
-        LevelManager.instance.levelModel.level = 1;
+        LevelManager.instance.levelModel.level = 2;
         await LevelManager.instance.gameStart();
     }
 

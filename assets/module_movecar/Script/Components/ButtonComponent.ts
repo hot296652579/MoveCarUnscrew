@@ -23,7 +23,7 @@ export class ButtonComponent extends Component {
 
     private onClickHandler(type: TYPE_ITEM): void {
         if (type == TYPE_ITEM.REFRESH) {
-            EventDispatcher.instance.emit(GameEvent.EVENT_MAGNET);
+            EventDispatcher.instance.emit(GameEvent.EVENT_REFRESH_COLOR);
         } else if (type == TYPE_ITEM.MAGNET) {
             EventDispatcher.instance.emit(GameEvent.EVENT_MAGNET);
         }
