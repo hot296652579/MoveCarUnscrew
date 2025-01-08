@@ -1,4 +1,4 @@
-import { _decorator, Component, ERaycast2DType, find, Node, PhysicsSystem2D, Tween, tween, Vec2, Vec3 } from 'cc';
+import { _decorator, Component, ERaycast2DType, find, Node, PhysicsSystem2D, Tween, tween, v2, v3, Vec2, Vec3 } from 'cc';
 import { EventDispatcher } from '../core_tgx/easy_ui_framework/EventDispatcher';
 import { CarColorsGlobalInstance } from './Script/CarColorsGlobalInstance';
 import { CarDir } from './Script/CarColorsGlobalTypes';
@@ -25,7 +25,7 @@ export class RoosterMoveCar extends Component {
 
     async startGame() {
         //DOTO 获取保存等级
-        LevelManager.instance.levelModel.level = 2;
+        LevelManager.instance.levelModel.level = 3;
         await LevelManager.instance.gameStart();
     }
 
@@ -38,13 +38,18 @@ export class RoosterMoveCar extends Component {
         let carComp = car.getComponent(CarCarColorsComponent);
         if (!carComp) return;
 
-        let carWorldPos = car.getWorldPosition().clone();
-        let objs = new Vec2(carWorldPos.x, carWorldPos.y);
-        let obje = this.createRaycastPosByDir(objs, carComp.carDir);
+        const carWorldPos = car.getWorldPosition().clone();
+        const objs = this.getWorldPositionAsVec2(car);
+        const obje = this.calculateRayEnd(car);
+        // const obje = this.createRaycastPosByDir(objs, car, carComp.carDir);
+
+        console.log('射线起点：', objs);
+        console.log('射线终点：', obje);
         // 射线检测
         let results = PhysicsSystem2D.instance.raycast(objs, obje, ERaycast2DType.Closest);
         if (results.length > 0) {
             const closestResult = results[0];
+            console.log('碰撞结果:', closestResult.collider.node.name);
             const collider = results[0].collider;
             //碰到车
             if (collider.group == 1 << 1) {
@@ -137,7 +142,18 @@ export class RoosterMoveCar extends Component {
         return null
     }
 
-    createRaycastPosByDir(objs: Vec2, carDir: CarDir): Vec2 {
+    // 获取车的世界坐标并转换为 Vec2
+    getWorldPositionAsVec2(car: Node): Vec2 {
+        const worldPosition = car.getWorldPosition().clone(); // 获取世界坐标
+        return v2(worldPosition.x, worldPosition.y); // 转换为 Vec2
+    }
+
+    createRaycastPosByDir(objs: Vec2, car: Node, carDir: CarDir): Vec2 {
+        const rotation = car.angle;
+        const radians = rotation * (Math.PI / 180);
+        const direction = v2(Math.cos(radians), Math.sin(radians));//方向向量
+
+        //DOTO 根据角度方向获取射线终点
         if (carDir == CarDir.TOP) {
             return new Vec2(objs.x, objs.y + 1000);
         } else if (carDir == CarDir.BOTTOM) {
@@ -147,6 +163,35 @@ export class RoosterMoveCar extends Component {
         } else if (carDir == CarDir.RIGHT) {
             return new Vec2(objs.x + 1000, objs.y);
         }
+    }
+
+    calculateRayEnd(car: Node): Vec2 {
+        const rotation = car.angle;
+
+        // 根据角度计算方向向量
+        let direction = v2(0, 0);
+        if (rotation === -90) {
+            direction = v2(1, 0); // 朝右
+        } else if (rotation === 0) {
+            direction = v2(0, 1); // 朝上
+        } else if (rotation === 90) {
+            direction = v2(-1, 0); // 朝左
+        } else if (rotation === 180) {
+            direction = v2(0, -1); // 朝下
+        } else {
+            // 如果是任意角度，使用 Math.cos 和 Math.sin 计算方向向量
+            const radians = rotation * (Math.PI / 180);
+            direction = v2(Math.cos(radians), Math.sin(radians));
+        }
+
+        // 计算射线起点坐标
+        const objs = this.getWorldPositionAsVec2(car);
+
+        // 计算射线终点坐标
+        const rayLength = 1000; // 射线长度
+        const obje = objs.add(direction.multiplyScalar(rayLength));
+
+        return obje;
     }
 
     /** 导航到碰撞点
@@ -180,7 +225,7 @@ export class RoosterMoveCar extends Component {
             .call(() => {
                 const targetWorldPos = targetPoint.getWorldPosition();
                 const direction = targetWorldPos.subtract(newHintStreetPos).normalize();
-                console.log('direction:', direction);
+                // console.log('direction:', direction);
 
                 let up: Vec3;
                 if (Math.abs(direction.x) > Math.abs(direction.y)) {
@@ -203,6 +248,33 @@ export class RoosterMoveCar extends Component {
             })
             .delay(0.1)
             .start();
+
+        // const targetPosition = hitPoint.getWorldPosition().clone();
+        // const rotation = car.angle;
+        // console.log('当前车的角度:', rotation);
+
+        // const radians = rotation * (Math.PI / 180);
+        // const direction = v3(Math.cos(radians), Math.sin(radians), 0);//方向向量
+
+        // // 计算从当前位置到目标位置的向量
+        // const currentPosition = this.node.position;
+        // const toTarget = targetPosition.subtract(currentPosition);
+
+        // const speed = 200;
+        // const moveDistance = direction.multiplyScalar(speed);
+
+        // // 计算移动时间（根据目标位置和移动距离）
+        // const distance = toTarget.length();
+        // const duration = distance / speed;
+
+        // tween(this.node.position)
+        //     .to(duration, toTarget, {
+        //         onUpdate: (target: Vec3, ratio: number) => {
+        //             // 更新车的位置
+        //             this.node.position = currentPosition.add(moveDistance.multiplyScalar(ratio));
+        //         }
+        //     })
+        //     .start();
     }
 
     // 顶部导航
