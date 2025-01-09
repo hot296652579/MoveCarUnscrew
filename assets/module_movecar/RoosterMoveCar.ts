@@ -232,7 +232,22 @@ export class RoosterMoveCar extends Component {
                     }
                 } else {
                     // 上下方向
-                    up = direction.y > 0 ? new Vec3(0, -1, 0) : new Vec3(0, 1, 0);
+                    // up = direction.y > 0 ? new Vec3(0, -1, 0) : new Vec3(0, 1, 0);
+                    // console.log('hitPoint.name:', hitPoint.name);
+                    if (hitPoint.name == 'PhysicRoodBottom' || hitPoint.name == 'PhysicRoodTop') {
+                        const leftPoint = hitPoint.getChildByName('LeftPoint')!;
+                        const rightPoint = hitPoint.getChildByName('RightPoint')!;
+                        const toLeft = leftPoint.getWorldPosition().subtract(carWorldPos).normalize();
+                        const toRight = rightPoint.getWorldPosition().subtract(carWorldPos).normalize();
+
+                        if (Math.abs(toLeft.x) < Math.abs(toRight.x)) {
+                            up = new Vec3(0, 0, 1);
+                        } else {
+                            up = new Vec3(0, 0, -1);
+                        }
+                    } else {
+                        up = direction.y > 0 ? new Vec3(0, -1, 0) : new Vec3(0, 1, 0);
+                    }
                 }
                 car.lookAt(targetV3, up);
             })

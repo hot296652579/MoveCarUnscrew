@@ -2048,7 +2048,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Street-010",
+    "_name": "BottomPoint",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -2115,7 +2115,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Street-011",
+    "_name": "TopPoint",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -2318,7 +2318,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Street-010",
+    "_name": "BottomPoint",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -2385,7 +2385,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Street-011",
+    "_name": "TopPoint",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
