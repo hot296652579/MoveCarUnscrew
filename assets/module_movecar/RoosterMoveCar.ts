@@ -6,6 +6,7 @@ import { CarCarColorsComponent } from './Script/Components/CarCarColorsComponent
 import { GameEvent } from './Script/Enum/GameEvent';
 import { LevelManager } from './Script/LevelMgr';
 import { CarCarColorsSysterm } from './Script/Systems/CarCarColorsSysterm';
+import { GameUtil } from './Script/GameUtil';
 const { ccclass, property } = _decorator;
 
 @ccclass('RoosterMoveCar')
@@ -39,7 +40,7 @@ export class RoosterMoveCar extends Component {
         if (!carComp) return;
 
         const carWorldPos = car.getWorldPosition().clone();
-        const objs = this.getWorldPositionAsVec2(car);
+        const objs = GameUtil.getWorldPositionAsVec2(car);
         const obje = this.calculateRayEnd(car);
         // const obje = this.createRaycastPosByDir(objs, car, carComp.carDir);
 
@@ -150,12 +151,6 @@ export class RoosterMoveCar extends Component {
         return null
     }
 
-    // 获取车的世界坐标并转换为 Vec2
-    getWorldPositionAsVec2(car: Node): Vec2 {
-        const worldPosition = car.getWorldPosition().clone(); // 获取世界坐标
-        return v2(worldPosition.x, worldPosition.y); // 转换为 Vec2
-    }
-
     createRaycastPosByDir(objs: Vec2, car: Node, carDir: CarDir): Vec2 {
         const rotation = car.angle;
         const radians = rotation * (Math.PI / 180);
@@ -192,7 +187,7 @@ export class RoosterMoveCar extends Component {
         }
 
         // 计算射线起点坐标
-        const objs = this.getWorldPositionAsVec2(car);
+        const objs = GameUtil.getWorldPositionAsVec2(car);
 
         // 计算射线终点坐标
         const rayLength = 1000; // 射线长度

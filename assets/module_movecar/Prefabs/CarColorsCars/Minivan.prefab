@@ -2722,6 +2722,7 @@
     "carType": 3,
     "carDir": 0,
     "_carColor": 6,
+    "roleMax": 6,
     "_id": ""
   },
   {

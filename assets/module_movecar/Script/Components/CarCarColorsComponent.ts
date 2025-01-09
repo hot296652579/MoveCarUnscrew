@@ -1,4 +1,4 @@
-import { _decorator, CircleCollider2D, Component, Enum, ERaycast2DType, EventTouch, find, Input, Node, PhysicsSystem2D, tween, Vec2, Vec3 } from 'cc';
+import { _decorator, CCFloat, CircleCollider2D, Component, Enum, ERaycast2DType, EventTouch, find, Input, Node, PhysicsSystem2D, tween, v2, Vec2, Vec3 } from 'cc';
 import { EventDispatcher } from 'db://assets/core_tgx/easy_ui_framework/EventDispatcher';
 import { tgxUIMgr } from 'db://assets/core_tgx/tgx';
 import { UI_BattleResult } from 'db://assets/scripts/UIDef';
@@ -7,6 +7,7 @@ import { CarColors, CarDir, CarTypes } from '../CarColorsGlobalTypes';
 import { GameEvent } from '../Enum/GameEvent';
 import { LevelAction } from '../LevelAction';
 import { LevelManager } from '../LevelMgr';
+import { GameUtil } from '../GameUtil';
 const { ccclass, property, executeInEditMode } = _decorator;
 @ccclass('CarCarColorsComponent')
 @executeInEditMode
@@ -25,6 +26,9 @@ export class CarCarColorsComponent extends Component {
     }
     @property({ type: Enum(CarColors) })
     private _carColor: CarColors = CarColors.Purple
+
+    @property(({ type: CCFloat, displayName: '可承载人数' }))
+    roleMax: number = 4;
 
     halfLen: number = 2
 
@@ -124,7 +128,6 @@ export class CarCarColorsComponent extends Component {
             const pins = levelComp.get_pin_color();
             if (pins.length == 0) {
                 LevelManager.instance.levelModel.isWin = true;
-                console.log('赢了添加结算面板+++++++++++++')
                 tgxUIMgr.inst.showUI(UI_BattleResult);
             }
         }
@@ -184,7 +187,8 @@ export class CarCarColorsComponent extends Component {
     checkCollision(): boolean {
         let carWorldPos = this.node.getWorldPosition().clone();
         let objs = new Vec2(carWorldPos.x, carWorldPos.y);
-        let obje = this.createRaycastPosByDir(objs, this.carDir);
+        // let obje = this.createRaycastPosByDir(objs, this.carDir);
+        let obje = this.calculateRayEnd(this.node);
 
         // 射线检测
         let results = PhysicsSystem2D.instance.raycast(objs, obje, ERaycast2DType.Closest);
@@ -199,16 +203,44 @@ export class CarCarColorsComponent extends Component {
         return false
     }
 
-    createRaycastPosByDir(objs: Vec2, carDir: CarDir): Vec2 {
-        if (carDir == CarDir.TOP) {
-            return new Vec2(objs.x, objs.y + 1000);
-        } else if (carDir == CarDir.BOTTOM) {
-            return new Vec2(objs.x, objs.y - 1000);
-        } else if (carDir == CarDir.LEFT) {
-            return new Vec2(objs.x - 1000, objs.y);
-        } else if (carDir == CarDir.RIGHT) {
-            return new Vec2(objs.x + 1000, objs.y);
+    // createRaycastPosByDir(objs: Vec2, carDir: CarDir): Vec2 {
+    //     if (carDir == CarDir.TOP) {
+    //         return new Vec2(objs.x, objs.y + 1000);
+    //     } else if (carDir == CarDir.BOTTOM) {
+    //         return new Vec2(objs.x, objs.y - 1000);
+    //     } else if (carDir == CarDir.LEFT) {
+    //         return new Vec2(objs.x - 1000, objs.y);
+    //     } else if (carDir == CarDir.RIGHT) {
+    //         return new Vec2(objs.x + 1000, objs.y);
+    //     }
+    // }
+
+    calculateRayEnd(car: Node): Vec2 {
+        const rotation = car.angle;
+
+        // 根据角度计算方向向量
+        let direction = v2(0, 0);
+        if (rotation === -90) {
+            direction = v2(1, 0); // 朝右
+        } else if (rotation === 0) {
+            direction = v2(0, 1); // 朝上
+        } else if (rotation === 90) {
+            direction = v2(-1, 0); // 朝左
+        } else if (rotation === 180) {
+            direction = v2(0, -1); // 朝下
+        } else {
+            const adjustedAngle = rotation - 90;
+            direction = v2(-Math.cos(adjustedAngle * (Math.PI / 180)), Math.sin(-adjustedAngle * (Math.PI / 180)));
         }
+
+        // 计算射线起点坐标
+        const objs = GameUtil.getWorldPositionAsVec2(car);
+
+        // 计算射线终点坐标
+        const rayLength = 1000; // 射线长度
+        const obje = objs.add(direction.multiplyScalar(rayLength));
+
+        return obje;
     }
 }
 

@@ -2890,7 +2890,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 140.48828125,
+      "width": 142.36328125,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -2920,7 +2920,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "Revoke",
+    "_string": "Refresh",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 40,

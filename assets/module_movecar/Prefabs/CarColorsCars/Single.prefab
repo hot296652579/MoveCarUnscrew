@@ -1863,6 +1863,7 @@
     "carType": 0,
     "carDir": 0,
     "_carColor": 6,
+    "roleMax": 1,
     "_id": ""
   },
   {

@@ -3442,6 +3442,7 @@
     "carType": 2,
     "carDir": 0,
     "_carColor": 6,
+    "roleMax": 10,
     "_id": ""
   },
   {
