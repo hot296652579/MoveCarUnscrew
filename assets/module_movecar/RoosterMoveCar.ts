@@ -41,7 +41,7 @@ export class RoosterMoveCar extends Component {
 
         const carWorldPos = car.getWorldPosition().clone();
         const objs = GameUtil.getWorldPositionAsVec2(car);
-        const obje = this.calculateRayEnd(car);
+        const obje = GameUtil.calculateRayEnd(car, 1000);
         // const obje = this.createRaycastPosByDir(objs, car, carComp.carDir);
 
         console.log('射线起点：', objs);
@@ -151,50 +151,22 @@ export class RoosterMoveCar extends Component {
         return null
     }
 
-    createRaycastPosByDir(objs: Vec2, car: Node, carDir: CarDir): Vec2 {
-        const rotation = car.angle;
-        const radians = rotation * (Math.PI / 180);
-        const direction = v2(Math.cos(radians), Math.sin(radians));//方向向量
+    // createRaycastPosByDir(objs: Vec2, car: Node, carDir: CarDir): Vec2 {
+    //     const rotation = car.angle;
+    //     const radians = rotation * (Math.PI / 180);
+    //     const direction = v2(Math.cos(radians), Math.sin(radians));//方向向量
 
-        //DOTO 根据角度方向获取射线终点
-        if (carDir == CarDir.TOP) {
-            return new Vec2(objs.x, objs.y + 1000);
-        } else if (carDir == CarDir.BOTTOM) {
-            return new Vec2(objs.x, objs.y - 1000);
-        } else if (carDir == CarDir.LEFT) {
-            return new Vec2(objs.x - 1000, objs.y);
-        } else if (carDir == CarDir.RIGHT) {
-            return new Vec2(objs.x + 1000, objs.y);
-        }
-    }
-
-    calculateRayEnd(car: Node): Vec2 {
-        const rotation = car.angle;
-
-        // 根据角度计算方向向量
-        let direction = v2(0, 0);
-        if (rotation === -90) {
-            direction = v2(1, 0); // 朝右
-        } else if (rotation === 0) {
-            direction = v2(0, 1); // 朝上
-        } else if (rotation === 90) {
-            direction = v2(-1, 0); // 朝左
-        } else if (rotation === 180) {
-            direction = v2(0, -1); // 朝下
-        } else {
-            const adjustedAngle = rotation - 90;
-            direction = v2(-Math.cos(adjustedAngle * (Math.PI / 180)), Math.sin(-adjustedAngle * (Math.PI / 180)));
-        }
-
-        // 计算射线起点坐标
-        const objs = GameUtil.getWorldPositionAsVec2(car);
-
-        // 计算射线终点坐标
-        const rayLength = 1000; // 射线长度
-        const obje = objs.add(direction.multiplyScalar(rayLength));
-
-        return obje;
-    }
+    //     //DOTO 根据角度方向获取射线终点
+    //     if (carDir == CarDir.TOP) {
+    //         return new Vec2(objs.x, objs.y + 1000);
+    //     } else if (carDir == CarDir.BOTTOM) {
+    //         return new Vec2(objs.x, objs.y - 1000);
+    //     } else if (carDir == CarDir.LEFT) {
+    //         return new Vec2(objs.x - 1000, objs.y);
+    //     } else if (carDir == CarDir.RIGHT) {
+    //         return new Vec2(objs.x + 1000, objs.y);
+    //     }
+    // }
 
     /** 导航到碰撞点
      * @param car 车节点

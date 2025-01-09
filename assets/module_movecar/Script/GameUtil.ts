@@ -52,4 +52,34 @@ export class GameUtil {
         return v2(worldPosition.x, worldPosition.y); // 转换为 Vec2
     }
 
+    /** 射线检测
+     * @param fromNode 起始节点
+     * @param rayLength 射线长度
+     * @return 射线结束点的世界坐标 (作为 Vec2)
+    */
+    static calculateRayEnd(fromNode: Node, rayLength: number): Vec2 {
+        const rotation = fromNode.angle;
+
+        // 根据角度计算方向向量
+        let direction = v2(0, 0);
+        if (rotation === -90) {
+            direction = v2(1, 0); // 朝右
+        } else if (rotation === 0) {
+            direction = v2(0, 1); // 朝上
+        } else if (rotation === 90) {
+            direction = v2(-1, 0); // 朝左
+        } else if (rotation === 180) {
+            direction = v2(0, -1); // 朝下
+        } else {
+            const adjustedAngle = rotation - 90;
+            direction = v2(-Math.cos(adjustedAngle * (Math.PI / 180)), Math.sin(-adjustedAngle * (Math.PI / 180)));
+        }
+
+        // 计算射线起点坐标
+        const objs = this.getWorldPositionAsVec2(fromNode);
+        const obje = objs.add(direction.multiplyScalar(rayLength));
+
+        return obje;
+    }
+
 }

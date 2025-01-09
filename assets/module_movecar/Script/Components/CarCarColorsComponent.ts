@@ -185,10 +185,8 @@ export class CarCarColorsComponent extends Component {
 
     //检测前方是否有碰撞物
     checkCollision(): boolean {
-        let carWorldPos = this.node.getWorldPosition().clone();
-        let objs = new Vec2(carWorldPos.x, carWorldPos.y);
-        // let obje = this.createRaycastPosByDir(objs, this.carDir);
-        let obje = this.calculateRayEnd(this.node);
+        const objs = GameUtil.getWorldPositionAsVec2(this.node);
+        const obje = GameUtil.calculateRayEnd(this.node, 1000);
 
         // 射线检测
         let results = PhysicsSystem2D.instance.raycast(objs, obje, ERaycast2DType.Closest);
@@ -214,34 +212,6 @@ export class CarCarColorsComponent extends Component {
     //         return new Vec2(objs.x + 1000, objs.y);
     //     }
     // }
-
-    calculateRayEnd(car: Node): Vec2 {
-        const rotation = car.angle;
-
-        // 根据角度计算方向向量
-        let direction = v2(0, 0);
-        if (rotation === -90) {
-            direction = v2(1, 0); // 朝右
-        } else if (rotation === 0) {
-            direction = v2(0, 1); // 朝上
-        } else if (rotation === 90) {
-            direction = v2(-1, 0); // 朝左
-        } else if (rotation === 180) {
-            direction = v2(0, -1); // 朝下
-        } else {
-            const adjustedAngle = rotation - 90;
-            direction = v2(-Math.cos(adjustedAngle * (Math.PI / 180)), Math.sin(-adjustedAngle * (Math.PI / 180)));
-        }
-
-        // 计算射线起点坐标
-        const objs = GameUtil.getWorldPositionAsVec2(car);
-
-        // 计算射线终点坐标
-        const rayLength = 1000; // 射线长度
-        const obje = objs.add(direction.multiplyScalar(rayLength));
-
-        return obje;
-    }
 }
 
 
