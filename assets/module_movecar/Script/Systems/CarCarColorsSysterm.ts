@@ -1,4 +1,4 @@
-import { _decorator, Component, find, geometry, Node, PhysicsSystem } from 'cc';
+import { _decorator, Component, ERaycast2DType, find, geometry, Node, PhysicsSystem, PhysicsSystem2D } from 'cc';
 import { CarColorLog, CarColors, CarTypes } from '../CarColorsGlobalTypes';
 import { CarBoxComponent } from '../Components/CarBoxComponent';
 import { CarCarColorsComponent } from '../Components/CarCarColorsComponent';
@@ -7,6 +7,7 @@ import { GameEvent } from '../Enum/GameEvent';
 import { CarColorsGlobalInstance } from '../CarColorsGlobalInstance';
 import { LevelAction } from '../LevelAction';
 import { PinComponent } from '../Components/PinComponent';
+import { GameUtil } from '../GameUtil';
 const { ccclass, property } = _decorator;
 
 @ccclass('CarCarColorsSysterm')
@@ -161,7 +162,7 @@ export class CarCarColorsSysterm extends Component {
         if (this.carBoxMap.length === 0) return
 
         let mask = 1 << 1; //车分组
-        let maxDistance = 100;
+        let maxDistance = 300;
         let queryTrigger = true;
         for (let i = this.carBoxMap.length; i--;) {
             const carBoxCom = this.carBoxMap[i]
@@ -170,13 +171,17 @@ export class CarCarColorsSysterm extends Component {
                 this.carBoxMap.splice(i, 1)
                 continue
             }
-            const pos = carBoxCom.node.getWorldPosition()
-            const forward = carBoxCom.node.forward.clone()
-            // 检测前方第一个碰撞体
-            const ray = new geometry.Ray(pos.x, pos.y, pos.z, forward.x, forward.y, forward.z)
-            // 前方没有障碍物
-            if (!PhysicsSystem.instance.raycastClosest(ray, mask, maxDistance, queryTrigger)) {
-                carBoxCom.outCarTween()
+
+            const car = carBoxCom.node;
+            const objs = GameUtil.getWorldPositionAsVec2(car);
+            const obje = GameUtil.calculateRayEnd(car, maxDistance);
+
+            let results = PhysicsSystem2D.instance.raycast(objs, obje, ERaycast2DType.Closest);
+            if (results.length == 0) {
+                // console.log("没有障碍物>>>>>>>");
+                carBoxCom.outCarTween();
+            } else {
+                // console.log("有障碍物:", results[0].collider.node.name);
             }
         }
     }

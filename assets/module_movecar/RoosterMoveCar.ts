@@ -26,7 +26,7 @@ export class RoosterMoveCar extends Component {
 
     async startGame() {
         //DOTO 获取保存等级
-        LevelManager.instance.levelModel.level = 3;
+        LevelManager.instance.levelModel.level = 1;
         await LevelManager.instance.gameStart();
     }
 
@@ -43,17 +43,16 @@ export class RoosterMoveCar extends Component {
         const objs = GameUtil.getWorldPositionAsVec2(car);
         const obje = GameUtil.calculateRayEnd(car, 1000);
         // const obje = this.createRaycastPosByDir(objs, car, carComp.carDir);
-
-        console.log('射线起点：', objs);
-        console.log('射线终点：', obje);
+        // console.log('射线起点：', objs);
+        // console.log('射线终点：', obje);
         // 射线检测
         let results = PhysicsSystem2D.instance.raycast(objs, obje, ERaycast2DType.Closest);
         if (results.length > 0) {
             const closestResult = results[0];
 
             const collider = results[0].collider;
-            console.log('碰撞器名称:', collider.name);
-            console.log('碰撞点世界坐标:', results[0].point);
+            // console.log('碰撞器名称:', collider.name);
+            // console.log('碰撞点世界坐标:', results[0].point);
             //碰到车
             if (collider.group == 1 << 1) {
                 const halfLen = carComp.halfLen;

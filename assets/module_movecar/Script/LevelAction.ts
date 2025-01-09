@@ -10,6 +10,7 @@ import { UnitAction } from './UnitAction';
 import { tgxUIMgr } from '../../core_tgx/tgx';
 import { UI_BattleResult } from '../../scripts/UIDef';
 import { LevelManager } from './LevelMgr';
+import { CarBoxComponent } from './Components/CarBoxComponent';
 const { ccclass, property } = _decorator;
 
 @ccclass('LevelAction')
@@ -41,7 +42,7 @@ export class LevelAction extends Component {
     public init_level() {
         for (let i = 0; i < this.node.children.length; i++) {
             const temp = this.node.children[i];
-            if (temp.getComponent(CarCarColorsComponent)) {
+            if (temp.getComponent(CarCarColorsComponent) || temp.getComponent(CarBoxComponent)) {
                 CarColorsGlobalInstance.instance.carSysterm.addCar(this.node.children[i]);
             }
         }
