@@ -230,24 +230,21 @@ export class LevelAction extends Component {
     //检测游戏是否结束
     checkGameOver() {
         let checkOver = function () {
-            let isEmpty = false;
             const points = find("Canvas/Scene/Parkings").children
 
             for (let i = points.length; i--;) {
 
                 if (points[i].name === "empty") {
-                    isEmpty = true;
                     return
                 }
 
                 if (points[i].name === "inuse" && points[i].children.length === 0) {
-                    isEmpty = true;
                     return
                 }
             }
 
             const ui = tgxUIMgr.inst.getUI(UI_BattleResult)!;
-            if (!ui && !isEmpty) {
+            if (!ui) {
                 LevelManager.instance.levelModel.isWin = false;
                 tgxUIMgr.inst.showUI(UI_BattleResult);
             }
