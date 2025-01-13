@@ -336,14 +336,12 @@ export class RoosterMoveCar extends Component {
                 }).start()
 
                 car.getComponent(CarCarColorsComponent).openCover();
-
                 EventDispatcher.instance.emit(GameEvent.EVENT_CHECK_GAME_OVER);
             })
             .delay(0.1)
             .to(0.2, {
                 worldPosition: targetPoint.getWorldPosition()
             })
-
     }
 
     //左边顶部转向右
