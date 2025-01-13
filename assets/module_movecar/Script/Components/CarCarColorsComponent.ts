@@ -1,4 +1,4 @@
-import { _decorator, CCFloat, CircleCollider2D, Component, Enum, ERaycast2DType, EventTouch, find, Input, Node, PhysicsSystem2D, tween, v2, Vec2, Vec3 } from 'cc';
+import { _decorator, CCFloat, CircleCollider2D, Component, Enum, ERaycast2DType, EventTouch, find, Input, Node, PhysicsSystem2D, tween, v2, v3, Vec2, Vec3 } from 'cc';
 import { EventDispatcher } from 'db://assets/core_tgx/easy_ui_framework/EventDispatcher';
 import { tgxUIMgr } from 'db://assets/core_tgx/tgx';
 import { UI_BattleResult } from 'db://assets/scripts/UIDef';
@@ -181,20 +181,18 @@ export class CarCarColorsComponent extends Component {
 
     // 车离开
     carOutTween(target: Node) {
+        const rightPointPos = find("Canvas/Scene/Grounds/PhysicRoodTop/RightPoint")!.getWorldPosition();
         tween(this.node).to(0.2, {
             worldPosition: target.getWorldPosition()
         })
             .call(() => {
-                const carforward = this.node.forward.clone()
-                tween(carforward).to(0.1, { x: -1, y: 0, z: 0 }, {
-                    onUpdate: () => {
-                        this.node.forward = carforward
-                    }
-                }).start()
+                const targetV3 = new Vec3(rightPointPos.x, rightPointPos.y, 0);
+                const up = new Vec3(0, 0, -1);
+                this.node.lookAt(targetV3, up);
             })
             .delay(0.1)
             .to(0.2, {
-                worldPosition: find("Canvas/Scene/Grounds/PhysicRoodTop/RightPoint").getWorldPosition()
+                worldPosition: rightPointPos
             })
             .call(() => {
                 this.carOut()

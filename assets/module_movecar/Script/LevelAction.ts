@@ -81,6 +81,9 @@ export class LevelAction extends Component {
             if (index > 3) {
                 element.name = `empty-lock${index}`;
                 element.getChildByName('Barricade')!.active = true;
+
+                const childrenToRemove = element.children.slice(1);
+                childrenToRemove.forEach(child => child.destroy());
             } else {
                 element.removeAllChildren();
             }
