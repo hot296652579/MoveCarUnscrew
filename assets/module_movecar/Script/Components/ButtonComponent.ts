@@ -2,6 +2,8 @@ import { Button, Component, Label, Node, NodeEventType, _decorator, find } from 
 import { GameEvent } from '../Enum/GameEvent';
 import { EventDispatcher } from 'db://assets/core_tgx/easy_ui_framework/EventDispatcher';
 import { TYPE_ITEM } from '../CarColorsGlobalTypes';
+import { GlobalConfig } from 'db://assets/start/Config/GlobalConfig';
+import { AdvertMgr } from 'db://assets/core_tgx/base/ad/AdvertMgr';
 const { ccclass, property } = _decorator;
 
 /**
@@ -23,9 +25,21 @@ export class ButtonComponent extends Component {
 
     private onClickHandler(type: TYPE_ITEM): void {
         if (type == TYPE_ITEM.REFRESH) {
-            EventDispatcher.instance.emit(GameEvent.EVENT_REFRESH_COLOR);
+            if (!GlobalConfig.isDebug) {
+                AdvertMgr.instance.showReawardVideo(() => {
+                    EventDispatcher.instance.emit(GameEvent.EVENT_REFRESH_COLOR);
+                })
+            } else {
+                EventDispatcher.instance.emit(GameEvent.EVENT_REFRESH_COLOR);
+            }
         } else if (type == TYPE_ITEM.MAGNET) {
-            EventDispatcher.instance.emit(GameEvent.EVENT_MAGNET);
+            if (!GlobalConfig.isDebug) {
+                AdvertMgr.instance.showReawardVideo(() => {
+                    EventDispatcher.instance.emit(GameEvent.EVENT_MAGNET);
+                })
+            } else {
+                EventDispatcher.instance.emit(GameEvent.EVENT_MAGNET);
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-import { _decorator, Component, ERaycast2DType, find, Label, Node, PhysicsSystem2D, Tween, tween, v2, v3, Vec2, Vec3 } from 'cc';
+import { _decorator, Component, ERaycast2DType, find, Label, Node, NodeEventType, PhysicsSystem2D, Tween, tween, v2, v3, Vec2, Vec3 } from 'cc';
 import { EventDispatcher } from '../core_tgx/easy_ui_framework/EventDispatcher';
 import { CarColorsGlobalInstance } from './Script/CarColorsGlobalInstance';
 import { CarDir } from './Script/CarColorsGlobalTypes';
@@ -9,13 +9,13 @@ import { CarCarColorsSysterm } from './Script/Systems/CarCarColorsSysterm';
 import { GameUtil } from './Script/GameUtil';
 import { Layout_BattleResult } from './Prefabs/UI/Result/Layout_BattleResult';
 import { LevelAction } from './Script/LevelAction';
+import { GlobalConfig } from '../start/Config/GlobalConfig';
+import { AdvertMgr } from '../core_tgx/base/ad/AdvertMgr';
+import { Barricade } from './Script/Components/Barricade';
 const { ccclass, property } = _decorator;
 
 @ccclass('RoosterMoveCar')
 export class RoosterMoveCar extends Component {
-
-    @property(Label)
-    lbScrews: Label = null!;
 
     onLoad() {
         LevelManager.instance.initilizeModel();
@@ -32,7 +32,7 @@ export class RoosterMoveCar extends Component {
 
     async startGame() {
         //DOTO 获取保存等级
-        LevelManager.instance.levelModel.level = 2;
+        LevelManager.instance.levelModel.level = 1;
         await LevelManager.instance.gameStart();
     }
 
@@ -40,6 +40,30 @@ export class RoosterMoveCar extends Component {
         EventDispatcher.instance.on(GameEvent.EVENT_CLICK_CAR, this.onTouchCar, this);
         EventDispatcher.instance.on(GameEvent.EVENT_UPDATE_LEFT_NAIL, this.onUpdateLeftNail, this);
         EventDispatcher.instance.on(GameEvent.EVENT_CHECK_ELEMENT_CHILDREN, this.onUpdateLeftNail, this);
+
+        //UI监听
+        const btnLock4 = find('Canvas/Scene/Parkings/empty-lock4')!;
+        const btnLock5 = find('Canvas/Scene/Parkings/empty-lock5')!;
+        const btnLock6 = find('Canvas/Scene/Parkings/empty-lock6')!;
+
+        btnLock4.on(NodeEventType.TOUCH_END, () => this.onClickHandler(btnLock4), this);
+        btnLock5.on(NodeEventType.TOUCH_END, () => this.onClickHandler(btnLock5), this);
+        btnLock6.on(NodeEventType.TOUCH_END, () => this.onClickHandler(btnLock6), this);
+    }
+
+    private onClickHandler(bt: Node): void {
+        const setBtEmpty = () => {
+            bt.name = 'empty';
+            bt.getComponentInChildren(Barricade)!.tick();
+        }
+
+        if (!GlobalConfig.isDebug) {
+            AdvertMgr.instance.showReawardVideo(() => {
+                setBtEmpty();
+            })
+        } else {
+            setBtEmpty();
+        }
     }
 
     onTouchCar(touchCar: Node) {
@@ -149,10 +173,11 @@ export class RoosterMoveCar extends Component {
 
     onUpdateLeftNail() {
         const levels = find('Canvas/Scene/Levels')!;
+        const lbScrews = find('Canvas/GameUI/LbScrews')!.getComponent(Label);
         const children = levels.children;
         const levelComp = children[0].getComponent(LevelAction)!;
         const pins = levelComp.get_pin_color();
-        this.lbScrews.string = `${pins.length}`;
+        lbScrews.string = `${pins.length}`;
     }
 
     /** 获取停车位坐标*/

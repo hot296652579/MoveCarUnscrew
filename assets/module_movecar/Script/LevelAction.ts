@@ -1,4 +1,4 @@
-import { _decorator, BoxCollider2D, CircleCollider2D, Collider2D, Component, find, Node } from 'cc';
+import { _decorator, BoxCollider2D, Button, CircleCollider2D, Collider2D, Component, find, Node, NodeEventType } from 'cc';
 import { EventDispatcher } from '../../core_tgx/easy_ui_framework/EventDispatcher';
 import { CarColorsGlobalInstance } from './CarColorsGlobalInstance';
 import { CarCarColorsComponent } from './Components/CarCarColorsComponent';
@@ -11,16 +11,22 @@ import { tgxUIMgr } from '../../core_tgx/tgx';
 import { UI_BattleResult } from '../../scripts/UIDef';
 import { LevelManager } from './LevelMgr';
 import { CarBoxComponent } from './Components/CarBoxComponent';
+import { GlobalConfig } from '../../start/Config/GlobalConfig';
+import { AdvertMgr } from '../../core_tgx/base/ad/AdvertMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('LevelAction')
 export class LevelAction extends Component {
 
     start() {
+        this.registerListener();
+        this.init_level();
+        this.schedule(this.moveToCar, 0.2);
+    }
+
+    registerListener() {
         EventDispatcher.instance.on(GameEvent.EVENT_UPDATE_LAYER, this.hide_element, this);
         EventDispatcher.instance.on(GameEvent.EVENT_CHECK_GAME_OVER, this.checkGameOver, this);
-        this.schedule(this.moveToCar, 0.3);
-        this.init_level();
     }
 
     get_lvl(): number {
@@ -74,6 +80,7 @@ export class LevelAction extends Component {
             element.name = 'empty';
             if (index > 3) {
                 element.name = `empty-lock${index}`;
+                element.getChildByName('Barricade')!.active = true;
             } else {
                 element.removeAllChildren();
             }
