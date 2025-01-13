@@ -5,6 +5,7 @@ import { GlobalConfig } from './Config/GlobalConfig';
 import { GameEvent } from './Enum/GameEvent';
 import { LevelAction } from './LevelAction';
 import { LevelModel } from './Model/LevelModel';
+import { GameUtil } from './GameUtil';
 const { ccclass, property } = _decorator;
 
 @ccclass('LevelManager')
@@ -69,7 +70,10 @@ export class LevelManager {
 
     public async gameStart() {
         const { level } = this.levelModel;
-        const levelNode = await this.loadLevel(level);
+        await this.loadLevel(level);
+
+        await GameUtil.delay(0.2);
+        EventDispatcher.instance.emit(GameEvent.EVENT_UPDATE_LEFT_NAIL);
     }
 
     /** 清除关卡数据*/

@@ -10,6 +10,9 @@ export class GameEvent {
     /** 更新Layer*/
     static readonly EVENT_UPDATE_LAYER = 'EVENT_UPDATE_LAYER';
 
+    /** 刷新剩余钉子数量*/
+    static readonly EVENT_UPDATE_LEFT_NAIL = 'EVENT_UPDATE_LEFT_NAIL';
+
     /** 检测是否有钉子可上车*/
     static readonly EVENT_CHECK_MOVE_TO_CAR = 'EVENT_CHECK_MOVE_TO_CAR';
 

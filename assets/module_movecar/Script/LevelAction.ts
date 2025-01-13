@@ -20,7 +20,6 @@ export class LevelAction extends Component {
         EventDispatcher.instance.on(GameEvent.EVENT_UPDATE_LAYER, this.hide_element, this);
         EventDispatcher.instance.on(GameEvent.EVENT_CHECK_GAME_OVER, this.checkGameOver, this);
         this.schedule(this.moveToCar, 0.3);
-
         this.init_level();
     }
 
@@ -71,11 +70,12 @@ export class LevelAction extends Component {
         const points = find("Canvas/Scene/Parkings").children
         for (let index = 0; index < points.length; index++) {
             const element = points[index];
-            element.removeAllChildren();
 
             element.name = 'empty';
             if (index > 3) {
                 element.name = `empty-lock${index}`;
+            } else {
+                element.removeAllChildren();
             }
         }
     }

@@ -1,4 +1,4 @@
-import { _decorator, Component, ERaycast2DType, find, Node, PhysicsSystem2D, Tween, tween, v2, v3, Vec2, Vec3 } from 'cc';
+import { _decorator, Component, ERaycast2DType, find, Label, Node, PhysicsSystem2D, Tween, tween, v2, v3, Vec2, Vec3 } from 'cc';
 import { EventDispatcher } from '../core_tgx/easy_ui_framework/EventDispatcher';
 import { CarColorsGlobalInstance } from './Script/CarColorsGlobalInstance';
 import { CarDir } from './Script/CarColorsGlobalTypes';
@@ -7,10 +7,16 @@ import { GameEvent } from './Script/Enum/GameEvent';
 import { LevelManager } from './Script/LevelMgr';
 import { CarCarColorsSysterm } from './Script/Systems/CarCarColorsSysterm';
 import { GameUtil } from './Script/GameUtil';
+import { Layout_BattleResult } from './Prefabs/UI/Result/Layout_BattleResult';
+import { LevelAction } from './Script/LevelAction';
 const { ccclass, property } = _decorator;
 
 @ccclass('RoosterMoveCar')
 export class RoosterMoveCar extends Component {
+
+    @property(Label)
+    lbScrews: Label = null!;
+
     onLoad() {
         LevelManager.instance.initilizeModel();
         CarColorsGlobalInstance.instance.levels = find('Canvas/Scene/Levels')!;
@@ -26,12 +32,14 @@ export class RoosterMoveCar extends Component {
 
     async startGame() {
         //DOTO 获取保存等级
-        LevelManager.instance.levelModel.level = 1;
+        LevelManager.instance.levelModel.level = 2;
         await LevelManager.instance.gameStart();
     }
 
     registerListener() {
         EventDispatcher.instance.on(GameEvent.EVENT_CLICK_CAR, this.onTouchCar, this);
+        EventDispatcher.instance.on(GameEvent.EVENT_UPDATE_LEFT_NAIL, this.onUpdateLeftNail, this);
+        EventDispatcher.instance.on(GameEvent.EVENT_CHECK_ELEMENT_CHILDREN, this.onUpdateLeftNail, this);
     }
 
     onTouchCar(touchCar: Node) {
@@ -139,6 +147,14 @@ export class RoosterMoveCar extends Component {
         }
     }
 
+    onUpdateLeftNail() {
+        const levels = find('Canvas/Scene/Levels')!;
+        const children = levels.children;
+        const levelComp = children[0].getComponent(LevelAction)!;
+        const pins = levelComp.get_pin_color();
+        this.lbScrews.string = `${pins.length}`;
+    }
+
     /** 获取停车位坐标*/
     getEmptyParkPoint(): Node {
         const points = find("Canvas/Scene/Parkings").children
@@ -149,23 +165,6 @@ export class RoosterMoveCar extends Component {
         }
         return null
     }
-
-    // createRaycastPosByDir(objs: Vec2, car: Node, carDir: CarDir): Vec2 {
-    //     const rotation = car.angle;
-    //     const radians = rotation * (Math.PI / 180);
-    //     const direction = v2(Math.cos(radians), Math.sin(radians));//方向向量
-
-    //     //DOTO 根据角度方向获取射线终点
-    //     if (carDir == CarDir.TOP) {
-    //         return new Vec2(objs.x, objs.y + 1000);
-    //     } else if (carDir == CarDir.BOTTOM) {
-    //         return new Vec2(objs.x, objs.y - 1000);
-    //     } else if (carDir == CarDir.LEFT) {
-    //         return new Vec2(objs.x - 1000, objs.y);
-    //     } else if (carDir == CarDir.RIGHT) {
-    //         return new Vec2(objs.x + 1000, objs.y);
-    //     }
-    // }
 
     /** 导航到碰撞点
      * @param car 车节点

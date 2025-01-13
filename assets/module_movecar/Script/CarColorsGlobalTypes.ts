@@ -51,7 +51,7 @@ export const CarColorHex: Record<CarColors, string> = {
     [CarColors.Blue]: "#1B24F0",
     [CarColors.Green]: "#1BF01B",
     [CarColors.Red]: "#F0241B",
-    [CarColors.Cyan]: "#E0FFFF",
+    [CarColors.Cyan]: "#9aeeca",
     [CarColors.Yellow]: "#EBF32A",
     [CarColors.Pink]: "#EB88BB",
     [CarColors.Purple]: "#F32AF3",

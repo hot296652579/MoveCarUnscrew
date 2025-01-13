@@ -54,7 +54,6 @@ export class CarCarColorsSysterm extends Component {
         for (; len--;) {
             this.carSeats.push(color)
         }
-        // console.log(this.carSeats);
     }
 
     removeCar(node: Node) {
