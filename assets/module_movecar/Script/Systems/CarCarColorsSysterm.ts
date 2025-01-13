@@ -41,7 +41,7 @@ export class CarCarColorsSysterm extends Component {
         const carType = node.getComponent(CarCarColorsComponent).carType
         let len = 0;
         if (carType === CarTypes.Bus) {
-            len = 10
+            len = 8
         }
         else if (carType === CarTypes.Minivan) {
             len = 6

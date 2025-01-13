@@ -65,7 +65,15 @@ export class CarCarColorsComponent extends Component {
             }
         })
 
-        this.node.getChildByName("arrow").active = true
+        this.node.getChildByName("Cover").children.forEach(child => {
+            if (child.name === CarColors[this._carColor]) {
+                child.active = true
+            } else {
+                child.active = false
+            }
+        })
+
+        this.node.getChildByName("Cover").active = true
 
         tween(this.node)
             .to(0.2, { scale: new Vec3(1.4, 1.4, 1.4) })
@@ -107,13 +115,24 @@ export class CarCarColorsComponent extends Component {
         } else if (this.carType === CarTypes.Sedan) {
             this.isFull = this.roleNum > 3
         } else if (this.carType === CarTypes.Bus) {
-            this.isFull = this.roleNum > 9
+            this.isFull = this.roleNum > 7
         } else if (this.carType === CarTypes.Single) {
             this.isFull = this.roleNum > 0
         }
 
         return this.isFull
     }
+
+    //打开车盖
+    openCover() {
+        const cover = this.node.getChildByName("Cover")!;
+        cover.active = true
+        const scale = cover.scale;
+        tween(cover).to(0.1, { scale: new Vec3(0, scale.y, scale.z) }, {
+            easing: "quadOut"
+        }).start()
+    }
+
     carOut() {
         this.node.getChildByName("Seets").children.forEach(seat => {
             if (seat.children.length === 0) return
@@ -144,7 +163,7 @@ export class CarCarColorsComponent extends Component {
                 max = 4;
                 break;
             case CarTypes.Bus:
-                max = 10;
+                max = 8;
                 break;
             case CarTypes.Single:
                 max = 1;
