@@ -13,6 +13,8 @@ import { GlobalConfig } from '../start/Config/GlobalConfig';
 import { AdvertMgr } from '../core_tgx/base/ad/AdvertMgr';
 import { Barricade } from './Script/Components/Barricade';
 import { CarUnscrewAudioMgr } from './Script/Manager/CarUnscrewAudioMgr';
+import { tgxUIMgr } from '../core_tgx/tgx';
+import { UI_Setting } from '../scripts/UIDef';
 const { ccclass, property } = _decorator;
 
 @ccclass('RoosterMoveCar')
@@ -50,11 +52,13 @@ export class RoosterMoveCar extends Component {
         const btnLock5 = find('Canvas/Scene/Parkings/empty-lock5')!;
         const btnLock6 = find('Canvas/Scene/Parkings/empty-lock6')!;
         const btnRefresh = find('Canvas/GameUI/TopLeft/BtnRefresh')!;
+        const btnSet = find('Canvas/GameUI/TopLeft/BtnSet')!;
 
         btnLock4.on(NodeEventType.TOUCH_END, () => this.onClickHandler(btnLock4), this);
         btnLock5.on(NodeEventType.TOUCH_END, () => this.onClickHandler(btnLock5), this);
         btnLock6.on(NodeEventType.TOUCH_END, () => this.onClickHandler(btnLock6), this);
         btnRefresh.on(NodeEventType.TOUCH_END, () => this.onClickRefresh(), this);
+        btnSet.on(NodeEventType.TOUCH_END, () => this.onClickSet(), this);
     }
 
     private onClickHandler(bt: Node): void {
@@ -74,11 +78,20 @@ export class RoosterMoveCar extends Component {
     }
 
     private onClickRefresh(): void {
+        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(3), 1.0);
         Tween.stopAll();
         LevelManager.instance.clearLevelData();
         CarColorsGlobalInstance.instance.carSysterm.clearAll();
         const { level } = LevelManager.instance.levelModel;
         LevelManager.instance.loadLevel(level);
+    }
+
+    private onClickSet(): void {
+        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(3), 1.0);
+        const show = tgxUIMgr.inst.isShowing(UI_Setting);
+        if (!show) {
+            tgxUIMgr.inst.showUI(UI_Setting);
+        }
     }
 
     onTouchCar(touchCar: Node) {
