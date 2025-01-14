@@ -137,8 +137,11 @@ export class CarCarColorsComponent extends Component {
             const levelComp = children[0].getComponent(LevelAction)!;
             const pins = levelComp.get_pin_color();
             if (pins.length == 0) {
-                LevelManager.instance.levelModel.isWin = true;
-                tgxUIMgr.inst.showUI(UI_BattleResult);
+                const ui = tgxUIMgr.inst.getUI(UI_BattleResult)!;
+                if (!ui) {
+                    LevelManager.instance.levelModel.isWin = true;
+                    tgxUIMgr.inst.showUI(UI_BattleResult);
+                }
             }
         }
     }

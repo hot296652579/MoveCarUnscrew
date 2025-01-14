@@ -32,7 +32,7 @@ export class RoosterMoveCar extends Component {
 
     async startGame() {
         //DOTO 获取保存等级
-        LevelManager.instance.levelModel.level = 2;
+        LevelManager.instance.levelModel.level = 1;
         await LevelManager.instance.gameStart();
     }
 
