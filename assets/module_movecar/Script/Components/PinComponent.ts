@@ -1,19 +1,28 @@
-import { _decorator, BoxCollider2D, CCBoolean, CircleCollider2D, Collider2D, Color, Node, Component, Contact2DType, Input, IPhysics2DContact, PhysicsSystem2D, PolygonCollider2D, RigidBody2D, Sprite, Rect } from 'cc';
+import { _decorator, BoxCollider2D, CCBoolean, CircleCollider2D, Collider2D, Color, Node, Component, Contact2DType, Input, IPhysics2DContact, PhysicsSystem2D, PolygonCollider2D, RigidBody2D, Sprite, Rect, Enum } from 'cc';
 import { CarColorHex, CarColors } from '../CarColorsGlobalTypes';
 import { HoleComponent } from './HoleComponent';
 import { LayerAction } from '../LayerAction';
 import { UnitAction } from '../UnitAction';
-const { ccclass, property } = _decorator;
+const { ccclass, property, executeInEditMode } = _decorator;
 
 /** 钉子组件*/
 @ccclass('PinComponent')
+@executeInEditMode
 export class PinComponent extends Component {
+    @property({ type: Enum(CarColors) })
+    private _carColor: CarColors = CarColors.Purple;
+
+    @property({ type: Enum(CarColors) })
+    get carColor() {
+        return this._carColor
+    }
+    set carColor(value) {
+        this._carColor = value
+        this.changeColor()
+    }
+
     pin_color: CarColors = null;
-    @property({ type: Sprite })
-    pin_img: Sprite
-
     isBlocked: boolean = false;
-
     pos_hole: HoleComponent = null;
 
     start() {
@@ -110,8 +119,18 @@ export class PinComponent extends Component {
             console.log(`被return的颜色${this.pin_color}`);
             return;
         }
+        this.changeColor();
+        // this.pin_img.getComponent(Sprite).color = new Color().fromHEX(CarColorHex[this.pin_color]);
+    }
 
-        this.pin_img.getComponent(Sprite).color = new Color().fromHEX(CarColorHex[this.pin_color]);
+    changeColor() {
+        this.node.children.forEach(child => {
+            if (child.name === CarColors[this.pin_color]) {
+                child.active = true
+            } else {
+                child.active = false
+            }
+        })
     }
 
     protected onDestroy(): void {
