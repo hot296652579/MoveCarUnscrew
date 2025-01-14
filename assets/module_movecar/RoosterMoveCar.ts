@@ -203,7 +203,7 @@ export class RoosterMoveCar extends Component {
 
     onUpdateLeftNail() {
         const levels = find('Canvas/Scene/Levels')!;
-        const lbScrews = find('Canvas/GameUI/LbScrews')!.getComponent(Label);
+        const lbScrews = find('Canvas/GameUI/Pai/LbScrews')!.getComponent(Label);
         const children = levels.children;
         const levelComp = children[0].getComponent(LevelAction)!;
         const pins = levelComp.get_pin_color();
