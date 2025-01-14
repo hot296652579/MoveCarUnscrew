@@ -204,20 +204,22 @@ export class LevelAction extends Component {
                         let selectedCar: Node = null
                         for (let i = cars.length; i--;) {
                             const car = cars[i]
-                            const carComp = car.getComponent(CarCarColorsComponent);
+                            const carComp = car.getComponent(CarCarColorsComponent)!;
 
-                            if (carComp.isFull)
+                            if (carComp && carComp.isFull)
                                 continue
 
                             // 颜色相同
                             // console.log('车颜色:', carComp.carColor, '钉子颜色:', pinCom.pin_color);
-                            if (carComp.carColor === pinCom.pin_color) {
-                                if (selectedCar === null) {
-                                    selectedCar = car
-                                    continue
-                                }
-                                if (selectedCar.getComponent(CarCarColorsComponent).roleNum === 0) {
-                                    selectedCar = car
+                            if (carComp && pinCom) {
+                                if (carComp.carColor === pinCom.pin_color) {
+                                    if (selectedCar === null) {
+                                        selectedCar = car
+                                        continue
+                                    }
+                                    if (selectedCar.getComponent(CarCarColorsComponent).roleNum === 0) {
+                                        selectedCar = car
+                                    }
                                 }
                             }
                         }

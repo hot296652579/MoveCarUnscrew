@@ -6,6 +6,8 @@ import { ModuleDef } from '../scripts/ModuleDef';
 import { SceneDef } from '../scripts/SceneDef';
 import { JsonUtil } from '../core_tgx/base/utils/JsonUtil';
 import { GtagMgr, GtagType } from '../core_tgx/base/GtagMgr';
+import { AdvertMgr } from '../core_tgx/base/ad/AdvertMgr';
+import { GlobalConfig } from './Config/GlobalConfig';
 const { ccclass, property } = _decorator;
 
 const _preloadBundles = [ModuleDef.BASIC, ModuleDef.MODULE_MOVECAR];
@@ -47,15 +49,22 @@ export class Start extends Component {
 
     private _percent: string = '';
     private _numCurrentLoaded = 0;
-    start() {
 
+    protected onLoad(): void {
+        AdvertMgr.instance.initilize();
+        if (!GlobalConfig.isDebug) {
+            AdvertMgr.instance.showInterstitial();
+        }
+    }
+
+    start() {
         PhysicsSystem2D.instance.debugDrawFlags = EPhysics2DDrawFlags.Aabb |
             EPhysics2DDrawFlags.Pair |
             EPhysics2DDrawFlags.CenterOfMass |
             EPhysics2DDrawFlags.Joint |
             EPhysics2DDrawFlags.Shape;
 
-        PhysicsSystem2D.instance.debugDrawFlags = 0; // 启用调试绘制
+        PhysicsSystem2D.instance.debugDrawFlags = 1; // 启用调试绘制
 
         tgxModuleContext.setDefaultModule(ModuleDef.BASIC);
 
