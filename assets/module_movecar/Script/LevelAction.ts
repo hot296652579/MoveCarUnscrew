@@ -253,8 +253,6 @@ export class LevelAction extends Component {
                 }
             }
 
-            console.log('没有活动的车子就结束了!!!!!!!!!!!!')
-
             const ui = tgxUIMgr.inst.getUI(UI_BattleResult)!;
             if (!ui) {
                 LevelManager.instance.levelModel.isWin = false;
@@ -263,7 +261,7 @@ export class LevelAction extends Component {
         }
 
         this.unschedule(checkOver);
-        this.scheduleOnce(checkOver, 2);
+        this.scheduleOnce(checkOver, 3);
     }
 
     protected onDestroy(): void {

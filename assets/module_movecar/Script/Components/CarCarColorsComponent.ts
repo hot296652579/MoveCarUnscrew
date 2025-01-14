@@ -35,7 +35,6 @@ export class CarCarColorsComponent extends Component {
     roleNum: number = 0
     isFull: boolean = false
 
-    tweenCount = 0
     onLoad() {
         this.changeColor()
         if (this.carType === CarTypes.Minivan) {
@@ -89,10 +88,9 @@ export class CarCarColorsComponent extends Component {
         tween(role).to(0.2, {
             position: new Vec3(0, 0, 0)
         }).call(() => {
-            this.tweenCount -= 1
             role.setScale(0.9, 0.9, 0.9)
             role.setRotationFromEuler(0, 0, 0)
-            if (this.tweenCount <= 0 && this.isFull) {
+            if (this.isFull) {
                 carPoint.name = "empty"
                 this.carOutTween(carPoint)
             }
@@ -102,7 +100,6 @@ export class CarCarColorsComponent extends Component {
         })
             .start()
 
-        this.tweenCount += 1
         this.roleNum += 1
         if (this.carType === CarTypes.Minivan) {
             this.isFull = this.roleNum > 5
