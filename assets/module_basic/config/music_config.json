@@ -1,1 +1,50 @@
-{"1":{"name":"bgm","type":1,"cd":0,"content":"游戏环节的背景音乐"},"2":{"name":"dianji","type":2,"cd":0,"content":"所有按钮的点击音效"},"3":{"name":"shengli","type":2,"cd":0,"content":"全部螺丝归位爆出彩带时的音效"},"4":{"name":"wancheng","type":2,"cd":0,"content":"一个螺母上的螺丝全部归位时的音效"},"5":{"name":"shengqi","type":2,"cd":0,"content":"螺丝进入代移动状态音效"},"6":{"name":"luoxia","type":2,"cd":0,"content":"每个螺丝移动到位时的音效"},"7":{"name":"jiesuo","type":2,"cd":0,"content":"解锁螺母时的音效"},"8":{"name":"xing1","type":2,"cd":0,"content":"获得第1个星星的音效"},"9":{"name":"xing2","type":2,"cd":0,"content":"获得第2个星星的音效"},"10":{"name":"xing3","type":2,"cd":0,"content":"获得第3个星星的音效"}}
+{
+    "1": {
+        "name": "bgm_1",
+        "type": 1,
+        "cd": 0,
+        "content": "主界面背景音乐"
+    },
+    "2": {
+        "name": "bgm_2",
+        "type": 1,
+        "cd": 0,
+        "content": "游戏环节的背景音乐"
+    },
+    "3": {
+        "name": "dianji",
+        "type": 2,
+        "cd": 0,
+        "content": "所有按钮的点击音效"
+    },
+    "4": {
+        "name": "yidong",
+        "type": 2,
+        "cd": 0,
+        "content": "点击车子移动音效/车子装满移动音效"
+    },
+    "5": {
+        "name": "zhuangche",
+        "type": 2,
+        "cd": 0,
+        "content": "车子撞到其他车的音效"
+    },
+    "6": {
+        "name": "luosi",
+        "type": 2,
+        "cd": 0,
+        "content": "螺丝取下时的音效"
+    },
+    "7": {
+        "name": "shengli",
+        "type": 2,
+        "cd": 0,
+        "content": "胜利音效"
+    },
+    "8": {
+        "name": "shibai",
+        "type": 2,
+        "cd": 0,
+        "content": "失败音效"
+    }
+}

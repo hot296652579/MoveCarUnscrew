@@ -4,6 +4,7 @@ import { EventDispatcher } from 'db://assets/core_tgx/easy_ui_framework/EventDis
 import { TYPE_ITEM } from '../CarColorsGlobalTypes';
 import { GlobalConfig } from 'db://assets/start/Config/GlobalConfig';
 import { AdvertMgr } from 'db://assets/core_tgx/base/ad/AdvertMgr';
+import { CarUnscrewAudioMgr } from '../Manager/CarUnscrewAudioMgr';
 const { ccclass, property } = _decorator;
 
 /**
@@ -24,6 +25,7 @@ export class ButtonComponent extends Component {
     }
 
     private onClickHandler(type: TYPE_ITEM): void {
+        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(3), 1.0);
         if (type == TYPE_ITEM.REFRESH) {
             if (!GlobalConfig.isDebug) {
                 AdvertMgr.instance.showReawardVideo(() => {

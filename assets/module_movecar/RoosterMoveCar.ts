@@ -4,7 +4,7 @@ import { CarColorsGlobalInstance } from './Script/CarColorsGlobalInstance';
 import { CarDir } from './Script/CarColorsGlobalTypes';
 import { CarCarColorsComponent } from './Script/Components/CarCarColorsComponent';
 import { GameEvent } from './Script/Enum/GameEvent';
-import { LevelManager } from './Script/LevelMgr';
+import { LevelManager } from './Script/Manager/LevelMgr';
 import { CarCarColorsSysterm } from './Script/Systems/CarCarColorsSysterm';
 import { GameUtil } from './Script/GameUtil';
 import { Layout_BattleResult } from './Prefabs/UI/Result/Layout_BattleResult';
@@ -12,12 +12,16 @@ import { LevelAction } from './Script/LevelAction';
 import { GlobalConfig } from '../start/Config/GlobalConfig';
 import { AdvertMgr } from '../core_tgx/base/ad/AdvertMgr';
 import { Barricade } from './Script/Components/Barricade';
+import { CarUnscrewAudioMgr } from './Script/Manager/CarUnscrewAudioMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('RoosterMoveCar')
 export class RoosterMoveCar extends Component {
 
     onLoad() {
+        CarUnscrewAudioMgr.initilize();
+        CarUnscrewAudioMgr.play(CarUnscrewAudioMgr.getMusicIdName(2), 1.0);
+
         LevelManager.instance.initilizeModel();
         CarColorsGlobalInstance.instance.levels = find('Canvas/Scene/Levels')!;
         CarColorsGlobalInstance.instance.carSysterm = this.node.getComponent(CarCarColorsSysterm)!;
@@ -52,6 +56,7 @@ export class RoosterMoveCar extends Component {
     }
 
     private onClickHandler(bt: Node): void {
+        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(3), 1.0);
         const setBtEmpty = () => {
             bt.name = 'empty';
             bt.getComponentInChildren(Barricade)!.tick();
@@ -105,6 +110,8 @@ export class RoosterMoveCar extends Component {
                     .call(() => {
                     })
                     .start()
+
+                CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(5), 1.0);
             }
             else {
                 //碰到路
@@ -242,6 +249,8 @@ export class RoosterMoveCar extends Component {
                 car.lookAt(targetV3, up);
             })
             .start();
+
+        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(4), 1.0);
     }
 
     carDirection(car: Node) {
@@ -341,6 +350,8 @@ export class RoosterMoveCar extends Component {
             .to(0.2, {
                 worldPosition: targetPoint.getWorldPosition()
             })
+
+        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(4), 1.0);
     }
 
     //左边顶部转向右
@@ -372,6 +383,8 @@ export class RoosterMoveCar extends Component {
                 }).start()
             })
             .delay(0.1)
+
+        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(4), 1.0);
 
     }
 
@@ -405,6 +418,8 @@ export class RoosterMoveCar extends Component {
             })
             .delay(0.1)
 
+        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(4), 1.0);
+
     }
     // 底部导航
     bottomRoadTween(car: Node, targetPoint: Node, tweenCar: Tween<Node>) {
@@ -421,6 +436,7 @@ export class RoosterMoveCar extends Component {
             })
             .delay(0.1)
 
+        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(4), 1.0);
     }
 
     update(deltaTime: number) {

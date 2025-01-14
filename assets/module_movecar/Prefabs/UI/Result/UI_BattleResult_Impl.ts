@@ -6,7 +6,7 @@ import { UI_BattleResult } from "../../../../scripts/UIDef";
 import { Layout_BattleResult } from "./Layout_BattleResult";
 import { GtagMgr, GtagType } from "db://assets/core_tgx/base/GtagMgr";
 import { GameEvent } from "../../../Script/Enum/GameEvent";
-import { LevelManager } from "../../../Script/LevelMgr";
+import { LevelManager } from "../../../Script/Manager/LevelMgr";
 
 export class UI_BattleResult_Impl extends UI_BattleResult {
     rewardBase: number = 0; //基础奖励

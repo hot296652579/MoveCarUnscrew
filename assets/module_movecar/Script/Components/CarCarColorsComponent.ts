@@ -6,8 +6,9 @@ import { CarColorsGlobalInstance } from '../CarColorsGlobalInstance';
 import { CarColors, CarDir, CarTypes } from '../CarColorsGlobalTypes';
 import { GameEvent } from '../Enum/GameEvent';
 import { LevelAction } from '../LevelAction';
-import { LevelManager } from '../LevelMgr';
+import { LevelManager } from '../Manager/LevelMgr';
 import { GameUtil } from '../GameUtil';
+import { CarUnscrewAudioMgr } from '../Manager/CarUnscrewAudioMgr';
 const { ccclass, property, executeInEditMode } = _decorator;
 @ccclass('CarCarColorsComponent')
 @executeInEditMode
@@ -82,6 +83,8 @@ export class CarCarColorsComponent extends Component {
 
     /** 添加人到车位上*/
     addRole(role: Node): boolean {
+        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(6), 1.0);
+
         const carPoint = this.node.parent
         role.active = true;
         role.setParent(this.node.getChildByName("Seets").children[this.roleNum]);
