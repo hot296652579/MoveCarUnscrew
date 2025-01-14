@@ -26,7 +26,6 @@ export class LevelAction extends Component {
 
     registerListener() {
         EventDispatcher.instance.on(GameEvent.EVENT_UPDATE_LAYER, this.hide_element, this);
-        EventDispatcher.instance.on(GameEvent.EVENT_CHECK_GAME_OVER, this.checkGameOver, this);
     }
 
     get_lvl(): number {
@@ -166,6 +165,7 @@ export class LevelAction extends Component {
     async moveToCar() {
         const points = find("Canvas/Scene/Parkings").children
         let cars: Array<Node> = []
+        let isEmpty = false
 
         for (let i = points.length; i--;) {
             if (points[i].name === "inuse" && points[i].children.length === 1) {
@@ -173,7 +173,14 @@ export class LevelAction extends Component {
                 continue
             }
 
+            if (points[i].name === "inuse" && points[i].children.length === 2) {
+                cars.push(points[i].children[1])
+                isEmpty = true
+                continue
+            }
+
             if (points[i].name === "empty") {
+                isEmpty = true
                 continue
             }
         }
@@ -225,6 +232,10 @@ export class LevelAction extends Component {
                 });
             }
         });
+
+        if (!isEmpty) {
+            this.checkGameOver();
+        }
     }
 
     //检测游戏是否结束
@@ -233,7 +244,6 @@ export class LevelAction extends Component {
             const points = find("Canvas/Scene/Parkings").children
 
             for (let i = points.length; i--;) {
-
                 if (points[i].name === "empty") {
                     return
                 }
@@ -243,6 +253,8 @@ export class LevelAction extends Component {
                 }
             }
 
+            console.log('没有活动的车子就结束了!!!!!!!!!!!!')
+
             const ui = tgxUIMgr.inst.getUI(UI_BattleResult)!;
             if (!ui) {
                 LevelManager.instance.levelModel.isWin = false;
@@ -251,12 +263,11 @@ export class LevelAction extends Component {
         }
 
         this.unschedule(checkOver);
-        this.scheduleOnce(checkOver, 1);
+        this.scheduleOnce(checkOver, 2);
     }
 
     protected onDestroy(): void {
         EventDispatcher.instance.off(GameEvent.EVENT_UPDATE_LAYER, this.hide_element);
-        EventDispatcher.instance.off(GameEvent.EVENT_CHECK_GAME_OVER, this.checkGameOver);
         this.unscheduleAllCallbacks()
     }
 

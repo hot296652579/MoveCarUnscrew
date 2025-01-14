@@ -93,13 +93,7 @@ export class CarCarColorsComponent extends Component {
             role.setScale(0.9, 0.9, 0.9)
             role.setRotationFromEuler(0, 0, 0)
             if (this.tweenCount <= 0 && this.isFull) {
-                if (carPoint.getSiblingIndex() === 7) {
-                    carPoint.name = "lock"
-                    carPoint.children[0].children[0].active = false
-                    carPoint.children[0].children[1].active = true
-                } else {
-                    carPoint.name = "empty"
-                }
+                carPoint.name = "empty"
                 this.carOutTween(carPoint)
             }
 

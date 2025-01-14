@@ -336,7 +336,6 @@ export class RoosterMoveCar extends Component {
                 }).start()
 
                 car.getComponent(CarCarColorsComponent).openCover();
-                EventDispatcher.instance.emit(GameEvent.EVENT_CHECK_GAME_OVER);
             })
             .delay(0.1)
             .to(0.2, {
