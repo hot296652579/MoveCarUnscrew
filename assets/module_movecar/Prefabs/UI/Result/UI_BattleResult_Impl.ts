@@ -7,6 +7,7 @@ import { Layout_BattleResult } from "./Layout_BattleResult";
 import { GtagMgr, GtagType } from "db://assets/core_tgx/base/GtagMgr";
 import { GameEvent } from "../../../Script/Enum/GameEvent";
 import { LevelManager } from "../../../Script/Manager/LevelMgr";
+import { CarUnscrewAudioMgr } from "../../../Script/Manager/CarUnscrewAudioMgr";
 
 export class UI_BattleResult_Impl extends UI_BattleResult {
     rewardBase: number = 0; //基础奖励
@@ -24,7 +25,8 @@ export class UI_BattleResult_Impl extends UI_BattleResult {
 
     protected onCreated(): void {
         this.win = LevelManager.instance.levelModel.isWin;
-        const soundId = this.win ? 3 : 3;
+        const soundId = this.win ? 7 : 8;
+        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(soundId), 1.0);
 
         let layout = this.layout as Layout_BattleResult;
         this.onButtonEvent(layout.btNext, () => {
