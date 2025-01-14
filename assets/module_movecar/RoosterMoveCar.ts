@@ -49,10 +49,12 @@ export class RoosterMoveCar extends Component {
         const btnLock4 = find('Canvas/Scene/Parkings/empty-lock4')!;
         const btnLock5 = find('Canvas/Scene/Parkings/empty-lock5')!;
         const btnLock6 = find('Canvas/Scene/Parkings/empty-lock6')!;
+        const btnRefresh = find('Canvas/GameUI/TopLeft/BtnRefresh')!;
 
         btnLock4.on(NodeEventType.TOUCH_END, () => this.onClickHandler(btnLock4), this);
         btnLock5.on(NodeEventType.TOUCH_END, () => this.onClickHandler(btnLock5), this);
         btnLock6.on(NodeEventType.TOUCH_END, () => this.onClickHandler(btnLock6), this);
+        btnRefresh.on(NodeEventType.TOUCH_END, () => this.onClickRefresh(), this);
     }
 
     private onClickHandler(bt: Node): void {
@@ -69,6 +71,14 @@ export class RoosterMoveCar extends Component {
         } else {
             setBtEmpty();
         }
+    }
+
+    private onClickRefresh(): void {
+        Tween.stopAll();
+        LevelManager.instance.clearLevelData();
+        CarColorsGlobalInstance.instance.carSysterm.clearAll();
+        const { level } = LevelManager.instance.levelModel;
+        LevelManager.instance.loadLevel(level);
     }
 
     onTouchCar(touchCar: Node) {
@@ -205,8 +215,9 @@ export class RoosterMoveCar extends Component {
      *@param hitPoint street碰撞点
     */
     hitPointTween2(car: Node, targetWorldPos: Vec2, tweenCar: Tween<Node>, hitPoint: Node = null) {
-        const targetV3 = new Vec3(targetWorldPos.x, targetWorldPos.y, 0);
+        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(4), 1.0);
 
+        const targetV3 = new Vec3(targetWorldPos.x, targetWorldPos.y, 0);
         tweenCar
             .to(0.2, { worldPosition: targetV3 }, { easing: 'quadInOut' })
             .call(() => {
@@ -249,8 +260,6 @@ export class RoosterMoveCar extends Component {
                 car.lookAt(targetV3, up);
             })
             .start();
-
-        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(4), 1.0);
     }
 
     carDirection(car: Node) {
@@ -350,8 +359,6 @@ export class RoosterMoveCar extends Component {
             .to(0.2, {
                 worldPosition: targetPoint.getWorldPosition()
             })
-
-        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(4), 1.0);
     }
 
     //左边顶部转向右
@@ -384,7 +391,7 @@ export class RoosterMoveCar extends Component {
             })
             .delay(0.1)
 
-        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(4), 1.0);
+
 
     }
 
@@ -418,7 +425,7 @@ export class RoosterMoveCar extends Component {
             })
             .delay(0.1)
 
-        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(4), 1.0);
+
 
     }
     // 底部导航
@@ -436,7 +443,7 @@ export class RoosterMoveCar extends Component {
             })
             .delay(0.1)
 
-        CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(4), 1.0);
+
     }
 
     update(deltaTime: number) {

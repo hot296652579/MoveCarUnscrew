@@ -68,7 +68,6 @@ export class CarCarColorsSysterm extends Component {
 
         this.carSeats.length = 0
         this.carSeats = []
-
     }
 
     refreshCarColor() {
