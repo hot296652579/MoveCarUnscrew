@@ -16,9 +16,9 @@ export class HoleComponent extends Component {
     }
 
     hide() {
-        if (this.node.getComponent(UIOpacity)) {
-            this.node.getComponent(UIOpacity).opacity = 0;
-        }
+        // if (this.node.getComponent(UIOpacity)) {
+        //     this.node.getComponent(UIOpacity).opacity = 0;
+        // }
     }
 }
 

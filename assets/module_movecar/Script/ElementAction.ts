@@ -17,7 +17,7 @@ export class ElementAction extends Component {
 
     update(deltaTime: number) {
         let currentPosition = this.node.getPosition().clone();
-        if (currentPosition.y < - view.getVisibleSize().height / 2) {
+        if (currentPosition.y < - view.getVisibleSize().height) {
             this.removeElement();
         }
     }
@@ -98,7 +98,7 @@ export class ElementAction extends Component {
                     let t: number = 0.3
                     let opc_1 = 100;
                     let opc_2 = 200;
-                    element.getComponent(UIOpacity).opacity = 100;
+                    element.getComponent(UIOpacity).opacity = 255;
                     tween(element.getComponent(UIOpacity))
                         .to(t, { opacity: opc_2 }, { easing: 'quadInOut' })
                         .to(t, { opacity: opc_1 }, { easing: 'quadInOut' })
@@ -108,7 +108,7 @@ export class ElementAction extends Component {
                         .call(() => {
                             element.getComponent(UIOpacity).opacity = 255;
                         })
-                        .start();
+                    // .start();
                 }
             }
         });

@@ -16,7 +16,7 @@ import { tgxUIMgr } from '../core_tgx/tgx';
 import { UI_Setting } from '../scripts/UIDef';
 const { ccclass, property } = _decorator;
 
-const duration = 0.4;
+const duration = 0.3;
 @ccclass('RoosterMoveCar')
 export class RoosterMoveCar extends Component {
 
@@ -282,7 +282,7 @@ export class RoosterMoveCar extends Component {
         })
             .call(() => {
                 const carforward = car.forward.clone()
-                tween(carforward).to(0.1, { x: -1.2, y: 0, z: 2 }, {
+                tween(carforward).to(0.1, { x: 0, y: 0, z: 0 }, {
                     onUpdate: () => {
                         car.forward = carforward
                     }
@@ -300,13 +300,13 @@ export class RoosterMoveCar extends Component {
     leftTopToRight(car: Node, targetPoint: Node, tweenCar: Tween<Node>) {
         //转向右边动画
         const targetWorldPos = targetPoint.getWorldPosition().clone()
-        tweenCar.to(duration, {
+        tweenCar.to(0.2, {
             eulerAngles: new Vec3(0, 0, -90)
         })
-            .delay(duration)
-            .to(duration, { worldPosition: new Vec3(targetWorldPos.x, targetWorldPos.y - 100, targetWorldPos.z) })
-            .delay(duration)
-            .to(duration, { eulerAngles: new Vec3(0, 0, 0) })
+            .delay(0.1)
+            .to(0.2, { worldPosition: new Vec3(targetWorldPos.x, targetWorldPos.y, targetWorldPos.z) })
+            .delay(0.1)
+            .to(0.2, { eulerAngles: new Vec3(0, 0, 0) })
             .start()
     }
 
@@ -331,13 +331,13 @@ export class RoosterMoveCar extends Component {
     rightTopToleft(car: Node, targetPoint: Node, tweenCar: Tween<Node>) {
         //转向左边动画
         const targetWorldPos = targetPoint.getWorldPosition().clone()
-        tweenCar.to(duration, {
+        tweenCar.to(0.2, {
             eulerAngles: new Vec3(0, 0, 90)
         })
-            .delay(duration)
-            .to(duration, { worldPosition: new Vec3(targetWorldPos.x, targetWorldPos.y - 100, targetWorldPos.z) })
-            .delay(duration)
-            .to(duration, { eulerAngles: new Vec3(0, 0, 0) })
+            .delay(0.1)
+            .to(0.2, { worldPosition: new Vec3(targetWorldPos.x, targetWorldPos.y, targetWorldPos.z) })
+            .delay(0.1)
+            .to(0.2, { eulerAngles: new Vec3(0, 0, 0) })
             .start()
     }
 
@@ -363,7 +363,7 @@ export class RoosterMoveCar extends Component {
     // 底部导航
     bottomRoadTween(car: Node, targetPoint: Node, tweenCar: Tween<Node>) {
         tweenCar.to(duration, {
-            worldPosition: targetPoint.getWorldPosition()
+            worldPosition: new Vec3(targetPoint.getWorldPosition().x, targetPoint.getWorldPosition().y + 50, targetPoint.getWorldPosition().z)
         })
             .call(() => {
                 const carforward = car.forward.clone()
@@ -374,8 +374,6 @@ export class RoosterMoveCar extends Component {
                 }).start()
             })
             .delay(0.1)
-
-
     }
 }
 

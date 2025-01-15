@@ -57,7 +57,7 @@ export const CarColorHex: Record<CarColors, string> = {
     [CarColors.Purple]: "#F32AF3",
     [CarColors.Brown]: "#F5A71D",
     [CarColors.Black]: "#000000",
-    [CarColors.SpriteWhite]: "#FFFFFF6F",
+    [CarColors.SpriteWhite]: "#FFFFFF",
 };
 
 /**道具类型
