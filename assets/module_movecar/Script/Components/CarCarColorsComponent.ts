@@ -75,10 +75,10 @@ export class CarCarColorsComponent extends Component {
 
         this.node.getChildByName("Cover").active = true
 
-        tween(this.node)
-            .to(0.2, { scale: new Vec3(1.4, 1.4, 1.4) })
-            .to(0.2, { scale: new Vec3(0.95, 0.95, 0.95) })
-            .start()
+        // tween(this.node)
+        //     .to(0.2, { scale: new Vec3(1.4, 1.4, 1.4) })
+        //     .to(0.2, { scale: new Vec3(0.95, 0.95, 0.95) })
+        //     .start()
     }
 
     /** 添加人到车位上*/
