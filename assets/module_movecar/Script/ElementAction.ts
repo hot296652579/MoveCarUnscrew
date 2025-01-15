@@ -17,7 +17,7 @@ export class ElementAction extends Component {
 
     update(deltaTime: number) {
         let currentPosition = this.node.getPosition().clone();
-        if (currentPosition.y < - view.getVisibleSize().height / 2) {
+        if (currentPosition.y < - view.getVisibleSize().height) {
             this.removeElement();
         }
     }

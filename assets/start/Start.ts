@@ -8,6 +8,7 @@ import { JsonUtil } from '../core_tgx/base/utils/JsonUtil';
 import { GtagMgr, GtagType } from '../core_tgx/base/GtagMgr';
 import { AdvertMgr } from '../core_tgx/base/ad/AdvertMgr';
 import { GlobalConfig } from './Config/GlobalConfig';
+import { GlobalMgr } from '../scripts/GlobalMgr';
 const { ccclass, property } = _decorator;
 
 const _preloadBundles = [ModuleDef.BASIC, ModuleDef.MODULE_MOVECAR];
@@ -51,6 +52,9 @@ export class Start extends Component {
     private _numCurrentLoaded = 0;
 
     protected onLoad(): void {
+        GlobalMgr.instance.initilize();
+        // GlobalMgr.instance.timeTest();
+
         AdvertMgr.instance.initilize();
         if (!GlobalConfig.isDebug) {
             AdvertMgr.instance.showInterstitial();
@@ -64,7 +68,7 @@ export class Start extends Component {
             EPhysics2DDrawFlags.Joint |
             EPhysics2DDrawFlags.Shape;
 
-        PhysicsSystem2D.instance.debugDrawFlags = 1; // 启用调试绘制
+        PhysicsSystem2D.instance.debugDrawFlags = 0; // 启用调试绘制
 
         tgxModuleContext.setDefaultModule(ModuleDef.BASIC);
 

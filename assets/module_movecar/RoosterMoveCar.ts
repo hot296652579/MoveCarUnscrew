@@ -403,9 +403,6 @@ export class RoosterMoveCar extends Component {
                 }).start()
             })
             .delay(0.1)
-
-
-
     }
 
     //右边顶部转向左
@@ -463,5 +460,7 @@ export class RoosterMoveCar extends Component {
 
     }
 }
+
+
 
 
