@@ -18,17 +18,14 @@ const _preloadRes = [
     { bundle: ModuleDef.BASIC, url: 'ui_tips/UI_Tips', type: 'prefab' },
     { bundle: ModuleDef.BASIC, url: 'ui_waiting/UI_Waiting', type: 'prefab' },
     { bundle: ModuleDef.MODULE_MOVECAR, url: 'Prefabs/UI/Result/UI_BattleResult', type: 'prefab' },
-    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/bgm.mp3', type: 'audio' },
-    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/bgm_jiemian.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/bgm_1.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/bgm_2.mp3', type: 'audio' },
     { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/dianji.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/luosi.mp3', type: 'audio' },
     { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/shengli.mp3', type: 'audio' },
-    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/wancheng.mp3', type: 'audio' },
-    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/shengqi.mp3', type: 'audio' },
-    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/luoxia.mp3', type: 'audio' },
-    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/jiesuo.mp3', type: 'audio' },
-    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/xing1.mp3', type: 'audio' },
-    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/xing2.mp3', type: 'audio' },
-    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/xing3.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/shibai.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/yidong.mp3', type: 'audio' },
+    { bundle: ModuleDef.MODULE_MOVECAR, url: 'Audio/zhuangche.mp3', type: 'audio' },
 ];
 
 const _loadingText = ['Loading.', 'Loading..', 'Loading...'];

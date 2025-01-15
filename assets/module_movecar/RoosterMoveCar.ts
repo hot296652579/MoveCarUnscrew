@@ -7,7 +7,6 @@ import { GameEvent } from './Script/Enum/GameEvent';
 import { LevelManager } from './Script/Manager/LevelMgr';
 import { CarCarColorsSysterm } from './Script/Systems/CarCarColorsSysterm';
 import { GameUtil } from './Script/GameUtil';
-import { Layout_BattleResult } from './Prefabs/UI/Result/Layout_BattleResult';
 import { LevelAction } from './Script/LevelAction';
 import { GlobalConfig } from '../start/Config/GlobalConfig';
 import { AdvertMgr } from '../core_tgx/base/ad/AdvertMgr';
@@ -17,6 +16,7 @@ import { tgxUIMgr } from '../core_tgx/tgx';
 import { UI_Setting } from '../scripts/UIDef';
 const { ccclass, property } = _decorator;
 
+const duration = 0.4;
 @ccclass('RoosterMoveCar')
 export class RoosterMoveCar extends Component {
 
@@ -232,7 +232,7 @@ export class RoosterMoveCar extends Component {
 
         const targetV3 = new Vec3(targetWorldPos.x, targetWorldPos.y, 0);
         tweenCar
-            .to(0.2, { worldPosition: targetV3 }, { easing: 'quadInOut' })
+            .to(duration, { worldPosition: targetV3 }, { easing: 'quadInOut' })
             .call(() => {
                 const carWorldPos = car.getWorldPosition().clone();
                 const direction = targetV3.subtract(carWorldPos).normalize();
@@ -275,87 +275,9 @@ export class RoosterMoveCar extends Component {
             .start();
     }
 
-    carDirection(car: Node) {
-        const rotation = car.angle;
-
-        // 计算移动方向
-        let direction = v3(0, 0, 0);
-        if (rotation === -90) {
-            direction = v3(1, 0, 0); // 朝右
-        } else if (rotation === 0) {
-            direction = v3(0, 1, 0); // 朝上
-        } else if (rotation === 90) {
-            direction = v3(-1, 0, 0); // 朝左
-        } else if (rotation === 180) {
-            direction = v3(0, -1, 0); // 朝下
-        } else {
-            // 如果是任意角度，使用 Math.cos 和 Math.sin 计算方向向量
-            const radians = rotation * (Math.PI / 180);
-            direction = v3(Math.cos(radians), Math.sin(radians), 0);
-        }
-
-        return direction;
-    }
-
-    /** 导航到碰撞点
-     *@param targetPoint 下一个目标点
-     *@param hitPoint street碰撞点
-    */
-    // hitPointTween(car: Node, targetPoint: Node, tweenCar: Tween<Node>, hitPoint: Node = null) {
-    //     const newHintStreetPos = hitPoint.getWorldPosition().clone();
-    //     const carWorldPos = car.getWorldPosition();
-
-    //     const carDir = car.getComponent(CarCarColorsComponent)!.carDir;
-    //     if (carDir == CarDir.LEFT || carDir == CarDir.RIGHT) {
-    //         // 判断移动方向
-    //         if (Math.abs(newHintStreetPos.x - carWorldPos.x) > Math.abs(newHintStreetPos.y - carWorldPos.y)) {
-    //             // 如果 X 轴差值更大，只改变 X 轴
-    //             newHintStreetPos.x = newHintStreetPos.x;
-    //             newHintStreetPos.y = carWorldPos.y;
-    //         } else {
-    //             // 否则只改变 Y 轴
-    //             newHintStreetPos.x = carWorldPos.x;
-    //             newHintStreetPos.y = newHintStreetPos.y;
-    //         }
-    //     } else if (carDir == CarDir.TOP || carDir == CarDir.BOTTOM) {
-    //         newHintStreetPos.x = carWorldPos.x;
-    //         newHintStreetPos.y = newHintStreetPos.y;
-    //     }
-
-    //     tweenCar.to(0.2, {
-    //         worldPosition: newHintStreetPos
-    //     })
-    //         .call(() => {
-    //             const targetWorldPos = targetPoint.getWorldPosition();
-    //             const direction = targetWorldPos.subtract(newHintStreetPos).normalize();
-    //             // console.log('direction:', direction);
-
-    //             let up: Vec3;
-    //             if (Math.abs(direction.x) > Math.abs(direction.y)) {
-    //                 // 左右方向
-    //                 const leftPoint = hitPoint.getChildByName('LeftPoint')!;
-    //                 const rightPoint = hitPoint.getChildByName('RightPoint')!;
-    //                 const toLeft = leftPoint.getWorldPosition().subtract(carWorldPos).normalize();
-    //                 const toRight = rightPoint.getWorldPosition().subtract(carWorldPos).normalize();
-
-    //                 if (Math.abs(toLeft.x) < Math.abs(toRight.x)) {
-    //                     up = new Vec3(0, 0, 1);
-    //                 } else {
-    //                     up = new Vec3(0, 0, -1);
-    //                 }
-    //             } else {
-    //                 // 上下方向
-    //                 up = direction.y > 0 ? new Vec3(0, 1, 0) : new Vec3(0, -1, 0);
-    //             }
-    //             car.lookAt(targetWorldPos, up);
-    //         })
-    //         .delay(0.1)
-    //         .start();
-    // }
-
     // 顶部导航
     topRoadTween(car: Node, targetPoint: Node, tweenCar: Tween<Node>) {
-        tweenCar.to(0.2, {
+        tweenCar.to(duration, {
             worldPosition: targetPoint.getWorldPosition()
         })
             .call(() => {
@@ -369,7 +291,7 @@ export class RoosterMoveCar extends Component {
                 car.getComponent(CarCarColorsComponent).openCover();
             })
             .delay(0.1)
-            .to(0.2, {
+            .to(duration, {
                 worldPosition: targetPoint.getWorldPosition()
             })
     }
@@ -378,20 +300,20 @@ export class RoosterMoveCar extends Component {
     leftTopToRight(car: Node, targetPoint: Node, tweenCar: Tween<Node>) {
         //转向右边动画
         const targetWorldPos = targetPoint.getWorldPosition().clone()
-        tweenCar.to(0.2, {
+        tweenCar.to(duration, {
             eulerAngles: new Vec3(0, 0, -90)
         })
-            .delay(0.2)
-            .to(0.2, { worldPosition: new Vec3(targetWorldPos.x, targetWorldPos.y - 100, targetWorldPos.z) })
-            .delay(0.2)
-            .to(0.2, { eulerAngles: new Vec3(0, 0, 0) })
+            .delay(duration)
+            .to(duration, { worldPosition: new Vec3(targetWorldPos.x, targetWorldPos.y - 100, targetWorldPos.z) })
+            .delay(duration)
+            .to(duration, { eulerAngles: new Vec3(0, 0, 0) })
             .start()
     }
 
     // 左边导航
     leftRoadTween(car: Node, tweenCar: Tween<Node>) {
         const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodTop/LeftPoint")
-        tweenCar.to(0.2, {
+        tweenCar.to(duration, {
             worldPosition: targetPoint.getWorldPosition()
         })
             .call(() => {
@@ -409,20 +331,20 @@ export class RoosterMoveCar extends Component {
     rightTopToleft(car: Node, targetPoint: Node, tweenCar: Tween<Node>) {
         //转向左边动画
         const targetWorldPos = targetPoint.getWorldPosition().clone()
-        tweenCar.to(0.2, {
+        tweenCar.to(duration, {
             eulerAngles: new Vec3(0, 0, 90)
         })
-            .delay(0.2)
-            .to(0.2, { worldPosition: new Vec3(targetWorldPos.x, targetWorldPos.y - 100, targetWorldPos.z) })
-            .delay(0.2)
-            .to(0.2, { eulerAngles: new Vec3(0, 0, 0) })
+            .delay(duration)
+            .to(duration, { worldPosition: new Vec3(targetWorldPos.x, targetWorldPos.y - 100, targetWorldPos.z) })
+            .delay(duration)
+            .to(duration, { eulerAngles: new Vec3(0, 0, 0) })
             .start()
     }
 
     // 右边导航
     rightRoadTween(car: Node, tweenCar: Tween<Node>) {
         const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodTop/RightPoint")
-        tweenCar.to(0.2, {
+        tweenCar.to(duration, {
             worldPosition: targetPoint.getWorldPosition()
         })
             .call(() => {
@@ -440,7 +362,7 @@ export class RoosterMoveCar extends Component {
     }
     // 底部导航
     bottomRoadTween(car: Node, targetPoint: Node, tweenCar: Tween<Node>) {
-        tweenCar.to(0.2, {
+        tweenCar.to(duration, {
             worldPosition: targetPoint.getWorldPosition()
         })
             .call(() => {
@@ -453,10 +375,6 @@ export class RoosterMoveCar extends Component {
             })
             .delay(0.1)
 
-
-    }
-
-    update(deltaTime: number) {
 
     }
 }

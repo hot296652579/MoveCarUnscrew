@@ -17,7 +17,7 @@ export class ElementAction extends Component {
 
     update(deltaTime: number) {
         let currentPosition = this.node.getPosition().clone();
-        if (currentPosition.y < - view.getVisibleSize().height) {
+        if (currentPosition.y < - view.getVisibleSize().height / 2) {
             this.removeElement();
         }
     }
@@ -40,8 +40,6 @@ export class ElementAction extends Component {
             colliders.forEach(collider => {
                 collider.sensor = true;
             })
-
-            this.removeElement();
         }
     }
 
