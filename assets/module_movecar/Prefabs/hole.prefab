@@ -36,8 +36,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -32.728,
-      "y": 33.716,
+      "x": 0,
+      "y": 0,
       "z": 0
     },
     "_lrot": {
@@ -65,7 +65,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "hole",
+    "_name": "dong",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -99,9 +99,9 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
+      "x": 0.9,
+      "y": 0.9,
+      "z": 0.9
     },
     "_mobility": 0,
     "_layer": 33554432,
@@ -158,9 +158,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 0,
+      "g": 0,
+      "b": 0,
       "a": 255
     },
     "_spriteFrame": {
@@ -213,8 +213,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 48,
-      "height": 48
+      "width": 44,
+      "height": 44
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

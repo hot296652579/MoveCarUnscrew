@@ -126,8 +126,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.75,
+      "y": 0.75,
       "z": 1
     },
     "_mobility": 0,
@@ -262,8 +262,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.75,
+      "y": 0.75,
       "z": 1
     },
     "_mobility": 0,
@@ -398,8 +398,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.75,
+      "y": 0.75,
       "z": 1
     },
     "_mobility": 0,
@@ -534,8 +534,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.75,
+      "y": 0.75,
       "z": 1
     },
     "_mobility": 0,
@@ -670,8 +670,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.75,
+      "y": 0.75,
       "z": 1
     },
     "_mobility": 0,
@@ -806,8 +806,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.75,
+      "y": 0.75,
       "z": 1
     },
     "_mobility": 0,
@@ -942,8 +942,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.75,
+      "y": 0.75,
       "z": 1
     },
     "_mobility": 0,
@@ -1078,8 +1078,8 @@
     },
     "_lscale": {
       "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
+      "x": 0.75,
+      "y": 0.75,
       "z": 1
     },
     "_mobility": 0,
@@ -1298,7 +1298,6 @@
       "__id__": 0
     },
     "fileId": "c46/YsCPVOJYA4mWEpNYRx",
-    "instance": null,
-    "targetOverrides": null
+    "instance": null
   }
 ]
