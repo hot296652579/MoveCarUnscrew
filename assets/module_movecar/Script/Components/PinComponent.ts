@@ -76,7 +76,7 @@ export class PinComponent extends Component {
 
         // 遍历所有高层 layer 的碰撞组件，判断是否有相交
         this.isBlocked = higherLayers.some((layer) => {
-            const colliders = layer.getComponentsInChildren(Collider2D);
+            const colliders = layer.getComponentsInChildren(PolygonCollider2D)!;
             return colliders.some((collider) => {
                 const otherBoundingBox = collider.worldAABB;
                 return pinBoundingBox.intersects(new Rect(
@@ -89,7 +89,9 @@ export class PinComponent extends Component {
         });
 
         if (this.isBlocked) {
-            console.log(`pin_color:${this.pin_color} 被遮挡了`);
+            if (this.pin_color == CarColors.Blue) {
+                console.log(`pin_color:${this.pin_color} 被遮挡了`);
+            }
         } else {
             // console.log('Pin 未被遮挡，可以移动');
         }
