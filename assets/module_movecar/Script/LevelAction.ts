@@ -11,8 +11,6 @@ import { tgxUIMgr } from '../../core_tgx/tgx';
 import { UI_BattleResult } from '../../scripts/UIDef';
 import { LevelManager } from './Manager/LevelMgr';
 import { CarBoxComponent } from './Components/CarBoxComponent';
-import { GlobalConfig } from '../../start/Config/GlobalConfig';
-import { AdvertMgr } from '../../core_tgx/base/ad/AdvertMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('LevelAction')

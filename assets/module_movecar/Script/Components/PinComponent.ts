@@ -1,4 +1,4 @@
-import { _decorator, BoxCollider2D, CCBoolean, CircleCollider2D, Collider2D, Color, Node, Component, Contact2DType, Input, IPhysics2DContact, PhysicsSystem2D, PolygonCollider2D, RigidBody2D, Sprite, Rect, Enum } from 'cc';
+import { _decorator, BoxCollider2D, CCBoolean, CircleCollider2D, Collider2D, Color, Node, Component, Contact2DType, Input, IPhysics2DContact, PhysicsSystem2D, PolygonCollider2D, RigidBody2D, Sprite, Rect, Enum, HingeJoint2D } from 'cc';
 import { CarColorHex, CarColors } from '../CarColorsGlobalTypes';
 import { HoleComponent } from './HoleComponent';
 import { LayerAction } from '../LayerAction';
@@ -10,18 +10,16 @@ const { ccclass, property, executeInEditMode } = _decorator;
 @executeInEditMode
 export class PinComponent extends Component {
     @property({ type: Enum(CarColors) })
-    private _carColor: CarColors = CarColors.Purple;
-
-    @property({ type: Enum(CarColors) })
-    get carColor() {
-        return this._carColor
+    get pin_color() {
+        return this._pin_color
     }
-    set carColor(value) {
-        this._carColor = value
+    set pin_color(value) {
+        this._pin_color = value
         this.changeColor()
     }
+    @property({ type: Enum(CarColors) })
+    private _pin_color: CarColors = CarColors.Purple
 
-    pin_color: CarColors = null;
     isBlocked: boolean = false;
     pos_hole: HoleComponent = null;
 
@@ -100,23 +98,14 @@ export class PinComponent extends Component {
     public init_date(group_id: number, pin_color: CarColors, hole: HoleComponent) {
         this.pos_hole = hole;
         this.node.getComponent(RigidBody2D).group = group_id;
-        this.node.getComponents(BoxCollider2D).forEach(element => {
-            element.group = group_id;
-        });
-        this.node.getComponents(CircleCollider2D).forEach(element => {
-            element.group = group_id;
-        });
-        this.node.getComponents(PolygonCollider2D).forEach(element => {
-            element.group = group_id;
-        });
-        this.pin_color = pin_color;
+        this._pin_color = pin_color;
         //set color
         this.reset_img();
     }
 
     reset_img() {
-        if (!this.pin_color) {
-            console.log(`被return的颜色${this.pin_color}`);
+        if (!this._pin_color) {
+            console.log(`被return的颜色${this._pin_color}`);
             return;
         }
         this.changeColor();
@@ -125,7 +114,7 @@ export class PinComponent extends Component {
 
     changeColor() {
         this.node.children.forEach(child => {
-            if (child.name === CarColors[this.pin_color]) {
+            if (child.name === CarColors[this._pin_color]) {
                 child.active = true
             } else {
                 child.active = false

@@ -72,11 +72,15 @@ export class ElementAction extends Component {
         //获取 hole
         this.node.children.forEach(element => {
             if (element.getComponent(HoleComponent)) {
-                let new_pin = instantiate(ResourcePool.instance.get_prefab("pin"));
-                this.node.addChild(new_pin);
-                new_pin.setPosition(element.position);
-                // console.log("实例钉子 group_id:", group_id);
-                new_pin.getComponent(PinComponent).init_date(group_id, color_pin_arr.shift(), element.getComponent(HoleComponent));
+                // let new_pin = instantiate(ResourcePool.instance.get_prefab("pin"));
+                // this.node.addChild(new_pin);
+                // new_pin.setPosition(element.position);
+                // new_pin.getComponent(PinComponent).init_date(group_id, color_pin_arr.shift(), element.getComponent(HoleComponent));
+
+                const pin = element.getComponentInChildren(PinComponent)!;
+                if (pin) {
+                    pin.init_date(group_id, color_pin_arr.shift(), element.getComponent(HoleComponent));
+                }
             }
         });
     }

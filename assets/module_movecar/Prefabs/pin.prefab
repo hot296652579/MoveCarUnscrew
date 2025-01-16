@@ -1218,7 +1218,7 @@
     "__prefab": {
       "__id__": 53
     },
-    "_carColor": 6,
+    "_pinColor": 7,
     "_id": ""
   },
   {
@@ -1260,7 +1260,7 @@
     "fileId": "61xBd741ZHeZI7lGXRVx3c"
   },
   {
-    "__type__": "cc.CircleCollider2D",
+    "__type__": "cc.FixedJoint2D",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -1271,23 +1271,25 @@
     "__prefab": {
       "__id__": 57
     },
-    "tag": 0,
-    "_group": 1,
-    "_density": 1,
-    "_sensor": false,
-    "_friction": 0.2,
-    "_restitution": 0,
-    "_offset": {
+    "anchor": {
       "__type__": "cc.Vec2",
       "x": 0,
       "y": 0
     },
-    "_radius": 20,
+    "connectedAnchor": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "collideConnected": false,
+    "connectedBody": null,
+    "_frequency": 0.7,
+    "_dampingRatio": 0.5,
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "0c+SNAmmpCq5G3eYR2K02j"
+    "fileId": "daO9/4C8NAVo0zC6QuywOG"
   },
   {
     "__type__": "cc.PrefabInfo",

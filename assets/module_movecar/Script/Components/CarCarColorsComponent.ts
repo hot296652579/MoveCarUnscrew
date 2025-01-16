@@ -1,4 +1,4 @@
-import { _decorator, CCFloat, CircleCollider2D, Component, Enum, ERaycast2DType, EventTouch, find, Input, Node, PhysicsSystem2D, tween, v2, v3, Vec2, Vec3, view } from 'cc';
+import { _decorator, CCFloat, CircleCollider2D, Component, Enum, ERaycast2DType, EventTouch, find, Input, instantiate, Node, PhysicsSystem2D, tween, v2, v3, Vec2, Vec3, view } from 'cc';
 import { EventDispatcher } from 'db://assets/core_tgx/easy_ui_framework/EventDispatcher';
 import { tgxUIMgr } from 'db://assets/core_tgx/tgx';
 import { UI_BattleResult } from 'db://assets/scripts/UIDef';
@@ -9,6 +9,8 @@ import { LevelAction } from '../LevelAction';
 import { LevelManager } from '../Manager/LevelMgr';
 import { GameUtil } from '../GameUtil';
 import { CarUnscrewAudioMgr } from '../Manager/CarUnscrewAudioMgr';
+import { ResourcePool } from '../ResourcePool';
+import { PinComponent } from './PinComponent';
 const { ccclass, property, executeInEditMode } = _decorator;
 @ccclass('CarCarColorsComponent')
 @executeInEditMode
@@ -17,6 +19,7 @@ export class CarCarColorsComponent extends Component {
     carType: CarTypes = CarTypes.Bus
     @property({ type: Enum(CarDir) })
     carDir: CarDir = CarDir.TOP
+
     @property({ type: Enum(CarColors) })
     get carColor() {
         return this._carColor
@@ -74,33 +77,36 @@ export class CarCarColorsComponent extends Component {
         })
 
         this.node.getChildByName("Cover").active = true
-
-        // tween(this.node)
-        //     .to(0.2, { scale: new Vec3(1.4, 1.4, 1.4) })
-        //     .to(0.2, { scale: new Vec3(0.95, 0.95, 0.95) })
-        //     .start()
     }
 
     /** 添加人到车位上*/
     addRole(role: Node): boolean {
         CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(6), 1.0);
 
-        const carPoint = this.node.parent
-        role.active = true;
-        role.setParent(this.node.getChildByName("Seets").children[this.roleNum]);
-        tween(role).to(0.2, {
-            position: new Vec3(0, 0, 0)
-        }).call(() => {
-            role.setScale(0.9, 0.9, 0.9)
-            role.setRotationFromEuler(0, 0, 0)
-            if (this.isFull) {
-                carPoint.name = "empty"
-                this.carOutTween(carPoint)
-            }
+        const carParent = this.node.parent
+        const pinParemt = role.parent
+        const seat = this.node.getChildByName("Seets").children[this.roleNum]
+        const new_pin = instantiate(ResourcePool.instance.get_prefab("pin"))
+        const pinWorldPos = role.getWorldPosition().clone()
+        const seatWorldPos = seat.getWorldPosition().clone()
 
-            role.getComponent(CircleCollider2D)!.sensor = true;
-            EventDispatcher.instance.emit(GameEvent.EVENT_CHECK_ELEMENT_CHILDREN);
-        })
+        const pin_color = role.getComponent(PinComponent)!.pin_color
+        pinParemt.addChild(new_pin)
+        new_pin.getComponent(PinComponent)!.pin_color = pin_color
+        new_pin.setWorldPosition(pinWorldPos)
+
+        role.removeFromParent()
+        tween(new_pin)
+            .to(0.3, {
+                worldPosition: new Vec3(seatWorldPos.x, seatWorldPos.y, 0)
+            })
+            .call(() => {
+                if (this.isFull) {
+                    carParent.name = 'empty'
+                    // this.carOutTween()
+                }
+                new_pin.setParent(seat)
+            })
             .start()
 
         this.roleNum += 1
@@ -177,7 +183,7 @@ export class CarCarColorsComponent extends Component {
     }
 
     // 车离开
-    carOutTween(target: Node) {
+    carOutTween() {
         const rightPointPos = find("Canvas/Scene/Grounds/PhysicRoodTop/RightPoint")!.getWorldPosition();
         const carWorldPos = this.node.getWorldPosition().clone();
         tween(this.node)
@@ -214,18 +220,6 @@ export class CarCarColorsComponent extends Component {
 
         return false
     }
-
-    // createRaycastPosByDir(objs: Vec2, carDir: CarDir): Vec2 {
-    //     if (carDir == CarDir.TOP) {
-    //         return new Vec2(objs.x, objs.y + 1000);
-    //     } else if (carDir == CarDir.BOTTOM) {
-    //         return new Vec2(objs.x, objs.y - 1000);
-    //     } else if (carDir == CarDir.LEFT) {
-    //         return new Vec2(objs.x - 1000, objs.y);
-    //     } else if (carDir == CarDir.RIGHT) {
-    //         return new Vec2(objs.x + 1000, objs.y);
-    //     }
-    // }
 }
 
 
