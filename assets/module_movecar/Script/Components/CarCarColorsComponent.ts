@@ -103,9 +103,11 @@ export class CarCarColorsComponent extends Component {
             .call(() => {
                 if (this.isFull) {
                     carParent.name = 'empty'
-                    // this.carOutTween()
+                    this.carOutTween()
                 }
-                new_pin.setParent(seat)
+
+                new_pin.setParent(seat);
+                new_pin.setPosition(Vec3.ZERO);
             })
             .start()
 
