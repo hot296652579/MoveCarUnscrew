@@ -3,7 +3,6 @@ import { EventDispatcher } from '../../core_tgx/easy_ui_framework/EventDispatche
 import { CarColorsGlobalInstance } from './CarColorsGlobalInstance';
 import { CarCarColorsComponent } from './Components/CarCarColorsComponent';
 import { PinComponent } from './Components/PinComponent';
-import { ElementAction } from './ElementAction';
 import { GameEvent } from './Enum/GameEvent';
 import { LayerAction } from './LayerAction';
 import { UnitAction } from './UnitAction';

@@ -143,10 +143,12 @@ export class CarCarColorsComponent extends Component {
         this.node.removeFromParent()
         this.node.destroy()
 
+        console.log('活动的车辆数量:', CarColorsGlobalInstance.instance.carSysterm.activeCar.size);
         if (CarColorsGlobalInstance.instance.carSysterm.activeCar.size === 0) {
             const children = CarColorsGlobalInstance.instance.levels.children;
             const levelComp = children[0].getComponent(LevelAction)!;
             const pins = levelComp.get_pin_color();
+            console.log('剩余钉子:', pins)
             if (pins.length == 0) {
                 const ui = tgxUIMgr.inst.getUI(UI_BattleResult)!;
                 if (!ui) {
@@ -201,6 +203,9 @@ export class CarCarColorsComponent extends Component {
             .delay(0.1)
             .to(0.2, {
                 worldPosition: new Vec3(view.getVisibleSize().x + 200, rightPointPos.y, 0)
+            })
+            .call(() => {
+                this.carOut()
             })
             .start()
     }
