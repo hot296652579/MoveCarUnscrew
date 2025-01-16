@@ -34,12 +34,12 @@ export class ElementAction extends Component {
     public checkElementChildren() {
         if (!this.node) return;
 
+
         const pins = this.node.getComponentsInChildren(PinComponent)!;
+        console.log('检测是否还有钉子:', pins.length)
         if (pins.length == 0) {
-            const colliders = this.node.getComponentsInChildren(BoxCollider2D)!;
-            colliders.forEach(collider => {
-                collider.sensor = true;
-            })
+            console.log("没有钉子 Element刚体变成动力学");
+            this.node.getComponent(RigidBody2D).type = ERigidBody2DType.Dynamic;
         }
     }
 

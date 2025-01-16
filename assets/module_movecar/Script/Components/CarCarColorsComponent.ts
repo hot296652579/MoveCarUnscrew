@@ -1,4 +1,4 @@
-import { _decorator, CCFloat, CircleCollider2D, Component, Enum, ERaycast2DType, EventTouch, find, Input, instantiate, Node, PhysicsSystem2D, tween, v2, v3, Vec2, Vec3, view } from 'cc';
+import { _decorator, CCFloat, CircleCollider2D, Component, Enum, ERaycast2DType, EventTouch, find, Game, Input, instantiate, Node, PhysicsSystem2D, tween, v2, v3, Vec2, Vec3, view } from 'cc';
 import { EventDispatcher } from 'db://assets/core_tgx/easy_ui_framework/EventDispatcher';
 import { tgxUIMgr } from 'db://assets/core_tgx/tgx';
 import { UI_BattleResult } from 'db://assets/scripts/UIDef';
@@ -108,6 +108,7 @@ export class CarCarColorsComponent extends Component {
 
                 new_pin.setParent(seat);
                 new_pin.setPosition(Vec3.ZERO);
+                EventDispatcher.instance.emit(GameEvent.EVENT_CHECK_ELEMENT_CHILDREN)
             })
             .start()
 

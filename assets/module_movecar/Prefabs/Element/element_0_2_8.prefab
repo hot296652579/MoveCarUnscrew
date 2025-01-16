@@ -2139,8 +2139,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 0,
-      "y": -1.1368683772161603e-13,
+      "x": 5.837,
+      "y": 4.941,
       "z": 0
     },
     "_lrot": {
@@ -3494,8 +3494,8 @@
     },
     "connectedAnchor": {
       "__type__": "cc.Vec2",
-      "x": -41.4,
-      "y": 76.8
+      "x": -35.8,
+      "y": 81.2
     },
     "collideConnected": false,
     "connectedBody": {
@@ -5105,8 +5105,8 @@
     },
     "connectedAnchor": {
       "__type__": "cc.Vec2",
-      "x": 39.4,
-      "y": 78.5
+      "x": 28.3,
+      "y": 86.3
     },
     "collideConnected": false,
     "connectedBody": {
@@ -5189,8 +5189,8 @@
     ],
     "value": {
       "__type__": "cc.Vec3",
-      "x": 39.026,
-      "y": 79.306,
+      "x": 28.698,
+      "y": 86.381,
       "z": 0
     }
   },
@@ -6753,8 +6753,8 @@
     },
     "connectedAnchor": {
       "__type__": "cc.Vec2",
-      "x": 92.8,
-      "y": 0.5
+      "x": 82.9,
+      "y": 36.8
     },
     "collideConnected": false,
     "connectedBody": {
@@ -6837,8 +6837,8 @@
     ],
     "value": {
       "__type__": "cc.Vec3",
-      "x": 92.811,
-      "y": 1.097,
+      "x": 82.476,
+      "y": 36.78,
       "z": 0
     }
   },
@@ -13385,8 +13385,8 @@
     },
     "connectedAnchor": {
       "__type__": "cc.Vec2",
-      "x": 80.4,
-      "y": -37.8
+      "x": 85.4,
+      "y": -25.4
     },
     "collideConnected": false,
     "connectedBody": {
@@ -13469,8 +13469,8 @@
     ],
     "value": {
       "__type__": "cc.Vec3",
-      "x": 78.255,
-      "y": -41.202,
+      "x": 85.761,
+      "y": -26.419,
       "z": 0
     }
   },
