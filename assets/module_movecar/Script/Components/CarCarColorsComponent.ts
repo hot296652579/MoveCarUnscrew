@@ -97,7 +97,7 @@ export class CarCarColorsComponent extends Component {
 
         role.removeFromParent()
         tween(new_pin)
-            .to(0.3, {
+            .to(0.2, {
                 worldPosition: new Vec3(seatWorldPos.x, seatWorldPos.y, 0)
             })
             .call(() => {
@@ -148,7 +148,7 @@ export class CarCarColorsComponent extends Component {
             const children = CarColorsGlobalInstance.instance.levels.children;
             const levelComp = children[0].getComponent(LevelAction)!;
             const pins = levelComp.get_pin_color();
-            console.log('剩余钉子:', pins)
+            // console.log('剩余钉子:', pins)
             if (pins.length == 0) {
                 const ui = tgxUIMgr.inst.getUI(UI_BattleResult)!;
                 if (!ui) {
