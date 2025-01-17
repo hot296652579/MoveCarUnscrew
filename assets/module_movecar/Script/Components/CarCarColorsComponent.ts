@@ -56,6 +56,9 @@ export class CarCarColorsComponent extends Component {
     }
 
     onTouchStart(event: EventTouch) {
+        const { isEnd } = LevelManager.instance.levelModel;
+        if (isEnd) return;
+
         EventDispatcher.instance.emit(GameEvent.EVENT_CLICK_CAR, this.node)
     }
 
