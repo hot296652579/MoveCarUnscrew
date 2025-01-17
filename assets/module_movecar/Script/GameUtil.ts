@@ -1,4 +1,4 @@
-import { Vec2, Node, v2 } from "cc";
+import { Vec2, Node, v2, PolygonCollider2D, Rect, CircleCollider2D } from "cc";
 
 /** 游戏工具类 */
 export class GameUtil {
@@ -80,6 +80,131 @@ export class GameUtil {
         const obje = objs.add(direction.multiplyScalar(rayLength));
 
         return obje;
+    }
+
+    /**
+     * 判断两个 AABB 是否相交
+     */
+    static isAABBIntersecting(rect1: Rect, rect2: Rect): boolean {
+        return !(
+            rect1.xMax < rect2.xMin ||
+            rect1.xMin > rect2.xMax ||
+            rect1.yMax < rect2.yMin ||
+            rect1.yMin > rect2.yMax
+        );
+    }
+
+    /**
+     * 检查点是否在多边形内
+     * @param point 点的坐标
+     * @param polygonPoints 多边形的顶点数组
+     * @returns 是否在多边形内
+     */
+    static isPointInPolygon(point: Vec2, polygonPoints: Readonly<Vec2[]>): boolean {
+        let isInside = false;
+        for (let i = 0, j = polygonPoints.length - 1; i < polygonPoints.length; j = i++) {
+            const xi = polygonPoints[i].x, yi = polygonPoints[i].y;
+            const xj = polygonPoints[j].x, yj = polygonPoints[j].y;
+
+            const intersect = (yi > point.y) !== (yj > point.y) &&
+                point.x < ((xj - xi) * (point.y - yi)) / (yj - yi) + xi;
+            if (intersect) isInside = !isInside;
+        }
+        return isInside;
+    }
+
+    /**
+     * 检查圆是否与线段相交
+     * @param circleCenter 圆心坐标
+     * @param radius 圆的半径
+     * @param lineStart 线段起点
+     * @param lineEnd 线段终点
+     * @returns 是否相交
+     */
+    static isCircleIntersectingLine(circleCenter: Vec2, radius: number, lineStart: Vec2, lineEnd: Vec2): boolean {
+        const lineDir = lineEnd.subtract(lineStart);
+        const toCircle = circleCenter.subtract(lineStart);
+        const projection = toCircle.dot(lineDir.normalize());
+
+        const closestPoint = lineStart.add(lineDir.normalize().multiplyScalar(projection));
+        const distance = circleCenter.subtract(closestPoint).length();
+
+        return distance <= radius;
+    }
+
+    /**
+     * 获取圆形碰撞器的 AABB（轴对齐边界框）
+     */
+    static getCircleAABB(circleCollider: CircleCollider2D): Rect {
+        const radius = circleCollider.radius;
+        const center = circleCollider.worldPosition;
+
+        const minX = center.x - radius;
+        const minY = center.y - radius;
+        const size = radius * 2;
+
+        return new Rect(minX, minY, size, size);
+    }
+
+    /**
+     * 获取多边形碰撞器的 AABB（轴对齐边界框）
+     */
+    static getPolygonAABB(polygonCollider: PolygonCollider2D): Rect {
+        const points = polygonCollider.worldPoints;
+        let minX = points[0].x;
+        let maxX = points[0].x;
+        let minY = points[0].y;
+        let maxY = points[0].y;
+
+        for (let i = 1; i < points.length; i++) {
+            const p = points[i];
+            if (p.x < minX) minX = p.x;
+            if (p.x > maxX) maxX = p.x;
+            if (p.y < minY) minY = p.y;
+            if (p.y > maxY) maxY = p.y;
+        }
+
+        return new Rect(minX, minY, maxX - minX, maxY - minY);
+    }
+
+    /**
+     * 判断多边形与圆是否相交
+     * @param polygonCollider 多边形碰撞器
+     * @param circleCollider 圆形碰撞器
+     * @returns 是否相交
+     */
+    static isPolygonAndCircleIntersecting(
+        polygonCollider: PolygonCollider2D,
+        circleCollider: CircleCollider2D
+    ): boolean {
+        // 1. AABB 检测
+        // const polygonAABB = this.getPolygonAABB(polygonCollider);
+        // const circleAABB = this.getCircleAABB(circleCollider);
+
+        // if (!this.isAABBIntersecting(polygonAABB, circleAABB)) {
+        //     return false;
+        // }
+
+        // 2. 精确检测
+        const circleCenter = new Vec2(circleCollider.node.worldPosition.x, circleCollider.node.worldPosition.y); // 圆心
+        const radius = circleCollider.radius;
+
+        // 检查圆心是否在多边形内部
+        if (this.isPointInPolygon(circleCenter, polygonCollider.worldPoints)) {
+            return true;
+        }
+
+        // 检查圆是否与多边形的边相交
+        const points = polygonCollider.worldPoints;
+        for (let i = 0; i < points.length; i++) {
+            const start = points[i];
+            const end = points[(i + 1) % points.length];
+            if (this.isCircleIntersectingLine(circleCenter, radius, start, end)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     static delay(seconds) {

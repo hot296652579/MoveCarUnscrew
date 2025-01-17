@@ -1,8 +1,9 @@
-import { _decorator, BoxCollider2D, CCBoolean, CircleCollider2D, Collider2D, Color, Node, Component, Contact2DType, Input, IPhysics2DContact, PhysicsSystem2D, PolygonCollider2D, RigidBody2D, Sprite, Rect, Enum, HingeJoint2D } from 'cc';
-import { CarColorHex, CarColors } from '../CarColorsGlobalTypes';
+import { _decorator, BoxCollider2D, CCBoolean, CircleCollider2D, Collider2D, Color, Node, Component, Contact2DType, Input, IPhysics2DContact, PhysicsSystem2D, PolygonCollider2D, RigidBody2D, Sprite, Rect, Enum, HingeJoint2D, Vec2 } from 'cc';
+import { CarColorHex, CarColorLog, CarColors } from '../CarColorsGlobalTypes';
 import { HoleComponent } from './HoleComponent';
 import { LayerAction } from '../LayerAction';
 import { UnitAction } from '../UnitAction';
+import { GameUtil } from '../GameUtil';
 const { ccclass, property, executeInEditMode } = _decorator;
 
 /** 钉子组件*/
@@ -24,7 +25,7 @@ export class PinComponent extends Component {
     pos_hole: HoleComponent = null;
 
     start() {
-        this.checkBlocking();
+        // this.checkBlocking();
     }
 
     // 获取当前 pin 所属的 layer 节点
@@ -75,25 +76,31 @@ export class PinComponent extends Component {
         if (higherLayers.length === 0) return;
 
         // 遍历所有高层 layer 的碰撞组件，判断是否有相交
+        // this.isBlocked = higherLayers.some((layer) => {
+        //     const colliders = layer.getComponentsInChildren(PolygonCollider2D)!;
+        //     return colliders.some((collider) => {
+        //         const otherBoundingBox = collider.worldAABB;
+        //         return pinBoundingBox.intersects(new Rect(
+        //             otherBoundingBox.xMin,
+        //             otherBoundingBox.yMin,
+        //             otherBoundingBox.width,
+        //             otherBoundingBox.height
+        //         ));
+        //     });
+        // });
+
+        const circleCollider2D = this.node.getComponent(CircleCollider2D);
         this.isBlocked = higherLayers.some((layer) => {
             const colliders = layer.getComponentsInChildren(PolygonCollider2D)!;
-            return colliders.some((collider) => {
-                const otherBoundingBox = collider.worldAABB;
-                return pinBoundingBox.intersects(new Rect(
-                    otherBoundingBox.xMin,
-                    otherBoundingBox.yMin,
-                    otherBoundingBox.width,
-                    otherBoundingBox.height
-                ));
+            return colliders.some((otherCollider) => {
+                return GameUtil.isPolygonAndCircleIntersecting(otherCollider, circleCollider2D)
             });
         });
 
         if (this.isBlocked) {
-            if (this.pin_color == CarColors.Blue) {
-                console.log(`pin_color:${this.pin_color} 被遮挡了`);
-            }
+            console.log(`${CarColorLog[this.pin_color]} 被遮挡了`);
         } else {
-            // console.log('Pin 未被遮挡，可以移动');
+            console.log(`${CarColorLog[this.pin_color]} 未被遮挡了,可以溜`);
         }
     }
 
