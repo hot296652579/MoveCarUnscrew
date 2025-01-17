@@ -38,6 +38,8 @@ export class LevelModel {
     public randomLevelList: number[] = [];
     /** 输赢*/
     public isWin: boolean = false;
+    /** 是否结束*/
+    public isEnd: boolean = false;
 
     /** 当前游戏状态*/
     public curGameState: TYPE_GAME_STATE = TYPE_GAME_STATE.GAME_STATE_INIT;
@@ -69,6 +71,7 @@ export class LevelModel {
     clearLevel() {
         CarColorsGlobalInstance.instance.carSysterm.clearAll();
         this.isWin = false;
+        this.isEnd = false;
         this.star = 3;
     }
 

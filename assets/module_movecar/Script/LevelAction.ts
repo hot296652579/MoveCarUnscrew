@@ -160,6 +160,9 @@ export class LevelAction extends Component {
     }
 
     async moveToCar() {
+        const { isEnd } = LevelManager.instance.levelModel;
+        if (isEnd) return;
+
         const points = find("Canvas/Scene/Parkings").children
         let cars: Array<Node> = []
         let isEmpty = false
@@ -255,6 +258,7 @@ export class LevelAction extends Component {
             const ui = tgxUIMgr.inst.getUI(UI_BattleResult)!;
             if (!ui) {
                 LevelManager.instance.levelModel.isWin = false;
+                LevelManager.instance.levelModel.isEnd = true;
                 tgxUIMgr.inst.showUI(UI_BattleResult);
             }
         }

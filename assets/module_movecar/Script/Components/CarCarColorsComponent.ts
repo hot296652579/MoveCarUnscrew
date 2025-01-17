@@ -154,6 +154,7 @@ export class CarCarColorsComponent extends Component {
                 const ui = tgxUIMgr.inst.getUI(UI_BattleResult)!;
                 if (!ui) {
                     LevelManager.instance.levelModel.isWin = true;
+                    LevelManager.instance.levelModel.isEnd = true;
                     tgxUIMgr.inst.showUI(UI_BattleResult);
                 }
             }
