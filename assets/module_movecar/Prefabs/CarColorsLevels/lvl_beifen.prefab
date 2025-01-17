@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "lvl_4",
+    "_name": "lvl_beifen",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "lvl_4",
+    "_name": "lvl_beifen",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
