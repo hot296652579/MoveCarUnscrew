@@ -277,36 +277,29 @@ export class RoosterMoveCar extends Component {
 
     // 顶部导航
     topRoadTween(car: Node, targetPoint: Node, tweenCar: Tween<Node>) {
-        tweenCar.to(duration, {
-            worldPosition: targetPoint.getWorldPosition()
-        })
-            .call(() => {
-                const carforward = car.forward.clone()
-                tween(carforward).to(0.1, { x: 0, y: 0, z: 0 }, {
-                    onUpdate: () => {
-                        car.forward = carforward
-                    }
-                }).start()
-
-                car.getComponent(CarCarColorsComponent).openCover();
+        const targetWorldPos = targetPoint.worldPosition.clone();
+        tweenCar
+            .to(duration, {
+                worldPosition: new Vec3(targetWorldPos.x, targetWorldPos.y - 70, targetWorldPos.z)
             })
             .delay(0.1)
             .to(duration, {
-                worldPosition: targetPoint.getWorldPosition()
+                eulerAngles: new Vec3(0, 0, 0)
+            })
+            .delay(0.1)
+            .to(duration, {
+                worldPosition: targetPoint.worldPosition
+            })
+            .call(() => {
+                car.getComponent(CarCarColorsComponent)!.openCover();
             })
     }
 
-    //左边顶部转向右
+    /** 顶部左边转向右*/
     leftTopToRight(car: Node, targetPoint: Node, tweenCar: Tween<Node>) {
-        //转向右边动画
-        const targetWorldPos = targetPoint.getWorldPosition().clone()
         tweenCar.to(0.2, {
             eulerAngles: new Vec3(0, 0, -90)
         })
-            .delay(0.1)
-            .to(0.2, { worldPosition: new Vec3(targetWorldPos.x, targetWorldPos.y, targetWorldPos.z) })
-            .delay(0.1)
-            .to(0.2, { eulerAngles: new Vec3(0, 0, 0) })
             .start()
     }
 
@@ -327,17 +320,11 @@ export class RoosterMoveCar extends Component {
             .delay(0.1)
     }
 
-    //右边顶部转向左
+    /** 顶部右边转向左*/
     rightTopToleft(car: Node, targetPoint: Node, tweenCar: Tween<Node>) {
-        //转向左边动画
-        const targetWorldPos = targetPoint.getWorldPosition().clone()
         tweenCar.to(0.2, {
             eulerAngles: new Vec3(0, 0, 90)
         })
-            .delay(0.1)
-            .to(0.2, { worldPosition: new Vec3(targetWorldPos.x, targetWorldPos.y, targetWorldPos.z) })
-            .delay(0.1)
-            .to(0.2, { eulerAngles: new Vec3(0, 0, 0) })
             .start()
     }
 
