@@ -38,7 +38,7 @@ export class RoosterMoveCar extends Component {
 
     async startGame() {
         //DOTO 获取保存等级
-        LevelManager.instance.levelModel.level = 1;
+        LevelManager.instance.levelModel.level = 2;
         await LevelManager.instance.gameStart();
     }
 
@@ -149,7 +149,7 @@ export class RoosterMoveCar extends Component {
                 let tweenCar: Tween<Node> = tween(car)
                 if (collider.node.name === "PhysicRoodTop") {
                     // this.hitPointTween(car, parkPoint, tweenCar, collider.node)
-                    this.hitPointTween2(car, targetWorldPos, tweenCar, collider.node)
+                    this.hitPointTween2(car, targetWorldPos, tweenCar, collider.node, parkPoint)
                     this.topRoadTween(car, parkPoint, tweenCar)
                 } else if (collider.node.name === "PhysicRoodLeft") {
                     const targetPoint = find("Canvas/Scene/Grounds/PhysicRoodTop/LeftPoint")
@@ -227,7 +227,7 @@ export class RoosterMoveCar extends Component {
      *@param tweenCar 车的tween动画
      *@param hitPoint street碰撞点
     */
-    hitPointTween2(car: Node, targetWorldPos: Vec2, tweenCar: Tween<Node>, hitPoint: Node = null) {
+    hitPointTween2(car: Node, targetWorldPos: Vec2, tweenCar: Tween<Node>, hitPoint: Node = null, parkPoint?: Node) {
         CarUnscrewAudioMgr.playOneShot(CarUnscrewAudioMgr.getMusicIdName(4), 1.0);
 
         const targetV3 = new Vec3(targetWorldPos.x, targetWorldPos.y, 0);
@@ -253,18 +253,31 @@ export class RoosterMoveCar extends Component {
                     }
                 } else {
                     // 上下方向
-                    // up = direction.y > 0 ? new Vec3(0, -1, 0) : new Vec3(0, 1, 0);
                     // console.log('hitPoint.name:', hitPoint.name);
                     if (hitPoint.name == 'PhysicRoodBottom' || hitPoint.name == 'PhysicRoodTop') {
-                        const leftPoint = hitPoint.getChildByName('LeftPoint')!;
-                        const rightPoint = hitPoint.getChildByName('RightPoint')!;
-                        const toLeft = leftPoint.getWorldPosition().subtract(carWorldPos).normalize();
-                        const toRight = rightPoint.getWorldPosition().subtract(carWorldPos).normalize();
+                        if (hitPoint.name == 'PhysicRoodTop') {
+                            //车找相对停车位的方向
+                            const carWorldPos = car.getWorldPosition().clone();
+                            const parkWorldPos = parkPoint.getWorldPosition().clone();
+                            const direction = carWorldPos.subtract(parkWorldPos).normalize();
 
-                        if (Math.abs(toLeft.x) < Math.abs(toRight.x)) {
-                            up = new Vec3(0, 0, 1);
+                            if (direction.x > 0) {
+                                up = new Vec3(0, 0, 1);
+                            } else {
+                                up = new Vec3(0, 0, -1);
+                            }
                         } else {
-                            up = new Vec3(0, 0, -1);
+                            const leftPoint = hitPoint.getChildByName('LeftPoint')!;
+                            const rightPoint = hitPoint.getChildByName('RightPoint')!;
+
+                            const toLeft = leftPoint.getWorldPosition().subtract(targetV3).normalize();
+                            const toRight = rightPoint.getWorldPosition().subtract(targetV3).normalize();
+
+                            if (Math.abs(toLeft.x) <= Math.abs(toRight.x)) {
+                                up = new Vec3(0, 0, 1);
+                            } else {
+                                up = new Vec3(0, 0, -1);
+                            }
                         }
                     } else {
                         up = direction.y > 0 ? new Vec3(0, -1, 0) : new Vec3(0, 1, 0);

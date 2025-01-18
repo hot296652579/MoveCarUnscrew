@@ -61,14 +61,14 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 128
+        "__id__": 130
       },
       {
-        "__id__": 130
+        "__id__": 132
       }
     ],
     "_prefab": {
-      "__id__": 132
+      "__id__": 134
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -1713,6 +1713,9 @@
       },
       {
         "__id__": 127
+      },
+      {
+        "__id__": 128
       }
     ],
     "removedComponents": []
@@ -1760,8 +1763,8 @@
       "__type__": "cc.Quat",
       "x": 0,
       "y": 0,
-      "z": 0,
-      "w": 1
+      "z": 1,
+      "w": 6.123233995736766e-17
     }
   },
   {
@@ -1776,8 +1779,24 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 0
+      "z": 180
     }
+  },
+  {
+    "__type__": "CCPropertyOverrideInfo",
+    "targetInfo": {
+      "__id__": 129
+    },
+    "propertyPath": [
+      "carDir"
+    ],
+    "value": 1
+  },
+  {
+    "__type__": "cc.TargetInfo",
+    "localID": [
+      "b5IAEwCNdMaLP1/q+CJgOW"
+    ]
   },
   {
     "__type__": "cc.UITransform",
@@ -1789,7 +1808,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 129
+      "__id__": 131
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -1817,7 +1836,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 131
+      "__id__": 133
     },
     "_id": ""
   },

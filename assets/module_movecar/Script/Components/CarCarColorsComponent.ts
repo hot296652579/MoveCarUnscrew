@@ -100,7 +100,7 @@ export class CarCarColorsComponent extends Component {
 
         role.removeFromParent()
         tween(new_pin)
-            .to(0.2, {
+            .to(0.5, {
                 worldPosition: new Vec3(seatWorldPos.x, seatWorldPos.y, 0)
             })
             .call(() => {

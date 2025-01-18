@@ -18,7 +18,7 @@ export class LevelAction extends Component {
     start() {
         this.registerListener();
         this.init_level();
-        this.schedule(this.moveToCar, 0.5);
+        this.schedule(this.moveToCar, 1);
     }
 
     registerListener() {
