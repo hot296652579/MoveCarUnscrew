@@ -22,6 +22,7 @@ export class PinComponent extends Component {
     private _pin_color: CarColors = CarColors.Purple
 
     isBlocked: boolean = false;
+    isProcessing: boolean = false;
     pos_hole: HoleComponent = null;
 
     start() {
